@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="fltstd26.Assistant"
+             Title="Initialization Assistant"
+             xmlns:local="clr-namespace:fltstd26.Resources.Texts">
+    <VerticalStackLayout>
+        <Label 
+            Text="{x:Static local:Lang.welcome}"
+            VerticalOptions="Center" 
+            HorizontalOptions="Center" />
+
+        <Button 
+            Text="{x:Static local:Lang.startButton}"
+            VerticalOptions="Center" 
+            HorizontalOptions="Center"
+            Clicked="Start_Clicked"/>
+    </VerticalStackLayout>
+</ContentPage>

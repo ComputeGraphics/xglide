@@ -1,0 +1,91 @@
+is_global = true
+build_property.TargetFramework = net9.0-windows10.0.19041.0
+build_property.TargetFrameworkIdentifier = .NETCoreApp
+build_property.TargetFrameworkVersion = v9.0
+build_property.TargetPlatformMinVersion = 10.0.17763.0
+build_property.UsingMicrosoftNETSdkWeb = 
+build_property.ProjectTypeGuids = 9A19103F-16F7-4668-BE54-9A1E7A4F7556
+build_property.InvariantGlobalization = 
+build_property.PlatformNeutralAssembly = 
+build_property.EnforceExtendedAnalyzerRules = 
+build_property._SupportedPlatformList = Linux,macOS,Windows
+build_property.RootNamespace = fltstd26
+build_property.ProjectDir = C:\Users\Arthur\Documents\GitHub\xglide\fltstd26\fltstd26\
+build_property.EnableComHosting = 
+build_property.EnableGeneratedComInterfaceComImportInterop = 
+build_property.CsWinRTAotOptimizerEnabled = true
+build_property.CsWinRTAotExportsEnabled = 
+build_property.CsWinRTRcwFactoryFallbackGeneratorForceOptIn = 
+build_property.CsWinRTRcwFactoryFallbackGeneratorForceOptOut = 
+build_property.CsWinRTCcwLookupTableGeneratorEnabled = true
+build_property.CsWinRTMergeReferencedActivationFactories = 
+build_property.CsWinRTAotWarningLevel = 
+build_property.CsWinRTUseWindowsUIXamlProjections = false
+build_property.EffectiveAnalysisLevelStyle = 9.0
+build_property.EnableCodeStyleSeverity = 
+
+[C:/Users/Arthur/Documents/GitHub/xglide/fltstd26/fltstd26/App.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = fltstd26.App.xaml
+build_metadata.AdditionalFiles.TargetPath = App.xaml
+build_metadata.AdditionalFiles.RelativePath = App.xaml
+
+[C:/Users/Arthur/Documents/GitHub/xglide/fltstd26/fltstd26/AppShell.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = fltstd26.AppShell.xaml
+build_metadata.AdditionalFiles.TargetPath = AppShell.xaml
+build_metadata.AdditionalFiles.RelativePath = AppShell.xaml
+
+[C:/Users/Arthur/Documents/GitHub/xglide/fltstd26/fltstd26/assistant/Assistant.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = fltstd26.assistant.Assistant.xaml
+build_metadata.AdditionalFiles.TargetPath = assistant\Assistant.xaml
+build_metadata.AdditionalFiles.RelativePath = assistant\Assistant.xaml
+
+[C:/Users/Arthur/Documents/GitHub/xglide/fltstd26/fltstd26/assistant/IABoard.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = fltstd26.assistant.IABoard.xaml
+build_metadata.AdditionalFiles.TargetPath = assistant\IABoard.xaml
+build_metadata.AdditionalFiles.RelativePath = assistant\IABoard.xaml
+
+[C:/Users/Arthur/Documents/GitHub/xglide/fltstd26/fltstd26/Board.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = fltstd26.Board.xaml
+build_metadata.AdditionalFiles.TargetPath = Board.xaml
+build_metadata.AdditionalFiles.RelativePath = Board.xaml
+
+[C:/Users/Arthur/Documents/GitHub/xglide/fltstd26/fltstd26/debug/DBPreview.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = fltstd26.debug.DBPreview.xaml
+build_metadata.AdditionalFiles.TargetPath = debug\DBPreview.xaml
+build_metadata.AdditionalFiles.RelativePath = debug\DBPreview.xaml
+
+[C:/Users/Arthur/Documents/GitHub/xglide/fltstd26/fltstd26/MainPage.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = fltstd26.MainPage.xaml
+build_metadata.AdditionalFiles.TargetPath = MainPage.xaml
+build_metadata.AdditionalFiles.RelativePath = MainPage.xaml
+
+[C:/Users/Arthur/Documents/GitHub/xglide/fltstd26/fltstd26/Resources/Styles/Colors.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = fltstd26.Resources.Styles.Colors.xaml
+build_metadata.AdditionalFiles.TargetPath = Resources\Styles\Colors.xaml
+build_metadata.AdditionalFiles.RelativePath = Resources\Styles\Colors.xaml
+
+[C:/Users/Arthur/Documents/GitHub/xglide/fltstd26/fltstd26/Resources/Styles/Styles.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = fltstd26.Resources.Styles.Styles.xaml
+build_metadata.AdditionalFiles.TargetPath = Resources\Styles\Styles.xaml
+build_metadata.AdditionalFiles.RelativePath = Resources\Styles\Styles.xaml
+
+[C:/Users/Arthur/Documents/GitHub/xglide/fltstd26/fltstd26/system/XConsole.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = fltstd26.system.XConsole.xaml
+build_metadata.AdditionalFiles.TargetPath = system\XConsole.xaml
+build_metadata.AdditionalFiles.RelativePath = system\XConsole.xaml
+
+[C:/Users/Arthur/Documents/GitHub/xglide/fltstd26/fltstd26/TargetCreator.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = fltstd26.TargetCreator.xaml
+build_metadata.AdditionalFiles.TargetPath = TargetCreator.xaml
+build_metadata.AdditionalFiles.RelativePath = TargetCreator.xaml

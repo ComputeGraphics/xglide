@@ -1,0 +1,198 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFrameworks>net9.0-maccatalyst</TargetFrameworks>
+		<TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);net9.0-windows10.0.19041.0</TargetFrameworks>
+		<!-- Uncomment to also build the tizen app. You will need to install tizen by following this: https://github.com/Samsung/Tizen.NET -->
+		<!-- <TargetFrameworks>$(TargetFrameworks);net9.0-tizen</TargetFrameworks> -->
+
+		<!-- Note for MacCatalyst:
+		The default runtime is maccatalyst-x64, except in Release config, in which case the default is maccatalyst-x64;maccatalyst-arm64.
+		When specifying both architectures, use the plural <RuntimeIdentifiers> instead of the singular <RuntimeIdentifier>.
+		The Mac App Store will NOT accept apps with ONLY maccatalyst-arm64 indicated;
+		either BOTH runtimes must be indicated or ONLY macatalyst-x64. -->
+		<!-- For example: <RuntimeIdentifiers>maccatalyst-x64;maccatalyst-arm64</RuntimeIdentifiers> -->
+
+		<OutputType>Exe</OutputType>
+		<RootNamespace>fltstd26</RootNamespace>
+		<UseMaui>true</UseMaui>
+		<SingleProject>true</SingleProject>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+
+		<!-- Display name -->
+		<ApplicationTitle>fltstd26</ApplicationTitle>
+
+		<!-- App Identifier -->
+		<ApplicationId>com.companyname.fltstd26</ApplicationId>
+
+		<!-- Versions -->
+		<ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
+		<ApplicationVersion>1</ApplicationVersion>
+
+		<!-- To develop, package, and publish an app to the Microsoft Store, see: https://aka.ms/MauiTemplateUnpackaged -->
+		<WindowsPackageType>None</WindowsPackageType>
+
+		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">15.0</SupportedOSPlatformVersion>
+		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'maccatalyst'">15.0</SupportedOSPlatformVersion>
+		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">21.0</SupportedOSPlatformVersion>
+		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</SupportedOSPlatformVersion>
+		<TargetPlatformMinVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</TargetPlatformMinVersion>
+		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'tizen'">6.5</SupportedOSPlatformVersion>
+		<NeutralLanguage>de</NeutralLanguage>
+		<DefaultLanguage>de</DefaultLanguage>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<!-- App Icon -->
+		<MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg.svg" Color="#512BD4" />
+
+		<!-- Splash Screen -->
+		<MauiSplashScreen Include="Resources\Splash\splash.svg" Color="#512BD4" BaseSize="128,128" />
+
+		<!-- Images -->
+		<MauiImage Include="Resources\Images\*" />
+		<MauiImage Update="Resources\Images\dotnet_bot.png" Resize="True" BaseSize="300,185" />
+		
+		<!-- Custom Fonts -->
+		<MauiFont Include="Resources\Fonts\*" />
+
+		<!-- Raw Assets (also remove the "Resources\Raw" prefix) -->
+		<MauiAsset Include="Resources\Raw\**" LogicalName="%(RecursiveDir)%(Filename)%(Extension)" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Remove="Resources\Icons\archive.svg" />
+	  <None Remove="Resources\Icons\audio_off.svg" />
+	  <None Remove="Resources\Icons\audio_on.svg" />
+	  <None Remove="Resources\Icons\auto.svg" />
+	  <None Remove="Resources\Icons\bin.svg" />
+	  <None Remove="Resources\Icons\calendar.svg" />
+	  <None Remove="Resources\Icons\cast.svg" />
+	  <None Remove="Resources\Icons\chart.svg" />
+	  <None Remove="Resources\Icons\check.svg" />
+	  <None Remove="Resources\Icons\control.svg" />
+	  <None Remove="Resources\Icons\copy.svg" />
+	  <None Remove="Resources\Icons\db.svg" />
+	  <None Remove="Resources\Icons\doc.svg" />
+	  <None Remove="Resources\Icons\file.svg" />
+	  <None Remove="Resources\Icons\flag.svg" />
+	  <None Remove="Resources\Icons\floppy.svg" />
+	  <None Remove="Resources\Icons\grid.svg" />
+	  <None Remove="Resources\Icons\help.svg" />
+	  <None Remove="Resources\Icons\info.svg" />
+	  <None Remove="Resources\Icons\mail.svg" />
+	  <None Remove="Resources\Icons\minus.svg" />
+	  <None Remove="Resources\Icons\modify.svg" />
+	  <None Remove="Resources\Icons\notify.svg" />
+	  <None Remove="Resources\Icons\paste.svg" />
+	  <None Remove="Resources\Icons\pin.svg" />
+	  <None Remove="Resources\Icons\plane.svg" />
+	  <None Remove="Resources\Icons\plus.svg" />
+	  <None Remove="Resources\Icons\price.svg" />
+	  <None Remove="Resources\Icons\quick.svg" />
+	  <None Remove="Resources\Icons\redo.svg" />
+	  <None Remove="Resources\Icons\refresh.svg" />
+	  <None Remove="Resources\Icons\say.svg" />
+	  <None Remove="Resources\Icons\screen.svg" />
+	  <None Remove="Resources\Icons\search.svg" />
+	  <None Remove="Resources\Icons\settings.svg" />
+	  <None Remove="Resources\Icons\signal.svg" />
+	  <None Remove="Resources\Icons\undo.svg" />
+	  <None Remove="Resources\Icons\x.svg" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="CommunityToolkit.Maui" Version="12.3.0" />
+		<PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
+		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="9.0.9" />
+		<PackageReference Include="sqlite-net-pcl" Version="1.9.172" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Compile Update="Properties\Resources.Designer.cs">
+	    <DesignTime>True</DesignTime>
+	    <AutoGen>True</AutoGen>
+	    <DependentUpon>Resources.resx</DependentUpon>
+	  </Compile>
+	  <Compile Update="Resources\Texts\Lang.Designer.cs">
+	    <DesignTime>True</DesignTime>
+	    <AutoGen>True</AutoGen>
+	    <DependentUpon>Lang.resx</DependentUpon>
+	  </Compile>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <EmbeddedResource Update="Properties\Resources.resx">
+	    <Generator>ResXFileCodeGenerator</Generator>
+	    <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+	  </EmbeddedResource>
+	  <EmbeddedResource Update="Resources\Texts\Lang.resx">
+	    <Generator>ResXFileCodeGenerator</Generator>
+	    <LastGenOutput>Lang.Designer.cs</LastGenOutput>
+	  </EmbeddedResource>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <MauiXaml Update="assistant\Assistant.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="assistant\IABoard.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Board.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="debug\DBPreview.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="system\XConsole.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="TargetCreator.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <MauiImage Include="Resources\Icons\archive.svg" />
+	  <MauiImage Include="Resources\Icons\audio_off.svg" />
+	  <MauiImage Include="Resources\Icons\audio_on.svg" />
+	  <MauiImage Include="Resources\Icons\auto.svg" />
+	  <MauiImage Include="Resources\Icons\bin.svg" />
+	  <MauiImage Include="Resources\Icons\calendar.svg" />
+	  <MauiImage Include="Resources\Icons\cast.svg" />
+	  <MauiImage Include="Resources\Icons\chart.svg" />
+	  <MauiImage Include="Resources\Icons\check.svg" />
+	  <MauiImage Include="Resources\Icons\control.svg" />
+	  <MauiImage Include="Resources\Icons\copy.svg" />
+	  <MauiImage Include="Resources\Icons\db.svg" />
+	  <MauiImage Include="Resources\Icons\doc.svg" />
+	  <MauiImage Include="Resources\Icons\file.svg" />
+	  <MauiImage Include="Resources\Icons\flag.svg" />
+	  <MauiImage Include="Resources\Icons\floppy.svg" />
+	  <MauiImage Include="Resources\Icons\grid.svg" />
+	  <MauiImage Include="Resources\Icons\help.svg" />
+	  <MauiImage Include="Resources\Icons\info.svg" />
+	  <MauiImage Include="Resources\Icons\mail.svg" />
+	  <MauiImage Include="Resources\Icons\minus.svg" />
+	  <MauiImage Include="Resources\Icons\modify.svg" />
+	  <MauiImage Include="Resources\Icons\notify.svg" />
+	  <MauiImage Include="Resources\Icons\paste.svg" />
+	  <MauiImage Include="Resources\Icons\pin.svg" />
+	  <MauiImage Include="Resources\Icons\plane.svg" />
+	  <MauiImage Include="Resources\Icons\plus.svg" />
+	  <MauiImage Include="Resources\Icons\price.svg" />
+	  <MauiImage Include="Resources\Icons\quick.svg" />
+	  <MauiImage Include="Resources\Icons\redo.svg" />
+	  <MauiImage Include="Resources\Icons\refresh.svg" />
+	  <MauiImage Include="Resources\Icons\say.svg" />
+	  <MauiImage Include="Resources\Icons\screen.svg" />
+	  <MauiImage Include="Resources\Icons\search.svg" />
+	  <MauiImage Include="Resources\Icons\settings.svg" />
+	  <MauiImage Include="Resources\Icons\signal.svg" />
+	  <MauiImage Include="Resources\Icons\undo.svg" />
+	  <MauiImage Include="Resources\Icons\x.svg" />
+	</ItemGroup>
+
+</Project>
