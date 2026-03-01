@@ -51,7 +51,7 @@
           "auditLevel": "low",
           "auditMode": "direct"
         },
-        "SdkAnalysisLevel": "10.0.100"
+        "SdkAnalysisLevel": "9.0.300"
       },
       "frameworks": {
         "net9.0-maccatalyst26.0": {
@@ -59,7 +59,7 @@
           "dependencies": {
             "CommunityToolkit.Maui": {
               "target": "Package",
-              "version": "[12.3.0, )"
+              "version": "[12.2.0, )"
             },
             "Microsoft.Extensions.Logging.Debug": {
               "target": "Package",
@@ -67,12 +67,12 @@
             },
             "Microsoft.Maui.Controls": {
               "target": "Package",
-              "version": "[9.0.120, )"
+              "version": "[9.0.111, )"
             },
             "Microsoft.NET.ILLink.Tasks": {
               "suppressParent": "All",
               "target": "Package",
-              "version": "[9.0.11, )",
+              "version": "[9.0.13, )",
               "autoReferenced": true
             },
             "sqlite-net-pcl": {
@@ -92,16 +92,6 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
-          "downloadDependencies": [
-            {
-              "name": "Microsoft.MacCatalyst.Ref.net9.0_26.0",
-              "version": "[26.0.9777, 26.0.9777]"
-            },
-            {
-              "name": "Microsoft.MacCatalyst.Runtime.maccatalyst-x64.net9.0_26.0",
-              "version": "[26.0.9777, 26.0.9777]"
-            }
-          ],
           "frameworkReferences": {
             "Microsoft.MacCatalyst": {
               "privateAssets": "all"
@@ -110,14 +100,14 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.101/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.311/PortableRuntimeIdentifierGraph.json"
         },
         "net9.0-windows10.0.19041": {
           "targetAlias": "net9.0-windows10.0.19041.0",
           "dependencies": {
             "CommunityToolkit.Maui": {
               "target": "Package",
-              "version": "[12.3.0, )"
+              "version": "[12.2.0, )"
             },
             "Microsoft.Extensions.Logging.Debug": {
               "target": "Package",
@@ -125,7 +115,7 @@
             },
             "Microsoft.Maui.Controls": {
               "target": "Package",
-              "version": "[9.0.120, )"
+              "version": "[9.0.111, )"
             },
             "sqlite-net-pcl": {
               "target": "Package",
@@ -157,7 +147,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.101\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.311\\RuntimeIdentifierGraph.json"
         }
       },
       "runtimes": {

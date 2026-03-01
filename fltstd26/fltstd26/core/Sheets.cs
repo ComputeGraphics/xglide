@@ -76,9 +76,19 @@ namespace fltstd26.core
             [Column("quickticket")]
             public bool QuickTicket { get; set; }
             [Column("price")]
-            public int Price { get; set; }
+            public int Price { get; set; } //Price Cat for negative - Price Absolute for positive  
             [Column("persistent")]
             public bool Persistent { get; set; }
+        }
+
+        [Table("PriceCat")]
+        public class PriceCat
+        {
+            [PrimaryKey, AutoIncrement]
+            [Column("id")]
+            public int Id { get; set; }
+            [Column("Price")]
+            public int Price { get; set; }
         }
     }
 }

@@ -48,6 +48,20 @@ namespace fltstd26
                 List<Border> borders = [];
                 List<VerticalStackLayout> containersRow = [];
                 XPlan.RowDefinitions.Add(new RowDefinition { Height = GridLength.Star });
+                Grid slot = new()
+                {
+                    ColumnDefinitions =
+                    {
+                        new ColumnDefinition(),
+                        new ColumnDefinition()
+                    },
+                    RowDefinitions =
+                    {
+                        new RowDefinition(),
+                        new RowDefinition()
+                    }
+                };
+
                 Label lbl = new()
                 { 
                     Text = $"{fts.Start:HH:mm}\n{fts.End:HH:mm}",
@@ -56,7 +70,25 @@ namespace fltstd26
                     FontSize = 20 ,
                     Margin = new Thickness(5,0,10,0)
                 };
-                XPlan.Add(lbl,0,XPlan.RowDefinitions.Count - 1);
+                slot.Add(lbl,0,0);
+                slot.SetColumnSpan(lbl,2);
+
+                Button min5 = new()
+                {
+                    Text="+5",
+                    FontAttributes = FontAttributes.Bold,
+                    VerticalOptions = LayoutOptions.Center,
+                };
+                slot.Add(min5,0,1);
+                Button min15 = new()
+                {
+                    Text = "+15",
+                    FontAttributes = FontAttributes.Bold,
+                    VerticalOptions = LayoutOptions.Center,
+                };
+                slot.Add(min15,1,1);
+
+                XPlan.Add(slot,0,XPlan.RowDefinitions.Count - 1);
                 for (int i = 0; i < USettings.allLFZ.Count; i++)
                 {
                     VerticalStackLayout cellContainer = [];
@@ -104,8 +136,8 @@ namespace fltstd26
             {
                 ColumnDefinitions =
                     {
-                        new ColumnDefinition(),
-                        new ColumnDefinition()
+                        new ColumnDefinition { Width = GridLength.Auto },
+                        new ColumnDefinition {Width = GridLength.Star}
                     },
                 RowDefinitions =
                     {
@@ -163,6 +195,7 @@ namespace fltstd26
                 {
                     BackgroundColor = Colors.Transparent,
                     Source = sources[i],
+                    Aspect = Aspect.AspectFit,
                     Behaviors =
                     {
                         new IconTintColorBehavior { TintColor = props[i] ? GSettings.GetColor("Primary") : GSettings.GetColor("Gray800") }

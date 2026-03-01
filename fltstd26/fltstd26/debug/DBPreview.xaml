@@ -22,6 +22,7 @@
                                 <x:String>Aircraft</x:String>
                                 <x:String>Slots</x:String>
                                 <x:String>Targets</x:String>
+                                <x:String>Prices</x:String>
                             </x:Array>
                         </Picker.ItemsSource>
                     </Picker>

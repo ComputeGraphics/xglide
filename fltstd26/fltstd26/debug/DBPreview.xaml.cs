@@ -36,6 +36,10 @@ public partial class DBPreview : Window
                 List<Sheets.Target> targetList = RData.GetTargetTable();
                 Draw(targetList);
                 break;
+            case 4:
+                List<Sheets.PriceCat> priceList = RData.GetPriceTable();
+                Draw(priceList);
+                break;
             default:
                 ConProc.Log("[DBPVW] Invalid Configuration",1);
                 break;

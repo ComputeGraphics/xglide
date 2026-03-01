@@ -26,6 +26,7 @@ namespace fltstd26.core
                 rdb.CreateTable<Sheets.Lfz>();
                 rdb.CreateTable<Sheets.Slots>();
                 rdb.CreateTable<Sheets.Target>();
+                rdb.CreateTable<Sheets.PriceCat>();
             }
             catch (Exception ex)
             {
@@ -43,10 +44,12 @@ namespace fltstd26.core
                     rdb?.DropTable<Sheets.Lfz>();
                     rdb?.DropTable<Sheets.Slots>();
                     rdb?.DropTable<Sheets.Target>();
+                    rdb?.DropTable<Sheets.PriceCat>();
                     rdb?.CreateTable<Sheets.Flt>();
                     rdb?.CreateTable<Sheets.Lfz>();
                     rdb?.CreateTable<Sheets.Slots>();
                     rdb?.CreateTable<Sheets.Target>();
+                    rdb?.CreateTable<Sheets.PriceCat>();
                     rdb?.Execute("VACUUM");
                 }
             }
@@ -93,6 +96,7 @@ namespace fltstd26.core
         public static List<Sheets.Slots> GetSlotsTable() => (Active ? rdb?.Table<Sheets.Slots>().ToList() : []) ?? [];
         public static List<Sheets.Lfz> GetAircraftTable() => (Active ? rdb?.Table<Sheets.Lfz>().ToList() : []) ?? [];
         public static List<Sheets.Target> GetTargetTable() => (Active ? rdb?.Table<Sheets.Target>().ToList() : []) ?? [];
+        public static List<Sheets.PriceCat> GetPriceTable() => (Active ? rdb?.Table<Sheets.PriceCat>().ToList() : []) ?? [];
 
     }
 }
