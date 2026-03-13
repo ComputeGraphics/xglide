@@ -15,7 +15,7 @@ namespace fltstd26.etc
 
         ////////////// NEW SETTINGS //////////////
 
-        public string[] Status = [
+        public static string[] Status = [
             Lang.xplan_status_airborne,
             Lang.xplan_status_app,
             Lang.xplan_status_cancel,
@@ -32,6 +32,8 @@ namespace fltstd26.etc
         ];
 
         public static Dictionary<string,string> Paths = [];
+
+        public static int QuickVolume = 5;
 
         public static List<string> Additionals = [];
 

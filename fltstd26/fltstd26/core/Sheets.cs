@@ -22,6 +22,8 @@ namespace fltstd26.core
             public byte Interval { get; set; }
             [Column("pricecat")]
             public byte PriceCat { get; set; }
+            [Column("avail")]
+            public byte[]? AvailTimes { get; set; }
             [Column("autoassign")]
             public bool AutoAssign { get; set; }
         }
@@ -87,6 +89,9 @@ namespace fltstd26.core
             [PrimaryKey, AutoIncrement]
             [Column("id")]
             public int Id { get; set; }
+            [Column("name")]
+            public string? Name { get; set; }
+
             [Column("Price")]
             public int Price { get; set; }
         }

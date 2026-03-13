@@ -1,6 +1,7 @@
 using fltstd26.system;
 using fltstd26.core;
 using System.Reflection;
+using System.Collections;
 
 namespace fltstd26.debug;
 
@@ -71,7 +72,7 @@ public partial class DBPreview : Window
                     object? value = props[colIndex].GetValue(flt);
                     Label cellLabel = new()
                     {
-                        Text = value?.ToString() ?? "null",
+                        Text = value is byte[] b ? string.Join(", ",b) : value?.ToString() ?? "",
                         Margin = new Thickness(0,5,0,5),
                         VerticalOptions = LayoutOptions.Center,
                         HorizontalOptions = LayoutOptions.Center

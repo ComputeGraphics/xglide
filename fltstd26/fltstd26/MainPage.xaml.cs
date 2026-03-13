@@ -22,7 +22,8 @@ namespace fltstd26
         public void XPlan_Restart()
         {
             TGT_LFZ_Dropdown.Items.Clear();
-            foreach (Types.LFZ lfz in USettings.allLFZ)
+            List<Types.LFZ> allLFZ = RData.Handler!.GetAll<Types.LFZ>();
+            foreach (Types.LFZ lfz in allLFZ)
             {
                 TGT_LFZ_Dropdown.Items.Add(lfz.Reg);
             }
@@ -32,7 +33,7 @@ namespace fltstd26
             XPlan.Children.Clear();
             XPlan.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
             XPlan.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto,});
-            foreach (Types.LFZ lfz in USettings.allLFZ)
+            foreach (Types.LFZ lfz in allLFZ)
             {
                 XPlan.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Star });
                 Label lbl = new()
@@ -43,13 +44,14 @@ namespace fltstd26
                 };
                 XPlan.Add(lbl,XPlan.ColumnDefinitions.Count - 1,0);
             }
-            foreach (Types.FTS fts in USettings.allFTS)
+            foreach (Types.FTS fts in RData.Handler!.GetAll<Types.FTS>())
             {
                 List<Border> borders = [];
                 List<VerticalStackLayout> containersRow = [];
                 XPlan.RowDefinitions.Add(new RowDefinition { Height = GridLength.Star });
                 Grid slot = new()
                 {
+                    Margin = new Thickness(0,0,10,0),
                     ColumnDefinitions =
                     {
                         new ColumnDefinition(),
@@ -66,30 +68,34 @@ namespace fltstd26
                 { 
                     Text = $"{fts.Start:HH:mm}\n{fts.End:HH:mm}",
                     FontAttributes = FontAttributes.Bold,
-                    VerticalOptions = LayoutOptions.Center,
+                    VerticalOptions = LayoutOptions.End,
+                    HorizontalOptions = LayoutOptions.Center,
                     FontSize = 20 ,
-                    Margin = new Thickness(5,0,10,0)
                 };
                 slot.Add(lbl,0,0);
                 slot.SetColumnSpan(lbl,2);
 
                 Button min5 = new()
                 {
-                    Text="+5",
+                    Text = "+5",
+                    CornerRadius = 0,
+                    FontSize = 14,
                     FontAttributes = FontAttributes.Bold,
-                    VerticalOptions = LayoutOptions.Center,
+                    VerticalOptions = LayoutOptions.Start,
                 };
                 slot.Add(min5,0,1);
                 Button min15 = new()
                 {
                     Text = "+15",
+                    CornerRadius = 0,
+                    FontSize = 14,
                     FontAttributes = FontAttributes.Bold,
-                    VerticalOptions = LayoutOptions.Center,
+                    VerticalOptions = LayoutOptions.Start,
                 };
                 slot.Add(min15,1,1);
 
                 XPlan.Add(slot,0,XPlan.RowDefinitions.Count - 1);
-                for (int i = 0; i < USettings.allLFZ.Count; i++)
+                for (int i = 0; i < allLFZ.Count; i++)
                 {
                     VerticalStackLayout cellContainer = [];
 
@@ -126,9 +132,10 @@ namespace fltstd26
         private bool AddNode(Types.FTS timeIn,Types.LFZ lfzIn,Types.TGT tgtIn,bool auto = false)
         {
             // Find the cell based on time and aircraft
-            int rowIndex = USettings.allFTS.FindIndex(fts => fts.Equals(timeIn));
+            int rowIndex = RData.Handler!.GetAll<Types.FTS>().FindIndex(fts => fts.Equals(timeIn));
             System.Diagnostics.Debug.WriteLine($"Row Index: {rowIndex}");
-            int colIndex = USettings.allLFZ.FindIndex(lfz => lfz.Equals(lfzIn));
+            System.Diagnostics.Debug.WriteLine($"LFZ Details:\nId: {lfzIn.Id}\nReg: {lfzIn.Reg}\nType: {lfzIn.Type}\nSeats: {lfzIn.Seats}\nInterval: {lfzIn.Interval}\nPriceCat: {lfzIn.PriceCat}\nAuto: {lfzIn.AutoAssign}\nAvail: {string.Join(", ",lfzIn.AvailTimes)}\n---------");
+            int colIndex = RData.Handler!.GetAll<Types.LFZ>().FindIndex(lfz => lfz.Id.Equals(lfzIn.Id));
             System.Diagnostics.Debug.WriteLine($"Col Index: {colIndex}");
             if (rowIndex == -1 || colIndex == -1) return false; //No Cell found
             Color DefCol = GSettings.GetColor("Gray100");
@@ -179,15 +186,18 @@ namespace fltstd26
                 TextColor = DefCol,
                 VerticalOptions = LayoutOptions.Center,
                 HorizontalOptions = LayoutOptions.Center,
-                Margin = new Thickness(5,0),
+                Padding = new Thickness(20,0),
                 FontSize = 16
             };
             nodegrid.Add(nodelength,0,2);
 
-            HorizontalStackLayout hzslicon = [];
-            bool[] props = [auto,tgtIn.QuickTicket,tgtIn.Persistent,false,false];
-            ImageSource[] sources = ["auto.png","quick.png","pin.png","notify.png","flag.png"];
-            string[] xname = ["AutoBtn","QuickBtn","PinBtn","NotifyBtn","FlagBtn"];
+            HorizontalStackLayout hzslicon = new() {
+                HorizontalOptions = LayoutOptions.End,
+                Padding = new Thickness(0,0,20,0),
+            };
+            bool[] props = [tgtIn.QuickTicket,tgtIn.Persistent,false,false];
+            ImageSource[] sources = ["quick.png","pin.png","notify.png","flag.png"];
+            string[] xname = ["QuickBtn","PinBtn","NotifyBtn","FlagBtn"];
 
             for (int i = 0; i < props.Length; i++)
             {
@@ -198,7 +208,7 @@ namespace fltstd26
                     Aspect = Aspect.AspectFit,
                     Behaviors =
                     {
-                        new IconTintColorBehavior { TintColor = props[i] ? GSettings.GetColor("Primary") : GSettings.GetColor("Gray800") }
+                        new IconTintColorBehavior { TintColor = props[i] ? GSettings.GetColor("Primary") : GSettings.GetColor("Gray500") }
                     },
                 };
                 imgbtn.Clicked += NodeInteractionHandler;
@@ -233,6 +243,7 @@ namespace fltstd26
             // Add drag gesture to the node
             var dragGesture = new DragGestureRecognizer();
             dragGesture.DragStarting += OnDragStarting;
+           
             node.GestureRecognizers.Add(dragGesture);
             containers.ElementAt(rowIndex).ElementAt(colIndex).Children.Add(node);
             return true;
@@ -281,7 +292,6 @@ namespace fltstd26
 
         private static void OnDrop(Border targetCell,DropEventArgs e)
         {
-
             e.Data.Properties.TryGetValue("DraggedNode",out var draggedNodeObj);
             System.Diagnostics.Debug.WriteLine($"Drop event - Target: {targetCell}, Node: " + draggedNodeObj);
             if (draggedNodeObj is Border draggedNode)
@@ -347,9 +357,9 @@ namespace fltstd26
                 Weight = 1,
                 Persistent = false,
             };
-            if (USettings.allFTS.Count > 0 && USettings.allLFZ.Count > 0)
+            if (RData.Handler!.GetAll<Types.FTS>().Count > 0 && RData.Handler!.GetAll<Types.LFZ>().Count > 0)
             {
-                AddNode(USettings.allFTS[1],USettings.allLFZ[0],demoTGT);
+                AddNode(RData.Handler!.GetAll<Types.FTS>()[1],RData.Handler!.GetAll<Types.LFZ>()[0],demoTGT);
             }
         }
 
@@ -363,6 +373,31 @@ namespace fltstd26
             Window dbPreviewWindow = new DBPreview();
             Application.Current?.OpenWindow(dbPreviewWindow);
         }
+
+        public void OpenFolder_Click(object sender,EventArgs e)
+        {
+            try
+            {
+                string folderPath = GSettings.dbpath;
+                if (Directory.Exists(folderPath))
+                {
+                    System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
+                    {
+                        FileName = folderPath,
+                        UseShellExecute = true,
+                        Verb = "open"
+                    });
+                }
+                else
+                {
+                    System.Diagnostics.Debug.WriteLine($"Directory does not exist: {folderPath}",2);
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Error opening folder: {ex.Message}",2);
+            }
+        }
     }
 
     public partial class XBorder : Border
@@ -372,8 +407,8 @@ namespace fltstd26
         public Types.FTS Fts { get; set; }
         public Types.FLT Flt { get; private set; }
 
-        ///<summary>auto, quick, pin, notify, flag</summary>
-        public bool[] Attrib = new bool[5];
+        ///<summary>quick, pin, notify, flag</summary>
+        public bool[] Attrib = new bool[4];
 
         public void GenFLT()
         {

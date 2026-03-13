@@ -16,6 +16,7 @@ namespace fltstd26.etc
             public byte Seats;
             public byte Interval;
             public byte PriceCat;
+            public byte[] AvailTimes;
             public bool AutoAssign;
         }
 

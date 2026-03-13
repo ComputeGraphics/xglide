@@ -1,6 +1,8 @@
 ﻿using SQLite;
 using fltstd26.etc;
 using fltstd26.system;
+using System.Dynamic;
+using System.Reflection;
 
 namespace fltstd26.core
 {
@@ -14,19 +16,19 @@ namespace fltstd26.core
         private static string DatabasePath =>
             Path.Combine(GSettings.dbpath, DatabaseFilename);
 
-        public static DBSys.Handler? rdbsys;
+        public static DBSys.Handler? Handler;
 
         public static void Init()
         {
             try
             {
                 rdb = new SQLiteConnection(DatabasePath);
-                rdbsys = new DBSys.Handler(rdb);
                 rdb.CreateTable<Sheets.Flt>();
                 rdb.CreateTable<Sheets.Lfz>();
                 rdb.CreateTable<Sheets.Slots>();
                 rdb.CreateTable<Sheets.Target>();
                 rdb.CreateTable<Sheets.PriceCat>();
+                Handler = new DBSys.Handler(rdb);
             }
             catch (Exception ex)
             {
@@ -97,6 +99,33 @@ namespace fltstd26.core
         public static List<Sheets.Lfz> GetAircraftTable() => (Active ? rdb?.Table<Sheets.Lfz>().ToList() : []) ?? [];
         public static List<Sheets.Target> GetTargetTable() => (Active ? rdb?.Table<Sheets.Target>().ToList() : []) ?? [];
         public static List<Sheets.PriceCat> GetPriceTable() => (Active ? rdb?.Table<Sheets.PriceCat>().ToList() : []) ?? [];
+
+        public static T? Get<T>(object pk) where T : class, new()
+        {
+            try
+            {
+                return rdb?.Get<T>(pk) ?? null;
+            }
+            catch (Exception e)
+            {
+                ConProc.Log($"[RDATA] Get Process failed: {e.Message}",2);
+                return null;
+            }
+        }
+        public static void SyncPriceTable()
+        {
+            GetPriceTable().ForEach(x =>
+            {
+                if (!USettings.PriceCategories.ContainsKey(x.Id))
+                {
+                    USettings.PriceCategories.Add(x.Id, (x.Name ?? "", x.Price));
+                }
+                else
+                {
+                    USettings.PriceCategories[x.Id] = (x.Name ?? "", x.Price);
+                }
+            });
+        }
 
     }
 }

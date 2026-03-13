@@ -14,7 +14,7 @@ namespace fltstd26.core
     {
         public class Handler(SQLiteConnection dbin)
         {
-            public SQLiteConnection db = dbin;
+            private SQLiteConnection db = dbin;
             private readonly string err = "[DBMNGR] An error occurred while ";
             #region Realtime Systems
             #region Request Systems
@@ -40,7 +40,7 @@ namespace fltstd26.core
                 }
                 catch (Exception ex)
                 {
-                    ConProc.Log($"[DBMNGR] An error occurred while fetching the flight: {ex.Message}",2);
+                    ConProc.Log(err + "fetching the flight: " + ex.Message ,2);
                     return new() { Id = -1 };
                 }
             }
@@ -72,7 +72,7 @@ namespace fltstd26.core
                 }
                 catch (Exception ex)
                 {
-                    ConProc.Log($"[DBMNGR] An error occurred while fetching the flights: {ex.Message}",2);
+                    ConProc.Log(err + "fetching the flights: " + ex.Message,2);
                     return [];
                 }
             }
@@ -91,7 +91,7 @@ namespace fltstd26.core
                 }
                 catch (Exception ex)
                 {
-                    ConProc.Log($"[DBMNGR] An error occurred while fetching the slot: {ex.Message}",2);
+                    ConProc.Log(err + "fetching the slot: " + ex.Message,2);
                     return new() { Id = -1 };
                 }
             }
@@ -111,7 +111,7 @@ namespace fltstd26.core
                 }
                 catch (Exception ex)
                 {
-                    ConProc.Log($"[DBMNGR] An error occurred while fetching the slots: {ex.Message}",2);
+                    ConProc.Log(err + "fetching the slots: " + ex.Message,2);
                     return [];
                 }
             }
@@ -130,7 +130,7 @@ namespace fltstd26.core
                 }
                 catch (Exception ex)
                 {
-                    ConProc.Log($"[DBMNGR] An error occurred while fetching the aircraft: {ex.Message}",2);
+                    ConProc.Log(err + "fetching the aircraft: " + ex.Message,2);
                     return new() { Id = -1 };
                 }
             }
@@ -149,7 +149,7 @@ namespace fltstd26.core
                 }
                 catch (Exception ex)
                 {
-                    ConProc.Log($"[DBMNGR] An error occurred while fetching the target: {ex.Message}",2);
+                    ConProc.Log(err + "fetching the target: " + ex.Message,2);
                     return new() { Id = -1 };
                 }
             }
@@ -168,10 +168,56 @@ namespace fltstd26.core
                 }
                 catch (Exception ex)
                 {
-                    ConProc.Log($"[DBMNGR] An error occurred while fetching the targets: {ex.Message}",2);
+                    ConProc.Log(err + "fetching the targets: " + ex.Message,2);
                     return [];
                 }
             }
+
+            /// <summary>
+            /// Request all converted objects from a specified table
+            /// </summary>
+            /// <returns>List of T otherwise empty</returns>
+            public List<T> GetAll<T>() where T : struct
+            {
+                try
+                {
+                    if (typeof(T) == typeof(Types.FLT))
+                    {
+                        List<Types.FLT> flights = [];
+                        foreach (Sheets.Flt f in db!.Table<Sheets.Flt>())
+                        {
+                            List<Types.TGT> tgts = [.. db!.Table<Sheets.Target>().Where(x => x.LId == f.Id).ToList().Select(Converter.Convert)];
+                            Types.LFZ aircraft = Converter.Convert(db!.Find<Sheets.Lfz>(f.Lfz));
+                            Types.FTS timeslot = Converter.Convert(db!.Find<Sheets.Slots>(f.Slot));
+                            Types.FLT flt = Converter.Convert(f);
+                            flt.Aircraft = aircraft;
+                            flt.TimeSlot = timeslot;
+                            flt.Target = tgts;
+                            flights.Add(flt);
+                        }
+                        return [.. flights.Cast<T>()];
+                    }
+                    else if (typeof(T) == typeof(Types.TGT))
+                    {
+                        return [.. db!.Table<Sheets.Target>().ToList().Select(Converter.Convert).Cast<T>()];
+                    }
+                    else if (typeof(T) == typeof(Types.FTS))
+                    {
+                        return [.. db!.Table<Sheets.Slots>().ToList().Select(Converter.Convert).Cast<T>()];
+                    }
+                    else if (typeof(T) == typeof(Types.LFZ))
+                    {
+                        return [.. db!.Table<Sheets.Lfz>().ToList().Select(Converter.Convert).Cast<T>()];
+                    }
+                    else return [];
+                }
+                catch (Exception ex)
+                {
+                    ConProc.Log(err + "fetching the table: " + ex.Message,2);
+                    return [];
+                }
+            }
+
             #endregion
             #region Modification Systems
             /// <summary>
@@ -314,6 +360,29 @@ namespace fltstd26.core
                 {
                     ConProc.Log(err + "updating the aircraft: " + ex.Message,2);
                     return -1;
+                }
+            }
+
+            /// <summary>
+            /// Insert a new price category into database.
+            /// </summary>
+            /// <returns>Identifier</returns>
+            public int InsertPrice(string name, int price)
+            {
+                try
+                {
+                    Sheets.PriceCat s = new()
+                    {
+                        Name = name,
+                        Price = price
+                    };
+                    db!.Insert(s);
+                    return s.Id;
+                }
+                catch (Exception ex)
+                {
+                    ConProc.Log(err + "inserting the price category: " + ex.Message,2);
+                    return -1; // Indicate failure
                 }
             }
 
@@ -477,17 +546,25 @@ namespace fltstd26.core
             {
                 try
                 {
-                    List<int> ids = [];
-                    db!.RunInTransaction(() =>
+                    if (db!.Table<Sheets.Slots>().Count() < 256)
                     {
-                        s.ForEach(x =>
+                        List<int> ids = [];
+                        db!.RunInTransaction(() =>
                         {
-                            Sheets.Slots f = Converter.Convert(x);
-                            db!.Insert(f);
-                            ids.Add(f.Id);
+                            s.ForEach(x =>
+                            {
+                                Sheets.Slots f = Converter.Convert(x);
+                                db!.Insert(f);
+                                ids.Add(f.Id);
+                            });
                         });
-                    });
-                    return ids;
+                        return ids;
+                    }
+                    else
+                    {
+                        ConProc.Log(err + "transacting slots: Too many slots.",2);
+                        return [];
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -505,21 +582,61 @@ namespace fltstd26.core
             {
                 try
                 {
+                    if (db!.Table<Sheets.Lfz>().Count() < 256)
+                    {
+                        List<int> ids = [];
+                        db!.RunInTransaction(() =>
+                        {
+                            s.ForEach(x =>
+                            {
+                                Sheets.Lfz f = Converter.Convert(x);
+                                db!.Insert(f);
+                                ids.Add(f.Id);
+                            });
+                        });
+                        return ids;
+                    }
+                    else
+                    {
+                        ConProc.Log(err + "transacting aircraft: Too many aircraft.",2);
+                        return [];
+                    }
+                }
+                catch (Exception ex)
+                {
+                    ConProc.Log(err + "transacting aircraft: " + ex.Message,2);
+                    return [];
+                }
+            }
+
+            /// <summary>
+            /// Creates multiple price cats in a transaction. If one update fails, all updates will be rolled back.
+            /// </summary>
+            /// <returns>Created IDs or empty</returns>
+            public List<int> InsertPriceT(List<string> name, List<int> price)
+            {
+                try
+                {
+                    if(name.Count != price.Count) throw new Exception("Name and Price count do not match.");
                     List<int> ids = [];
                     db!.RunInTransaction(() =>
                     {
-                        s.ForEach(x =>
+                        for(int i = 0; i < name.Count; i++)
                         {
-                            Sheets.Lfz f = Converter.Convert(x);
-                            db!.Insert(f);
-                            ids.Add(f.Id);
-                        });
+                            Sheets.PriceCat s = new()
+                            {
+                                Name = name[i],
+                                Price = price[i]
+                            };
+                            db!.Insert(s);
+                            ids.Add(s.Id);
+                        }
                     });
                     return ids;
                 }
                 catch (Exception ex)
                 {
-                    ConProc.Log(err + "transacting aircraft: " + ex.Message,2);
+                    ConProc.Log(err + "transacting price categories: " + ex.Message,2);
                     return [];
                 }
             }
@@ -560,7 +677,7 @@ namespace fltstd26.core
                 {
                     Id = Con.Id,
                     End = Con.FTime,
-                    Start = Con.FTime,
+                    Start = Con.STime,
                     Length = Con.Length,
                 };
             }
@@ -580,6 +697,7 @@ namespace fltstd26.core
                     AutoAssign = Con.AutoAssign,
                     Interval = Con.Interval,
                     PriceCat = Con.PriceCat,
+                    AvailTimes = Con.AvailTimes ?? [],
                     Seats = Con.Seats,
                 };
             }
@@ -650,7 +768,8 @@ namespace fltstd26.core
                     AutoAssign = Con.AutoAssign,
                     PriceCat = Con.PriceCat,
                     Type = Con.Type,
-                    Reg = Con.Type,
+                    Reg = Con.Reg,
+                    AvailTimes = Con.AvailTimes ?? [],
                     Seats = Con.Seats,
                 };
             }

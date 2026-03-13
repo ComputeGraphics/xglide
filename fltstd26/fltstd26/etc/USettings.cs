@@ -10,6 +10,8 @@ namespace fltstd26.etc
 {
     public class USettings
     {
+        public static Dictionary<int, (string, int)> PriceCategories = [];
+
         public static List<Types.LFZ> allLFZ = [];
         public static List<Types.FTS> allFTS = [];
 
