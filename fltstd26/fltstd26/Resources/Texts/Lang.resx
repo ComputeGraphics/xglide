@@ -153,9 +153,21 @@
   <data name="info" xml:space="preserve">
     <value>Informationen</value>
   </data>
+  <data name="menubar_cachefolder" xml:space="preserve">
+    <value>Cache Ordner öffnen...</value>
+    <comment>Filesystem Items</comment>
+  </data>
+  <data name="menubar_datafolder" xml:space="preserve">
+    <value>Daten Ordner öffnen...</value>
+    <comment>Filesystem Items</comment>
+  </data>
   <data name="menubar_file" xml:space="preserve">
     <value>Datei</value>
     <comment>Menubar Items</comment>
+  </data>
+  <data name="menubar_filesystem" xml:space="preserve">
+    <value>Dateisystem</value>
+    <comment>Filesystem Items</comment>
   </data>
   <data name="menubar_help" xml:space="preserve">
     <value>Hilfe</value>
@@ -165,11 +177,15 @@
     <value>Verwalten</value>
     <comment>Menubar Items</comment>
   </data>
+  <data name="menubar_profiles" xml:space="preserve">
+    <value>Profile</value>
+    <comment>Menubar Items</comment>
+  </data>
   <data name="menubar_system" xml:space="preserve">
     <value>System</value>
     <comment>Menubar Items</comment>
   </data>
-  <data name="menubar_view" xml:space="preserve">
+  <data name="view" xml:space="preserve">
     <value>Ansicht</value>
     <comment>Menubar Items</comment>
   </data>
@@ -274,5 +290,30 @@
   </data>
   <data name="xplan_weight" xml:space="preserve">
     <value>Gewicht</value>
+  </data>
+  <data name="profile_editor" xml:space="preserve">
+    <value>Profileditor öffnen...</value>
+    <comment>Profile System</comment>
+  </data>
+  <data name="open" xml:space="preserve">
+    <value>Öffnen</value>
+  </data>
+  <data name="save" xml:space="preserve">
+    <value>Speichern</value>
+  </data>
+  <data name="saveas" xml:space="preserve">
+    <value>Speichern unter...</value>
+  </data>
+  <data name="menubar_config" xml:space="preserve">
+    <value>Konfiguration</value>
+  </data>
+  <data name="config_editor" xml:space="preserve">
+    <value>Konfigurationseditor öffnen...</value>
+  </data>
+  <data name="close" xml:space="preserve">
+    <value>Schließen</value>
+  </data>
+  <data name="newobj" xml:space="preserve">
+    <value>Neu...</value>
   </data>
 </root>

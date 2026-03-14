@@ -39,6 +39,8 @@ namespace fltstd26.etc
 
 
         public static Func<string,Color> GetColor = (string c) => (Color)Application.Current!.Resources[c];
+        public static Color InactiveIcon = Application.Current!.RequestedTheme == AppTheme.Dark ? GSettings.GetColor("Gray500") : GSettings.GetColor("Gray400");
+        public static Color PrimaryColor = Application.Current!.RequestedTheme == AppTheme.Dark ? GSettings.GetColor("Primary") : GSettings.GetColor("PrimaryDark");
 
     }
 }

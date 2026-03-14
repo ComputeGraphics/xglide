@@ -37,7 +37,7 @@ namespace fltstd26.etc
             allFTS.Add(new Types.FTS { Start = DateTime.Today.AddHours(14),End = DateTime.Today.AddHours(15),Length = 15 });
 
             //Upload
-            RData.Handler?.db.InsertAll(allPriceCat,true);
+            RData.InsertRange(allPriceCat);
             RData.Handler?.InsertAircraftT(allLFZ);
             RData.Handler?.InsertSlotT(allFTS);
 

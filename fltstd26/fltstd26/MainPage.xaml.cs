@@ -3,24 +3,35 @@ using fltstd26.core;
 using fltstd26.debug;
 using fltstd26.etc;
 using fltstd26.system;
+using fltstd26.XFly;
 using Microsoft.Maui.Controls.Shapes;
+using System.Xml.Linq;
 namespace fltstd26
 {
     public partial class MainPage : ContentPage
     {
+
         List<List<Border>> cells = [];
         List<List<VerticalStackLayout>> containers = [];
+        
+        Dictionary<Guid, XBorder> NodeLibrary = [];
+        Guid focusedID = new(new byte[16]);
 
+        readonly Builder XBuilder = new();
 
         public MainPage()
         {
             InitializeComponent();
             DskMan.Init();
             RData.Init();
+            System.Diagnostics.Debug.WriteLine(Application.Current!.RequestedTheme.ToString());
+            //Application.Current!.UserAppTheme = AppTheme.Light;
         }
 
         public void XPlan_Restart()
         {
+            Color stroke = Application.Current!.RequestedTheme == AppTheme.Dark ? Colors.DarkGray : Colors.LightGray;
+
             TGT_LFZ_Dropdown.Items.Clear();
             List<Types.LFZ> allLFZ = RData.Handler!.GetAll<Types.LFZ>();
             foreach (Types.LFZ lfz in allLFZ)
@@ -28,6 +39,10 @@ namespace fltstd26
                 TGT_LFZ_Dropdown.Items.Add(lfz.Reg);
             }
             //XPLAN AUFBAUEN
+            TapGestureRecognizer Deselector = new TapGestureRecognizer();
+            Deselector.Tapped += NodeDeselectionHandler;
+            XPlan.GestureRecognizers.Add(Deselector);
+
             XPlan.ColumnDefinitions.Clear();
             XPlan.RowDefinitions.Clear();
             XPlan.Children.Clear();
@@ -109,7 +124,7 @@ namespace fltstd26
                                 AllowDrop = true,
                             }
                         },
-                        Stroke = Colors.DarkGray,
+                        Stroke = stroke,
                         StrokeThickness = 1,
                     };
 
@@ -131,14 +146,15 @@ namespace fltstd26
 
         private bool AddNode(Types.FTS timeIn,Types.LFZ lfzIn,Types.TGT tgtIn,bool auto = false)
         {
-            // Find the cell based on time and aircraft
             int rowIndex = RData.Handler!.GetAll<Types.FTS>().FindIndex(fts => fts.Equals(timeIn));
             System.Diagnostics.Debug.WriteLine($"Row Index: {rowIndex}");
             System.Diagnostics.Debug.WriteLine($"LFZ Details:\nId: {lfzIn.Id}\nReg: {lfzIn.Reg}\nType: {lfzIn.Type}\nSeats: {lfzIn.Seats}\nInterval: {lfzIn.Interval}\nPriceCat: {lfzIn.PriceCat}\nAuto: {lfzIn.AutoAssign}\nAvail: {string.Join(", ",lfzIn.AvailTimes)}\n---------");
             int colIndex = RData.Handler!.GetAll<Types.LFZ>().FindIndex(lfz => lfz.Id.Equals(lfzIn.Id));
             System.Diagnostics.Debug.WriteLine($"Col Index: {colIndex}");
             if (rowIndex == -1 || colIndex == -1) return false; //No Cell found
-            Color DefCol = GSettings.GetColor("Gray100");
+
+            Color defCol = Application.Current!.RequestedTheme == AppTheme.Dark ? GSettings.GetColor("Gray100") : GSettings.GetColor("Gray900");
+
             Grid nodegrid = new()
             {
                 ColumnDefinitions =
@@ -158,7 +174,7 @@ namespace fltstd26
             Label nodeid = new()
             {
                 Text = tgtIn.Id.ToString(),
-                TextColor = DefCol,
+                TextColor = defCol,
                 Padding = new Thickness(3),
                 FontAttributes = FontAttributes.Bold,
                 HorizontalTextAlignment = TextAlignment.Center,
@@ -171,7 +187,7 @@ namespace fltstd26
             Label nodename = new()
             {
                 Text = tgtIn.Name,
-                TextColor = DefCol,
+                TextColor = defCol,
                 Padding = new Thickness(3),
                 HorizontalTextAlignment = TextAlignment.Center,
                 FontSize = 16
@@ -183,7 +199,7 @@ namespace fltstd26
             Label nodelength = new()
             {
                 Text = timeIn.Length.ToString() + " min",
-                TextColor = DefCol,
+                TextColor = defCol,
                 VerticalOptions = LayoutOptions.Center,
                 HorizontalOptions = LayoutOptions.Center,
                 Padding = new Thickness(20,0),
@@ -191,7 +207,8 @@ namespace fltstd26
             };
             nodegrid.Add(nodelength,0,2);
 
-            HorizontalStackLayout hzslicon = new() {
+            HorizontalStackLayout hzslicon = new()
+            {
                 HorizontalOptions = LayoutOptions.End,
                 Padding = new Thickness(0,0,20,0),
             };
@@ -208,7 +225,7 @@ namespace fltstd26
                     Aspect = Aspect.AspectFit,
                     Behaviors =
                     {
-                        new IconTintColorBehavior { TintColor = props[i] ? GSettings.GetColor("Primary") : GSettings.GetColor("Gray500") }
+                        new IconTintColorBehavior { TintColor = props[i] ? GSettings.PrimaryColor : GSettings.InactiveIcon }
                     },
                 };
                 imgbtn.Clicked += NodeInteractionHandler;
@@ -219,7 +236,7 @@ namespace fltstd26
             Label nodeoid = new()
             {
                 Text = tgtIn.Id.ToString(),
-                TextColor = DefCol,
+                TextColor = defCol,
                 Padding = new Thickness(3),
                 HorizontalTextAlignment = TextAlignment.Center,
                 FontSize = 16
@@ -230,9 +247,9 @@ namespace fltstd26
 
             XBorder node = new()
             {
-                BackgroundColor = GSettings.GetColor("Background"),
-                Stroke = DefCol,
-                StrokeThickness = 2,
+                BackgroundColor = Application.Current!.RequestedTheme == AppTheme.Dark ? GSettings.GetColor("Gray950") : GSettings.GetColor("Gray100"),
+                Stroke = defCol,
+                StrokeThickness = 0,
                 Content = nodegrid,
                 Tgt = tgtIn,
                 Lfz = lfzIn,
@@ -240,12 +257,20 @@ namespace fltstd26
                 Attrib = props
             };
 
-            // Add drag gesture to the node
-            var dragGesture = new DragGestureRecognizer();
-            dragGesture.DragStarting += OnDragStarting;
-           
-            node.GestureRecognizers.Add(dragGesture);
+            // Gesture Control
+            var Drag = new DragGestureRecognizer();
+            Drag.DragStarting += OnDragStarting;
+            node.GestureRecognizers.Add(Drag);
+
+            TapGestureRecognizer LClick = new TapGestureRecognizer
+            {
+                Buttons = ButtonsMask.Primary,
+            };
+            LClick.Tapped += NodeSelectionHandler;
+            node.GestureRecognizers.Add(LClick);
+
             containers.ElementAt(rowIndex).ElementAt(colIndex).Children.Add(node);
+            NodeLibrary.Add(node.Id,node);
             return true;
         }
 
@@ -261,8 +286,9 @@ namespace fltstd26
                         int buttonIndex = hzsl.Children.IndexOf(interaction);
                         var btn = hzsl.Children.OfType<ImageButton>().ToList().ElementAt(buttonIndex);
                         if (btn.Behaviors.OfType<IconTintColorBehavior>().FirstOrDefault() != null) btn.Behaviors.Clear();
+                        //Invoke button specific action here
                         invokerCell.Attrib[buttonIndex] = !invokerCell.Attrib[buttonIndex];
-                        btn.Behaviors.Add(new IconTintColorBehavior { TintColor = invokerCell.Attrib[buttonIndex] ? GSettings.GetColor("Primary") : GSettings.GetColor("Gray500") });
+                        btn.Behaviors.Add(new IconTintColorBehavior { TintColor = invokerCell.Attrib[buttonIndex] ? GSettings.PrimaryColor : GSettings.InactiveIcon });
                     }
                 }
             }
@@ -270,12 +296,28 @@ namespace fltstd26
 
         private void NodeSelectionHandler(object? sender,EventArgs e)
         {
-            if (sender is XBorder selectedNode)
+            if (sender is XBorder selectedNode && selectedNode.Id != focusedID)
             {
+                NodeDeselectionHandler(sender,e);
+                focusedID = selectedNode.Id;
+                selectedNode.Focus();
+                selectedNode.StrokeThickness = 3;
                 System.Diagnostics.Debug.WriteLine($"Selected node: {selectedNode.Tgt.Id}");
             }
         }
 
+        private void NodeDeselectionHandler(object? sender,EventArgs e)
+        {
+            if (!focusedID.ToByteArray().All(x => x == 0) && NodeLibrary.TryGetValue(focusedID,out XBorder? old))
+            {
+                if (old is not null)
+                {
+                    old.StrokeThickness = 0;
+                    old.Unfocus();
+                }
+                focusedID = new(new byte[16]);
+            }
+        }
 
         private void OnDragStarting(object? sender,DragStartingEventArgs e)
         {
@@ -285,9 +327,6 @@ namespace fltstd26
                 System.Diagnostics.Debug.WriteLine($"Drag started for: {draggedNode.Content!.GetType()}",0);
             }
         }
-
-
-
 
 
         private static void OnDrop(Border targetCell,DropEventArgs e)
@@ -374,30 +413,44 @@ namespace fltstd26
             Application.Current?.OpenWindow(dbPreviewWindow);
         }
 
-        public void OpenFolder_Click(object sender,EventArgs e)
-        {
-            try
-            {
-                string folderPath = GSettings.dbpath;
-                if (Directory.Exists(folderPath))
-                {
-                    System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
-                    {
-                        FileName = folderPath,
-                        UseShellExecute = true,
-                        Verb = "open"
-                    });
-                }
-                else
-                {
-                    System.Diagnostics.Debug.WriteLine($"Directory does not exist: {folderPath}",2);
-                }
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Debug.WriteLine($"Error opening folder: {ex.Message}",2);
-            }
-        }
+
+        //////////////////////////////////////////INTERACTION BAR HANDLING//////////////////////////////////////////
+        public void UndoInterClick(object sender,EventArgs e) => System.Diagnostics.Debug.WriteLine("Undo Click");
+        public void RedoInterClick(object sender,EventArgs e) => System.Diagnostics.Debug.WriteLine("Redo Click");
+        public void CopyInterClick(object sender,EventArgs e) => System.Diagnostics.Debug.WriteLine("Copy Click");
+        public void PasteInterClick(object sender,EventArgs e) => System.Diagnostics.Debug.WriteLine("Paste Click");
+        public void EditInterClick(object sender,EventArgs e) => System.Diagnostics.Debug.WriteLine("Edit Click");
+        public void FlagInterClick(object sender,EventArgs e) => System.Diagnostics.Debug.WriteLine("Flag Click");
+        public void NotifyInterClick(object sender,EventArgs e) => System.Diagnostics.Debug.WriteLine("Notify Click");
+        public void InfoInterClick(object sender,EventArgs e) => System.Diagnostics.Debug.WriteLine("Info Click");
+        public void DeleteInterClick(object sender,EventArgs e) => System.Diagnostics.Debug.WriteLine("Delete Click");
+
+        /////////////////////////////////////////////FILE MENU HANDLING/////////////////////////////////////////////
+
+        //Profiles
+        public void ProfileNewClick(object sender,EventArgs e) => System.Diagnostics.Debug.WriteLine("Not implemented");
+        public void ProfileOpenClick(object sender,EventArgs e) => System.Diagnostics.Debug.WriteLine("Not implemented");
+        public void ProfileSaveClick(object sender,EventArgs e) => System.Diagnostics.Debug.WriteLine("Not implemented");
+        public void ProfileSaveAsClick(object sender,EventArgs e) => System.Diagnostics.Debug.WriteLine("Not implemented");
+        public void ProfileViewClick(object sender,EventArgs e) => System.Diagnostics.Debug.WriteLine("Not implemented");
+        public void ProfileEditorClick(object sender,EventArgs e) => System.Diagnostics.Debug.WriteLine("Not implemented");
+        public void ProfileInfoClick(object sender,EventArgs e) => System.Diagnostics.Debug.WriteLine("Not implemented");
+
+        //Config
+        public void ConfigNewClick(object sender,EventArgs e) => System.Diagnostics.Debug.WriteLine("Not implemented");
+        public void ConfigOpenClick(object sender,EventArgs e) => System.Diagnostics.Debug.WriteLine("Not implemented");
+        public void ConfigSaveClick(object sender,EventArgs e) => System.Diagnostics.Debug.WriteLine("Not implemented");
+        public void ConfigSaveAsClick(object sender,EventArgs e) => System.Diagnostics.Debug.WriteLine("Not implemented");
+        public void ConfigViewClick(object sender,EventArgs e) => System.Diagnostics.Debug.WriteLine("Not implemented");
+        public void ConfigEditorClick(object sender,EventArgs e) => System.Diagnostics.Debug.WriteLine("Not implemented");
+        public void ConfigInfoClick(object sender,EventArgs e) => System.Diagnostics.Debug.WriteLine("Not implemented");
+
+        //Filesystem
+        public void OpenCacheClick(object sender,EventArgs e) => DskMan.OpenFolder(true);
+        public void OpenDataClick(object sender,EventArgs e) => DskMan.OpenFolder(false);
+
+        //Close
+        public void CloseClick(object sender,EventArgs e) => System.Diagnostics.Debug.WriteLine("Not implemented");
     }
 
     public partial class XBorder : Border

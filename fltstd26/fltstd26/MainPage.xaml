@@ -18,6 +18,51 @@
 
     <ContentPage.MenuBarItems>
         <MenuBarItem Text="{x:Static local:Lang.menubar_file}">
+
+            <MenuFlyoutSubItem Text="{x:Static local:Lang.menubar_profiles}">
+                <MenuFlyoutItem Text="{x:Static local:Lang.newobj}"
+                                Clicked="ProfileNewClick" />
+                <MenuFlyoutItem Text="{x:Static local:Lang.open}"
+                                Clicked="ProfileOpenClick" />
+                <MenuFlyoutItem Text="{x:Static local:Lang.save}"
+                                Clicked="ProfileSaveClick" />
+                <MenuFlyoutItem Text="{x:Static local:Lang.saveas}"
+                                Clicked="ProfileSaveAsClick" />
+                <MenuFlyoutItem Text="{x:Static local:Lang.view}"
+                                Clicked="ProfileViewClick" />
+                <MenuFlyoutItem Text="{x:Static local:Lang.profile_editor}"
+                                Clicked="ProfileEditorClick" />
+                <MenuFlyoutItem Text="{x:Static local:Lang.info}"
+                                Clicked="ProfileInfoClick"/>
+            </MenuFlyoutSubItem>
+
+            <MenuFlyoutSubItem Text="{x:Static local:Lang.menubar_config}">
+                <MenuFlyoutItem Text="{x:Static local:Lang.newobj}"
+                                Clicked="ConfigNewClick" />
+                <MenuFlyoutItem Text="{x:Static local:Lang.open}"
+                                Clicked="ConfigOpenClick" />
+                <MenuFlyoutItem Text="{x:Static local:Lang.save}"
+                                Clicked="ConfigSaveClick" />
+                <MenuFlyoutItem Text="{x:Static local:Lang.saveas}"
+                                Clicked="ConfigSaveAsClick" />
+                <MenuFlyoutItem Text="{x:Static local:Lang.view}"
+                                Clicked="ConfigViewClick" />
+                <MenuFlyoutItem Text="{x:Static local:Lang.config_editor}"
+                                Clicked="ConfigEditorClick" />
+                <MenuFlyoutItem Text="{x:Static local:Lang.info}"
+                                Clicked="ConfigInfoClick"/>
+            </MenuFlyoutSubItem>
+
+            <MenuFlyoutSubItem Text="{x:Static local:Lang.menubar_filesystem}">
+                <MenuFlyoutItem Text="{x:Static local:Lang.menubar_cachefolder}"
+                            Clicked="OpenCacheClick"/>
+                <MenuFlyoutItem Text="{x:Static local:Lang.menubar_datafolder}"
+                            Clicked="OpenDataClick"/>
+            </MenuFlyoutSubItem>
+
+            <MenuFlyoutItem Text="{x:Static local:Lang.close}"
+                            Clicked="CloseClick" />
+
             <MenuFlyoutItem Text="Assitant"
                             Clicked="OpenAssistant_Click" />
             <MenuFlyoutItem Text="Create Sample FLT"
@@ -26,8 +71,7 @@
                             Clicked="XPlan_Restart_Click" />
             <MenuFlyoutItem Text="Add Test Node"
                             Clicked="CreateDemoNode_Click" />
-            <MenuFlyoutItem Text="Open Folder"
-                            Clicked="OpenFolder_Click"/>
+
         </MenuBarItem>
         <MenuBarItem Text="{x:Static local:Lang.menubar_system}">
             <MenuFlyoutSeparator/>
@@ -50,7 +94,7 @@
             <MenuFlyoutItem Text="Change Theme"
                             Command="{Binding ChangeThemeCommand}" />
         </MenuBarItem>
-        <MenuBarItem Text="{x:Static local:Lang.menubar_view}">
+        <MenuBarItem Text="{x:Static local:Lang.view}">
             <MenuFlyoutItem Text="XConsole"
                             Clicked="XConsoleClick" />
             <MenuFlyoutItem Text="Zoom In"
@@ -73,11 +117,13 @@
               ColumnDefinitions="*, Auto">
         <Grid RowDefinitions="Auto,*"
               Grid.Column="0">
-            <Border Background="{AppThemeBinding Light={StaticResource Secondary}, Dark={StaticResource SecondaryDark}}"
+            <Border Background="{AppThemeBinding Light={StaticResource SecondaryBg}, Dark={StaticResource SecondaryDark}}"
                     Padding="10"
                     StrokeThickness="0">
                 <Grid ColumnDefinitions="*,*,*,*,*,*,*,*,*">
                     <Button Text="{x:Static local:Lang.undo}"
+                            Clicked="UndoInterClick"
+                            TextColor="Black"
                             Grid.Column="0"
                             x:Name="XPlan_UndoButton"
                             CornerRadius="0"
@@ -85,6 +131,8 @@
                             FontAttributes="Bold"
                             ImageSource="undo.png"/>
                     <Button Text="{x:Static local:Lang.redo}"
+                            Clicked="RedoInterClick"
+                            TextColor="Black"
                             x:Name="XPlan_RedoButton"
                             Grid.Column="1"
                             CornerRadius="0"
@@ -92,6 +140,8 @@
                             FontAttributes="Bold"
                             ImageSource="redo.png"/>
                     <Button Text="{x:Static local:Lang.copy}"
+                            Clicked="CopyInterClick"
+                            TextColor="Black"
                             x:Name="XPlan_CopyButton"
                             Grid.Column="2"
                             CornerRadius="0"
@@ -99,6 +149,8 @@
                             FontAttributes="Bold"
                             ImageSource="copy.png"/>
                     <Button Text="{x:Static local:Lang.paste}"
+                            Clicked="PasteInterClick"
+                            TextColor="Black"
                             x:Name="XPlan_PasteButton"
                             Grid.Column="3"
                             CornerRadius="0"
@@ -106,6 +158,8 @@
                             FontAttributes="Bold"
                             ImageSource="paste.png"/>
                     <Button Text="{x:Static local:Lang.edit}"
+                            Clicked="EditInterClick"
+                            TextColor="Black"
                             x:Name="XPlan_EditButton"
                             Grid.Column="4"
                             CornerRadius="0"
@@ -113,6 +167,8 @@
                             FontAttributes="Bold"
                             ImageSource="modify.png"/>
                     <Button Text="{x:Static local:Lang.flag}"
+                            Clicked="FlagInterClick"
+                            TextColor="Black"
                             x:Name="XPlan_FlagButton"
                             Grid.Column="5"
                             CornerRadius="0"
@@ -120,6 +176,8 @@
                             FontAttributes="Bold"
                             ImageSource="flag.png"/>
                     <Button Text="{x:Static local:Lang.notify}"
+                            Clicked="NotifyInterClick"
+                            TextColor="Black"
                             x:Name="XPlan_NotifyButton"
                             CornerRadius="0"
                             Grid.Column="6"
@@ -127,6 +185,8 @@
                             FontAttributes="Bold"
                             ImageSource="notify.png"/>
                     <Button Text="{x:Static local:Lang.info}"
+                            Clicked="InfoInterClick"
+                            TextColor="Black"
                             x:Name="XPlan_InfoButton"
                             Grid.Column="7"
                             CornerRadius="0"
@@ -134,13 +194,14 @@
                             FontAttributes="Bold"
                             ImageSource="info.png"/>
                     <Button Text="{x:Static local:Lang.delete}"
+                            Clicked="DeleteInterClick"
+                            TextColor="Black"
                             x:Name="XPlan_DeleteButton"
                             Grid.Column="8"
                             CornerRadius="0"
                             BackgroundColor="Transparent"
                             FontAttributes="Bold"
                             ImageSource="bin.png"/>
-
                 </Grid>
             </Border>
             <ScrollView
@@ -154,7 +215,7 @@
             </ScrollView>
         </Grid>
 
-        <Border Background="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource Gray800}}"
+        <Border Background="{AppThemeBinding Light={StaticResource Gray100}, Dark={StaticResource Gray800}}"
                 StrokeThickness="0"
                 Padding="10"
                 Grid.Column="1">
@@ -278,8 +339,5 @@
                         Clicked="XPlan_Add_Click"/>
             </Grid>
         </Border>
-
     </Grid>
-
-
 </ContentPage>

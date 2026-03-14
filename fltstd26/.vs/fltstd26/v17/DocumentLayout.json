@@ -7,8 +7,36 @@
       "RelativeMoniker": "D:0:0:{6732172F-690A-4717-894F-71CFB16A836E}|fltstd26\\fltstd26.csproj|solutionrelative:fltstd26\\mainpage.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
+      "AbsoluteMoniker": "D:0:0:{6732172F-690A-4717-894F-71CFB16A836E}|fltstd26\\fltstd26.csproj|c:\\users\\arthur\\documents\\github\\xglide\\fltstd26\\fltstd26\\xfly\\builder.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{6732172F-690A-4717-894F-71CFB16A836E}|fltstd26\\fltstd26.csproj|solutionrelative:fltstd26\\xfly\\builder.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{6732172F-690A-4717-894F-71CFB16A836E}|fltstd26\\fltstd26.csproj|c:\\users\\arthur\\documents\\github\\xglide\\fltstd26\\fltstd26\\mainpage.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
       "RelativeMoniker": "D:0:0:{6732172F-690A-4717-894F-71CFB16A836E}|fltstd26\\fltstd26.csproj|solutionrelative:fltstd26\\mainpage.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{6732172F-690A-4717-894F-71CFB16A836E}|fltstd26\\fltstd26.csproj|c:\\users\\arthur\\documents\\github\\xglide\\fltstd26\\fltstd26\\etc\\gsettings.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{6732172F-690A-4717-894F-71CFB16A836E}|fltstd26\\fltstd26.csproj|solutionrelative:fltstd26\\etc\\gsettings.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{6732172F-690A-4717-894F-71CFB16A836E}|fltstd26\\fltstd26.csproj|c:\\users\\arthur\\documents\\github\\xglide\\fltstd26\\fltstd26\\core\\rdata.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{6732172F-690A-4717-894F-71CFB16A836E}|fltstd26\\fltstd26.csproj|solutionrelative:fltstd26\\core\\rdata.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{6732172F-690A-4717-894F-71CFB16A836E}|fltstd26\\fltstd26.csproj|c:\\users\\arthur\\documents\\github\\xglide\\fltstd26\\fltstd26\\system\\dskman.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{6732172F-690A-4717-894F-71CFB16A836E}|fltstd26\\fltstd26.csproj|solutionrelative:fltstd26\\system\\dskman.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{6732172F-690A-4717-894F-71CFB16A836E}|fltstd26\\fltstd26.csproj|c:\\users\\arthur\\documents\\github\\xglide\\fltstd26\\fltstd26\\resources\\texts\\lang.resx||{81828910-B8B3-4D2B-99A3-067027C180C1}",
+      "RelativeMoniker": "D:0:0:{6732172F-690A-4717-894F-71CFB16A836E}|fltstd26\\fltstd26.csproj|solutionrelative:fltstd26\\resources\\texts\\lang.resx||{81828910-B8B3-4D2B-99A3-067027C180C1}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{6732172F-690A-4717-894F-71CFB16A836E}|fltstd26\\fltstd26.csproj|c:\\users\\arthur\\documents\\github\\xglide\\fltstd26\\fltstd26\\etc\\presets.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{6732172F-690A-4717-894F-71CFB16A836E}|fltstd26\\fltstd26.csproj|solutionrelative:fltstd26\\etc\\presets.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{6732172F-690A-4717-894F-71CFB16A836E}|fltstd26\\fltstd26.csproj|c:\\users\\arthur\\documents\\github\\xglide\\fltstd26\\fltstd26\\core\\dbsys.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{6732172F-690A-4717-894F-71CFB16A836E}|fltstd26\\fltstd26.csproj|solutionrelative:fltstd26\\core\\dbsys.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{6732172F-690A-4717-894F-71CFB16A836E}|fltstd26\\fltstd26.csproj|c:\\users\\arthur\\documents\\github\\xglide\\fltstd26\\fltstd26\\xfly\\manager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -27,32 +55,12 @@
       "RelativeMoniker": "D:0:0:{6732172F-690A-4717-894F-71CFB16A836E}|fltstd26\\fltstd26.csproj|solutionrelative:fltstd26\\etc\\types.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{6732172F-690A-4717-894F-71CFB16A836E}|fltstd26\\fltstd26.csproj|c:\\users\\arthur\\documents\\github\\xglide\\fltstd26\\fltstd26\\core\\dbsys.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{6732172F-690A-4717-894F-71CFB16A836E}|fltstd26\\fltstd26.csproj|solutionrelative:fltstd26\\core\\dbsys.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{6732172F-690A-4717-894F-71CFB16A836E}|fltstd26\\fltstd26.csproj|c:\\users\\arthur\\documents\\github\\xglide\\fltstd26\\fltstd26\\etc\\presets.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{6732172F-690A-4717-894F-71CFB16A836E}|fltstd26\\fltstd26.csproj|solutionrelative:fltstd26\\etc\\presets.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{6732172F-690A-4717-894F-71CFB16A836E}|fltstd26\\fltstd26.csproj|c:\\users\\arthur\\documents\\github\\xglide\\fltstd26\\fltstd26\\core\\rdata.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{6732172F-690A-4717-894F-71CFB16A836E}|fltstd26\\fltstd26.csproj|solutionrelative:fltstd26\\core\\rdata.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{6732172F-690A-4717-894F-71CFB16A836E}|fltstd26\\fltstd26.csproj|c:\\users\\arthur\\documents\\github\\xglide\\fltstd26\\fltstd26\\debug\\dbpreview.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{6732172F-690A-4717-894F-71CFB16A836E}|fltstd26\\fltstd26.csproj|solutionrelative:fltstd26\\debug\\dbpreview.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{6732172F-690A-4717-894F-71CFB16A836E}|fltstd26\\fltstd26.csproj|c:\\users\\arthur\\documents\\github\\xglide\\fltstd26\\fltstd26\\etc\\gsettings.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{6732172F-690A-4717-894F-71CFB16A836E}|fltstd26\\fltstd26.csproj|solutionrelative:fltstd26\\etc\\gsettings.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{6732172F-690A-4717-894F-71CFB16A836E}|fltstd26\\fltstd26.csproj|c:\\users\\arthur\\documents\\github\\xglide\\fltstd26\\fltstd26\\debug\\dbpreview.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
       "RelativeMoniker": "D:0:0:{6732172F-690A-4717-894F-71CFB16A836E}|fltstd26\\fltstd26.csproj|solutionrelative:fltstd26\\debug\\dbpreview.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{6732172F-690A-4717-894F-71CFB16A836E}|fltstd26\\fltstd26.csproj|c:\\users\\arthur\\documents\\github\\xglide\\fltstd26\\fltstd26\\resources\\texts\\lang.resx||{81828910-B8B3-4D2B-99A3-067027C180C1}",
-      "RelativeMoniker": "D:0:0:{6732172F-690A-4717-894F-71CFB16A836E}|fltstd26\\fltstd26.csproj|solutionrelative:fltstd26\\resources\\texts\\lang.resx||{81828910-B8B3-4D2B-99A3-067027C180C1}"
     }
   ],
   "DocumentGroupContainers": [
@@ -61,8 +69,8 @@
       "VerticalTabListWidth": 256,
       "DocumentGroups": [
         {
-          "DockedWidth": 258,
-          "SelectedChildIndex": 12,
+          "DockedWidth": 239,
+          "SelectedChildIndex": 3,
           "Children": [
             {
               "$type": "Bookmark",
@@ -70,141 +78,28 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
-              "Title": "DBSys.cs",
-              "DocumentMoniker": "C:\\Users\\Arthur\\Documents\\GitHub\\xglide\\fltstd26\\fltstd26\\core\\DBSys.cs",
-              "RelativeDocumentMoniker": "fltstd26\\core\\DBSys.cs",
-              "ToolTip": "C:\\Users\\Arthur\\Documents\\GitHub\\xglide\\fltstd26\\fltstd26\\core\\DBSys.cs",
-              "RelativeToolTip": "fltstd26\\core\\DBSys.cs",
-              "ViewState": "AgIAAIcAAAAAAAAAAAAmwMoAAAAVAAAAAAAAAA==",
+              "DocumentIndex": 1,
+              "Title": "Builder.cs",
+              "DocumentMoniker": "C:\\Users\\Arthur\\Documents\\GitHub\\xglide\\fltstd26\\fltstd26\\XFly\\Builder.cs",
+              "RelativeDocumentMoniker": "fltstd26\\XFly\\Builder.cs",
+              "ToolTip": "C:\\Users\\Arthur\\Documents\\GitHub\\xglide\\fltstd26\\fltstd26\\XFly\\Builder.cs",
+              "RelativeToolTip": "fltstd26\\XFly\\Builder.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-18T16:30:45.917Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "Types.cs",
-              "DocumentMoniker": "C:\\Users\\Arthur\\Documents\\GitHub\\xglide\\fltstd26\\fltstd26\\etc\\Types.cs",
-              "RelativeDocumentMoniker": "fltstd26\\etc\\Types.cs",
-              "ToolTip": "C:\\Users\\Arthur\\Documents\\GitHub\\xglide\\fltstd26\\fltstd26\\etc\\Types.cs",
-              "RelativeToolTip": "fltstd26\\etc\\Types.cs",
-              "ViewState": "AgIAABgAAAAAAAAAAAAowB8AAAAgAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-08T19:49:45.736Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "USettings.cs",
-              "DocumentMoniker": "C:\\Users\\Arthur\\Documents\\GitHub\\xglide\\fltstd26\\fltstd26\\etc\\USettings.cs",
-              "RelativeDocumentMoniker": "fltstd26\\etc\\USettings.cs",
-              "ToolTip": "C:\\Users\\Arthur\\Documents\\GitHub\\xglide\\fltstd26\\fltstd26\\etc\\USettings.cs",
-              "RelativeToolTip": "fltstd26\\etc\\USettings.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAABKAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-01T19:17:54.288Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "Sheets.cs",
-              "DocumentMoniker": "C:\\Users\\Arthur\\Documents\\GitHub\\xglide\\fltstd26\\fltstd26\\core\\Sheets.cs",
-              "RelativeDocumentMoniker": "fltstd26\\core\\Sheets.cs",
-              "ToolTip": "C:\\Users\\Arthur\\Documents\\GitHub\\xglide\\fltstd26\\fltstd26\\core\\Sheets.cs",
-              "RelativeToolTip": "fltstd26\\core\\Sheets.cs",
-              "ViewState": "AgIAAEcAAAAAAAAAAAAmwBkAAAAaAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-01T19:01:11.098Z",
+              "WhenOpened": "2026-03-14T12:58:45.975Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 2,
-              "Title": "Manager.cs",
-              "DocumentMoniker": "C:\\Users\\Arthur\\Documents\\GitHub\\xglide\\fltstd26\\fltstd26\\XFly\\Manager.cs",
-              "RelativeDocumentMoniker": "fltstd26\\XFly\\Manager.cs",
-              "ToolTip": "C:\\Users\\Arthur\\Documents\\GitHub\\xglide\\fltstd26\\fltstd26\\XFly\\Manager.cs",
-              "RelativeToolTip": "fltstd26\\XFly\\Manager.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAACYAAAAJAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-01T18:43:22.061Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 12,
-              "Title": "Lang.resx",
-              "DocumentMoniker": "C:\\Users\\Arthur\\Documents\\GitHub\\xglide\\fltstd26\\fltstd26\\Resources\\Texts\\Lang.resx",
-              "RelativeDocumentMoniker": "fltstd26\\Resources\\Texts\\Lang.resx",
-              "ToolTip": "C:\\Users\\Arthur\\Documents\\GitHub\\xglide\\fltstd26\\fltstd26\\Resources\\Texts\\Lang.resx",
-              "RelativeToolTip": "fltstd26\\Resources\\Texts\\Lang.resx",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001005|",
-              "WhenOpened": "2026-02-27T17:37:31.65Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 10,
-              "Title": "GSettings.cs",
-              "DocumentMoniker": "C:\\Users\\Arthur\\Documents\\GitHub\\xglide\\fltstd26\\fltstd26\\etc\\GSettings.cs",
-              "RelativeDocumentMoniker": "fltstd26\\etc\\GSettings.cs",
-              "ToolTip": "C:\\Users\\Arthur\\Documents\\GitHub\\xglide\\fltstd26\\fltstd26\\etc\\GSettings.cs",
-              "RelativeToolTip": "fltstd26\\etc\\GSettings.cs",
-              "ViewState": "AgIAAAMAAAAAAAAAAADwvyMAAAAqAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-08T21:24:32.42Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 11,
-              "Title": "DBPreview.xaml",
-              "DocumentMoniker": "C:\\Users\\Arthur\\Documents\\GitHub\\xglide\\fltstd26\\fltstd26\\debug\\DBPreview.xaml",
-              "RelativeDocumentMoniker": "fltstd26\\debug\\DBPreview.xaml",
-              "ToolTip": "C:\\Users\\Arthur\\Documents\\GitHub\\xglide\\fltstd26\\fltstd26\\debug\\DBPreview.xaml",
-              "RelativeToolTip": "fltstd26\\debug\\DBPreview.xaml",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABYAAAA6AAAAAAAAAA==",
+              "Title": "MainPage.xaml",
+              "DocumentMoniker": "C:\\Users\\Arthur\\Documents\\GitHub\\xglide\\fltstd26\\fltstd26\\MainPage.xaml",
+              "RelativeDocumentMoniker": "fltstd26\\MainPage.xaml",
+              "ToolTip": "C:\\Users\\Arthur\\Documents\\GitHub\\xglide\\fltstd26\\fltstd26\\MainPage.xaml",
+              "RelativeToolTip": "fltstd26\\MainPage.xaml",
+              "ViewState": "AgIAAFgAAAAAAAAAAAAowHcAAAB3AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2026-02-20T15:55:29.524Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 8,
-              "Title": "RData.cs",
-              "DocumentMoniker": "C:\\Users\\Arthur\\Documents\\GitHub\\xglide\\fltstd26\\fltstd26\\core\\RData.cs",
-              "RelativeDocumentMoniker": "fltstd26\\core\\RData.cs",
-              "ToolTip": "C:\\Users\\Arthur\\Documents\\GitHub\\xglide\\fltstd26\\fltstd26\\core\\RData.cs",
-              "RelativeToolTip": "fltstd26\\core\\RData.cs",
-              "ViewState": "AgIAADYAAAAAAAAAAAAqwD4AAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-01T13:24:18.614Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 9,
-              "Title": "DBPreview.xaml.cs",
-              "DocumentMoniker": "C:\\Users\\Arthur\\Documents\\GitHub\\xglide\\fltstd26\\fltstd26\\debug\\DBPreview.xaml.cs",
-              "RelativeDocumentMoniker": "fltstd26\\debug\\DBPreview.xaml.cs",
-              "ToolTip": "C:\\Users\\Arthur\\Documents\\GitHub\\xglide\\fltstd26\\fltstd26\\debug\\DBPreview.xaml.cs",
-              "RelativeToolTip": "fltstd26\\debug\\DBPreview.xaml.cs",
-              "ViewState": "AgIAADAAAAAAAAAAAAAowEYAAAARAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-16T14:52:21.237Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 7,
-              "Title": "presets.cs",
-              "DocumentMoniker": "C:\\Users\\Arthur\\Documents\\GitHub\\xglide\\fltstd26\\fltstd26\\etc\\presets.cs",
-              "RelativeDocumentMoniker": "fltstd26\\etc\\presets.cs",
-              "ToolTip": "C:\\Users\\Arthur\\Documents\\GitHub\\xglide\\fltstd26\\fltstd26\\etc\\presets.cs",
-              "RelativeToolTip": "fltstd26\\etc\\presets.cs",
-              "ViewState": "AgIAAAkAAAAAAAAAAAAIwA4AAAAoAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-15T18:21:51.377Z",
+              "WhenOpened": "2026-03-13T15:54:20.254Z",
               "EditorCaption": ""
             },
             {
@@ -215,23 +110,160 @@
               "RelativeDocumentMoniker": "fltstd26\\MainPage.xaml.cs",
               "ToolTip": "C:\\Users\\Arthur\\Documents\\GitHub\\xglide\\fltstd26\\fltstd26\\MainPage.xaml.cs",
               "RelativeToolTip": "fltstd26\\MainPage.xaml.cs",
-              "ViewState": "AgIAAKEAAAAAAAAAAAAwwNcAAAANAAAAAAAAAA==",
+              "ViewState": "AgIAANUAAAAAAAAAAAAgwAYBAAAuAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-12-31T15:54:38.37Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "MainPage.xaml",
-              "DocumentMoniker": "C:\\Users\\Arthur\\Documents\\GitHub\\xglide\\fltstd26\\fltstd26\\MainPage.xaml",
-              "RelativeDocumentMoniker": "fltstd26\\MainPage.xaml",
-              "ToolTip": "C:\\Users\\Arthur\\Documents\\GitHub\\xglide\\fltstd26\\fltstd26\\MainPage.xaml",
-              "RelativeToolTip": "fltstd26\\MainPage.xaml",
-              "ViewState": "AgIAAEMAAAAAAAAAAAAAAPYAAABQAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2025-12-25T12:56:41.952Z",
+              "DocumentIndex": 6,
+              "Title": "Lang.resx",
+              "DocumentMoniker": "C:\\Users\\Arthur\\Documents\\GitHub\\xglide\\fltstd26\\fltstd26\\Resources\\Texts\\Lang.resx",
+              "RelativeDocumentMoniker": "fltstd26\\Resources\\Texts\\Lang.resx",
+              "ToolTip": "C:\\Users\\Arthur\\Documents\\GitHub\\xglide\\fltstd26\\fltstd26\\Resources\\Texts\\Lang.resx",
+              "RelativeToolTip": "fltstd26\\Resources\\Texts\\Lang.resx",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001005|",
+              "WhenOpened": "2026-02-27T17:37:31.65Z",
               "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "DskMan.cs",
+              "DocumentMoniker": "C:\\Users\\Arthur\\Documents\\GitHub\\xglide\\fltstd26\\fltstd26\\system\\DskMan.cs",
+              "RelativeDocumentMoniker": "fltstd26\\system\\DskMan.cs",
+              "ToolTip": "C:\\Users\\Arthur\\Documents\\GitHub\\xglide\\fltstd26\\fltstd26\\system\\DskMan.cs",
+              "RelativeToolTip": "fltstd26\\system\\DskMan.cs",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAAADAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-13T16:07:53.702Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "DBSys.cs",
+              "DocumentMoniker": "C:\\Users\\Arthur\\Documents\\GitHub\\xglide\\fltstd26\\fltstd26\\core\\DBSys.cs",
+              "RelativeDocumentMoniker": "fltstd26\\core\\DBSys.cs",
+              "ToolTip": "C:\\Users\\Arthur\\Documents\\GitHub\\xglide\\fltstd26\\fltstd26\\core\\DBSys.cs",
+              "RelativeToolTip": "fltstd26\\core\\DBSys.cs",
+              "ViewState": "AgIAAOcAAAAAAAAAAAAkwMoAAAAVAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-18T16:30:45.917Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "Sheets.cs",
+              "DocumentMoniker": "C:\\Users\\Arthur\\Documents\\GitHub\\xglide\\fltstd26\\fltstd26\\core\\Sheets.cs",
+              "RelativeDocumentMoniker": "fltstd26\\core\\Sheets.cs",
+              "ToolTip": "C:\\Users\\Arthur\\Documents\\GitHub\\xglide\\fltstd26\\fltstd26\\core\\Sheets.cs",
+              "RelativeToolTip": "fltstd26\\core\\Sheets.cs",
+              "ViewState": "AgIAAEcAAAAAAAAAAAAmwBkAAAAaAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-01T19:01:11.098Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "Manager.cs",
+              "DocumentMoniker": "C:\\Users\\Arthur\\Documents\\GitHub\\xglide\\fltstd26\\fltstd26\\XFly\\Manager.cs",
+              "RelativeDocumentMoniker": "fltstd26\\XFly\\Manager.cs",
+              "ToolTip": "C:\\Users\\Arthur\\Documents\\GitHub\\xglide\\fltstd26\\fltstd26\\XFly\\Manager.cs",
+              "RelativeToolTip": "fltstd26\\XFly\\Manager.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAACYAAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-01T18:43:22.061Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "GSettings.cs",
+              "DocumentMoniker": "C:\\Users\\Arthur\\Documents\\GitHub\\xglide\\fltstd26\\fltstd26\\etc\\GSettings.cs",
+              "RelativeDocumentMoniker": "fltstd26\\etc\\GSettings.cs",
+              "ToolTip": "C:\\Users\\Arthur\\Documents\\GitHub\\xglide\\fltstd26\\fltstd26\\etc\\GSettings.cs",
+              "RelativeToolTip": "fltstd26\\etc\\GSettings.cs",
+              "ViewState": "AgIAAAYAAAAAAAAAAADwvyoAAABIAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-08T21:24:32.42Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 14,
+              "Title": "DBPreview.xaml",
+              "DocumentMoniker": "C:\\Users\\Arthur\\Documents\\GitHub\\xglide\\fltstd26\\fltstd26\\debug\\DBPreview.xaml",
+              "RelativeDocumentMoniker": "fltstd26\\debug\\DBPreview.xaml",
+              "ToolTip": "C:\\Users\\Arthur\\Documents\\GitHub\\xglide\\fltstd26\\fltstd26\\debug\\DBPreview.xaml",
+              "RelativeToolTip": "fltstd26\\debug\\DBPreview.xaml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABYAAAA6AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2026-02-20T15:55:29.524Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "RData.cs",
+              "DocumentMoniker": "C:\\Users\\Arthur\\Documents\\GitHub\\xglide\\fltstd26\\fltstd26\\core\\RData.cs",
+              "RelativeDocumentMoniker": "fltstd26\\core\\RData.cs",
+              "ToolTip": "C:\\Users\\Arthur\\Documents\\GitHub\\xglide\\fltstd26\\fltstd26\\core\\RData.cs",
+              "RelativeToolTip": "fltstd26\\core\\RData.cs",
+              "ViewState": "AgIAAA0AAAAAAAAAAAAgwBQAAAAhAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-01T13:24:18.614Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "presets.cs",
+              "DocumentMoniker": "C:\\Users\\Arthur\\Documents\\GitHub\\xglide\\fltstd26\\fltstd26\\etc\\presets.cs",
+              "RelativeDocumentMoniker": "fltstd26\\etc\\presets.cs",
+              "ToolTip": "C:\\Users\\Arthur\\Documents\\GitHub\\xglide\\fltstd26\\fltstd26\\etc\\presets.cs",
+              "RelativeToolTip": "fltstd26\\etc\\presets.cs",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAqwCkAAAAvAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-15T18:21:51.377Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "USettings.cs",
+              "DocumentMoniker": "C:\\Users\\Arthur\\Documents\\GitHub\\xglide\\fltstd26\\fltstd26\\etc\\USettings.cs",
+              "RelativeDocumentMoniker": "fltstd26\\etc\\USettings.cs",
+              "ToolTip": "C:\\Users\\Arthur\\Documents\\GitHub\\xglide\\fltstd26\\fltstd26\\etc\\USettings.cs",
+              "RelativeToolTip": "fltstd26\\etc\\USettings.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAABKAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-01T19:17:54.288Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "Types.cs",
+              "DocumentMoniker": "C:\\Users\\Arthur\\Documents\\GitHub\\xglide\\fltstd26\\fltstd26\\etc\\Types.cs",
+              "RelativeDocumentMoniker": "fltstd26\\etc\\Types.cs",
+              "ToolTip": "C:\\Users\\Arthur\\Documents\\GitHub\\xglide\\fltstd26\\fltstd26\\etc\\Types.cs",
+              "RelativeToolTip": "fltstd26\\etc\\Types.cs",
+              "ViewState": "AgIAABgAAAAAAAAAAAAowB8AAAAgAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-08T19:49:45.736Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "DBPreview.xaml.cs",
+              "DocumentMoniker": "C:\\Users\\Arthur\\Documents\\GitHub\\xglide\\fltstd26\\fltstd26\\debug\\DBPreview.xaml.cs",
+              "RelativeDocumentMoniker": "fltstd26\\debug\\DBPreview.xaml.cs",
+              "ToolTip": "C:\\Users\\Arthur\\Documents\\GitHub\\xglide\\fltstd26\\fltstd26\\debug\\DBPreview.xaml.cs",
+              "RelativeToolTip": "fltstd26\\debug\\DBPreview.xaml.cs",
+              "ViewState": "AgIAADAAAAAAAAAAAAAowEYAAAARAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-16T14:52:21.237Z"
             }
           ]
         }

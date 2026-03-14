@@ -153,8 +153,17 @@
   <data name="info" xml:space="preserve">
     <value>Info</value>
   </data>
+  <data name="menubar_cachefolder" xml:space="preserve">
+    <value>Open Cache Folder...</value>
+  </data>
+  <data name="menubar_datafolder" xml:space="preserve">
+    <value>Open Data Folder...</value>
+  </data>
   <data name="menubar_file" xml:space="preserve">
     <value>File</value>
+  </data>
+  <data name="menubar_filesystem" xml:space="preserve">
+    <value>Filesystem</value>
   </data>
   <data name="menubar_help" xml:space="preserve">
     <value>Help</value>
@@ -162,10 +171,13 @@
   <data name="menubar_manage" xml:space="preserve">
     <value>Manage</value>
   </data>
+  <data name="menubar_profiles" xml:space="preserve">
+    <value>Profiles</value>
+  </data>
   <data name="menubar_system" xml:space="preserve">
     <value>System</value>
   </data>
-  <data name="menubar_view" xml:space="preserve">
+  <data name="view" xml:space="preserve">
     <value>View</value>
   </data>
   <data name="notify" xml:space="preserve">
@@ -254,5 +266,29 @@
   </data>
   <data name="xplan_weight" xml:space="preserve">
     <value>Weight</value>
+  </data>
+  <data name="profile_editor" xml:space="preserve">
+    <value>Open Profile Editor...</value>
+  </data>
+  <data name="open" xml:space="preserve">
+    <value>Open</value>
+  </data>
+  <data name="save" xml:space="preserve">
+    <value>Save</value>
+  </data>
+  <data name="saveas" xml:space="preserve">
+    <value>Save as...</value>
+  </data>
+  <data name="menubar_config" xml:space="preserve">
+    <value>Configuration</value>
+  </data>
+  <data name="config_editor" xml:space="preserve">
+    <value>Open Config Editor...</value>
+  </data>
+  <data name="close" xml:space="preserve">
+    <value>Close</value>
+  </data>
+  <data name="newobj" xml:space="preserve">
+    <value>New...</value>
   </data>
 </root>

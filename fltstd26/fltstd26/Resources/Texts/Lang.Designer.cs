@@ -70,6 +70,24 @@ namespace fltstd26.Resources.Texts {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Schließen ähnelt.
+        /// </summary>
+        internal static string close {
+            get {
+                return ResourceManager.GetString("close", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Konfigurationseditor öffnen... ähnelt.
+        /// </summary>
+        internal static string config_editor {
+            get {
+                return ResourceManager.GetString("config_editor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Tauschen ähnelt.
         /// </summary>
         internal static string copy {
@@ -169,11 +187,47 @@ namespace fltstd26.Resources.Texts {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Cache Ordner öffnen... ähnelt.
+        /// </summary>
+        internal static string menubar_cachefolder {
+            get {
+                return ResourceManager.GetString("menubar_cachefolder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Konfiguration ähnelt.
+        /// </summary>
+        internal static string menubar_config {
+            get {
+                return ResourceManager.GetString("menubar_config", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Daten Ordner öffnen... ähnelt.
+        /// </summary>
+        internal static string menubar_datafolder {
+            get {
+                return ResourceManager.GetString("menubar_datafolder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Datei ähnelt.
         /// </summary>
         internal static string menubar_file {
             get {
                 return ResourceManager.GetString("menubar_file", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Dateisystem ähnelt.
+        /// </summary>
+        internal static string menubar_filesystem {
+            get {
+                return ResourceManager.GetString("menubar_filesystem", resourceCulture);
             }
         }
         
@@ -196,6 +250,15 @@ namespace fltstd26.Resources.Texts {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Profile ähnelt.
+        /// </summary>
+        internal static string menubar_profiles {
+            get {
+                return ResourceManager.GetString("menubar_profiles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die System ähnelt.
         /// </summary>
         internal static string menubar_system {
@@ -205,11 +268,11 @@ namespace fltstd26.Resources.Texts {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Ansicht ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Neu... ähnelt.
         /// </summary>
-        internal static string menubar_view {
+        internal static string newobj {
             get {
-                return ResourceManager.GetString("menubar_view", resourceCulture);
+                return ResourceManager.GetString("newobj", resourceCulture);
             }
         }
         
@@ -223,6 +286,15 @@ namespace fltstd26.Resources.Texts {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Öffnen ähnelt.
+        /// </summary>
+        internal static string open {
+            get {
+                return ResourceManager.GetString("open", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Einfügen ähnelt.
         /// </summary>
         internal static string paste {
@@ -232,11 +304,38 @@ namespace fltstd26.Resources.Texts {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Profileditor öffnen... ähnelt.
+        /// </summary>
+        internal static string profile_editor {
+            get {
+                return ResourceManager.GetString("profile_editor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Wiederholen ähnelt.
         /// </summary>
         internal static string redo {
             get {
                 return ResourceManager.GetString("redo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Speichern ähnelt.
+        /// </summary>
+        internal static string save {
+            get {
+                return ResourceManager.GetString("save", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Speichern unter... ähnelt.
+        /// </summary>
+        internal static string saveas {
+            get {
+                return ResourceManager.GetString("saveas", resourceCulture);
             }
         }
         
@@ -255,6 +354,15 @@ namespace fltstd26.Resources.Texts {
         internal static string undo {
             get {
                 return ResourceManager.GetString("undo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Ansicht ähnelt.
+        /// </summary>
+        internal static string view {
+            get {
+                return ResourceManager.GetString("view", resourceCulture);
             }
         }
         

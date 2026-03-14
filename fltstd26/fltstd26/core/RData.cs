@@ -93,7 +93,7 @@ namespace fltstd26.core
         }
 
         //////////////////////////////////////////////LANG REDIRECTION//////////////////////////////////////////////
-
+        
         public static List<Sheets.Flt> GetFlightTable() => (Active ? rdb?.Table<Sheets.Flt>().ToList() : []) ?? [];
         public static List<Sheets.Slots> GetSlotsTable() => (Active ? rdb?.Table<Sheets.Slots>().ToList() : []) ?? [];
         public static List<Sheets.Lfz> GetAircraftTable() => (Active ? rdb?.Table<Sheets.Lfz>().ToList() : []) ?? [];
@@ -110,6 +110,20 @@ namespace fltstd26.core
             {
                 ConProc.Log($"[RDATA] Get Process failed: {e.Message}",2);
                 return null;
+            }
+        }
+
+        public static bool InsertRange<T>(List<T> value) where T : class, new()
+        {
+            try
+            {
+                rdb?.InsertAll(value,true);
+                return true;
+            }
+            catch (Exception e)
+            {
+                ConProc.Log($"[RDATA] Insert Process failed: {e.Message}",2);
+                return false;
             }
         }
         public static void SyncPriceTable()
