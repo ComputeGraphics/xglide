@@ -38,9 +38,10 @@ namespace fltstd26.etc
         public static List<string> Additionals = [];
 
 
-        public static Func<string,Color> GetColor = (string c) => (Color)Application.Current!.Resources[c];
-        public static Color InactiveIcon = Application.Current!.RequestedTheme == AppTheme.Dark ? GSettings.GetColor("Gray500") : GSettings.GetColor("Gray400");
-        public static Color PrimaryColor = Application.Current!.RequestedTheme == AppTheme.Dark ? GSettings.GetColor("Primary") : GSettings.GetColor("PrimaryDark");
+        public static Func<string,Color> GetColour = (string c) => (Color)Application.Current!.Resources[c];
+        public static Color InactiveIcon = Application.Current!.RequestedTheme == AppTheme.Dark ? GSettings.GetColour("Gray500") : GSettings.GetColour("Gray400");
+        public static Color PrimaryColour = Application.Current!.RequestedTheme == AppTheme.Dark ? GSettings.GetColour("Primary") : GSettings.GetColour("PrimaryDark");
+        public static Color NodeColour = Application.Current!.RequestedTheme == AppTheme.Dark ? GSettings.GetColour("Gray100") : GSettings.GetColour("Gray900");
 
     }
 }

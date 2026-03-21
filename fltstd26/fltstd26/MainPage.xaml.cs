@@ -13,11 +13,10 @@ namespace fltstd26
 
         List<List<Border>> cells = [];
         List<List<VerticalStackLayout>> containers = [];
-        
-        Dictionary<Guid, XBorder> NodeLibrary = [];
-        Guid focusedID = new(new byte[16]);
 
-        readonly Builder XBuilder = new();
+        Dictionary<Guid,XBorder> NodeLibrary = [];
+        Guid copyBuffer = new(new byte[16]);
+        Guid focusedID = new(new byte[16]);
 
         public MainPage()
         {
@@ -52,8 +51,10 @@ namespace fltstd26
             {
                 XPlan.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Star });
                 Label lbl = new()
-                { 
-                    Text = lfz.Reg,VerticalOptions = LayoutOptions.Center,HorizontalOptions = LayoutOptions.Center,
+                {
+                    Text = lfz.Reg,
+                    VerticalOptions = LayoutOptions.Center,
+                    HorizontalOptions = LayoutOptions.Center,
                     FontAttributes = FontAttributes.Bold,
                     FontSize = 24,
                 };
@@ -80,12 +81,12 @@ namespace fltstd26
                 };
 
                 Label lbl = new()
-                { 
+                {
                     Text = $"{fts.Start:HH:mm}\n{fts.End:HH:mm}",
                     FontAttributes = FontAttributes.Bold,
                     VerticalOptions = LayoutOptions.End,
                     HorizontalOptions = LayoutOptions.Center,
-                    FontSize = 20 ,
+                    FontSize = 20,
                 };
                 slot.Add(lbl,0,0);
                 slot.SetColumnSpan(lbl,2);
@@ -112,29 +113,43 @@ namespace fltstd26
                 XPlan.Add(slot,0,XPlan.RowDefinitions.Count - 1);
                 for (int i = 0; i < allLFZ.Count; i++)
                 {
-                    VerticalStackLayout cellContainer = [];
-
+                    // Event Handlers
+                    
                     Border cellBorder = new()
                     {
-                        Content = cellContainer,
-                        GestureRecognizers =
-                        {
-                            new DropGestureRecognizer
-                            {
-                                AllowDrop = true,
-                            }
-                        },
                         Stroke = stroke,
                         StrokeThickness = 1,
                     };
 
-                    containersRow.Add(cellContainer);
 
-                    // Attach Drop event handler
-                    if (cellBorder.GestureRecognizers[0] is DropGestureRecognizer dropGesture)
+                    if (Get.AvailableIn(allLFZ[i].Id,fts.Id))
                     {
-                        dropGesture.Drop += (s,e) => OnDrop(cellBorder,e);
+                        VerticalStackLayout cellContainer = [];
+                        cellBorder.Content = cellContainer;
+                        cellBorder.GestureRecognizers.Add(new DropGestureRecognizer());
+
+                        if (cellBorder.GestureRecognizers[0] is DropGestureRecognizer dropGesture)
+                        {
+                            dropGesture.DragOver += (s,e) => OnHoverNode(s,e,true);
+                            dropGesture.AllowDrop = true;
+                            dropGesture.Drop += (s,e) => OnDropNode(cellBorder,e);
+                        }
+                        containersRow.Add(cellContainer);
                     }
+                    else
+                    {
+                        Label x = new()
+                        {
+                            Text = "x",
+                            TextColor = GSettings.InactiveIcon,
+                            FontAttributes = FontAttributes.Bold,
+                            HorizontalTextAlignment = TextAlignment.Center,
+                            VerticalTextAlignment = TextAlignment.Center,
+                            FontSize = 24
+                        };
+                        cellBorder.Content = x;
+                    }
+
                     borders.Add(cellBorder);
                     XPlan.Add(cellBorder,i + 1,XPlan.RowDefinitions.Count - 1);
                 }
@@ -152,8 +167,6 @@ namespace fltstd26
             int colIndex = RData.Handler!.GetAll<Types.LFZ>().FindIndex(lfz => lfz.Id.Equals(lfzIn.Id));
             System.Diagnostics.Debug.WriteLine($"Col Index: {colIndex}");
             if (rowIndex == -1 || colIndex == -1) return false; //No Cell found
-
-            Color defCol = Application.Current!.RequestedTheme == AppTheme.Dark ? GSettings.GetColor("Gray100") : GSettings.GetColor("Gray900");
 
             Grid nodegrid = new()
             {
@@ -174,7 +187,7 @@ namespace fltstd26
             Label nodeid = new()
             {
                 Text = tgtIn.Id.ToString(),
-                TextColor = defCol,
+                TextColor = GSettings.NodeColour,
                 Padding = new Thickness(3),
                 FontAttributes = FontAttributes.Bold,
                 HorizontalTextAlignment = TextAlignment.Center,
@@ -187,7 +200,7 @@ namespace fltstd26
             Label nodename = new()
             {
                 Text = tgtIn.Name,
-                TextColor = defCol,
+                TextColor = GSettings.NodeColour,
                 Padding = new Thickness(3),
                 HorizontalTextAlignment = TextAlignment.Center,
                 FontSize = 16
@@ -199,7 +212,7 @@ namespace fltstd26
             Label nodelength = new()
             {
                 Text = timeIn.Length.ToString() + " min",
-                TextColor = defCol,
+                TextColor = GSettings.NodeColour,
                 VerticalOptions = LayoutOptions.Center,
                 HorizontalOptions = LayoutOptions.Center,
                 Padding = new Thickness(20,0),
@@ -225,7 +238,7 @@ namespace fltstd26
                     Aspect = Aspect.AspectFit,
                     Behaviors =
                     {
-                        new IconTintColorBehavior { TintColor = props[i] ? GSettings.PrimaryColor : GSettings.InactiveIcon }
+                        new IconTintColorBehavior { TintColor = props[i] ? GSettings.PrimaryColour : GSettings.InactiveIcon }
                     },
                 };
                 imgbtn.Clicked += NodeInteractionHandler;
@@ -236,7 +249,7 @@ namespace fltstd26
             Label nodeoid = new()
             {
                 Text = tgtIn.Id.ToString(),
-                TextColor = defCol,
+                TextColor = GSettings.NodeColour,
                 Padding = new Thickness(3),
                 HorizontalTextAlignment = TextAlignment.Center,
                 FontSize = 16
@@ -247,8 +260,8 @@ namespace fltstd26
 
             XBorder node = new()
             {
-                BackgroundColor = Application.Current!.RequestedTheme == AppTheme.Dark ? GSettings.GetColor("Gray950") : GSettings.GetColor("Gray100"),
-                Stroke = defCol,
+                BackgroundColor = Application.Current!.RequestedTheme == AppTheme.Dark ? GSettings.GetColour("Gray950") : GSettings.GetColour("Gray100"),
+                Stroke = GSettings.NodeColour,
                 StrokeThickness = 0,
                 Content = nodegrid,
                 Tgt = tgtIn,
@@ -259,7 +272,7 @@ namespace fltstd26
 
             // Gesture Control
             var Drag = new DragGestureRecognizer();
-            Drag.DragStarting += OnDragStarting;
+            Drag.DragStarting += NodeDragStartHandler;
             node.GestureRecognizers.Add(Drag);
 
             TapGestureRecognizer LClick = new TapGestureRecognizer
@@ -274,7 +287,7 @@ namespace fltstd26
             return true;
         }
 
-        private void NodeInteractionHandler(object? sender, EventArgs e)
+        private void NodeInteractionHandler(object? sender,EventArgs e)
         {
             if (sender is ImageButton interaction)
             {
@@ -288,7 +301,7 @@ namespace fltstd26
                         if (btn.Behaviors.OfType<IconTintColorBehavior>().FirstOrDefault() != null) btn.Behaviors.Clear();
                         //Invoke button specific action here
                         invokerCell.Attrib[buttonIndex] = !invokerCell.Attrib[buttonIndex];
-                        btn.Behaviors.Add(new IconTintColorBehavior { TintColor = invokerCell.Attrib[buttonIndex] ? GSettings.PrimaryColor : GSettings.InactiveIcon });
+                        btn.Behaviors.Add(new IconTintColorBehavior { TintColor = invokerCell.Attrib[buttonIndex] ? GSettings.PrimaryColour : GSettings.InactiveIcon });
                     }
                 }
             }
@@ -319,32 +332,30 @@ namespace fltstd26
             }
         }
 
-        private void OnDragStarting(object? sender,DragStartingEventArgs e)
+        private void NodeDragStartHandler(object? sender,DragStartingEventArgs e)
         {
             if (sender is DragGestureRecognizer dragRecognizer && dragRecognizer.Parent is XBorder draggedNode)
             {
                 e.Data.Properties["DraggedNode"] = draggedNode;
+                e.Data.Text = string.Empty;
                 System.Diagnostics.Debug.WriteLine($"Drag started for: {draggedNode.Content!.GetType()}",0);
             }
         }
 
-
-        private static void OnDrop(Border targetCell,DropEventArgs e)
+        private void OnHoverNode(object? sender,DragEventArgs e,bool avail)
+        {
+            e.AcceptedOperation = avail ? e.AcceptedOperation = DataPackageOperation.Copy : DataPackageOperation.None;
+        }
+        private static void OnDropNode(Border targetCell,DropEventArgs e)
         {
             e.Data.Properties.TryGetValue("DraggedNode",out var draggedNodeObj);
             System.Diagnostics.Debug.WriteLine($"Drop event - Target: {targetCell}, Node: " + draggedNodeObj);
-            if (draggedNodeObj is Border draggedNode)
+            if (draggedNodeObj is XBorder draggedNode)
             {
-                // Find the source container (parent of the dragged node)
                 if (draggedNode.Parent is VerticalStackLayout sourceContainer)
                 {
-                    // Remove from source
                     sourceContainer.Children.Remove(draggedNode);
-
-                    // Find the target container (inside the target border)
                     var targetContainer = targetCell.Content as VerticalStackLayout;
-
-                    // Add to target
                     targetContainer?.Children.Add(draggedNode);
                 }
             }
@@ -417,8 +428,29 @@ namespace fltstd26
         //////////////////////////////////////////INTERACTION BAR HANDLING//////////////////////////////////////////
         public void UndoInterClick(object sender,EventArgs e) => System.Diagnostics.Debug.WriteLine("Undo Click");
         public void RedoInterClick(object sender,EventArgs e) => System.Diagnostics.Debug.WriteLine("Redo Click");
-        public void CopyInterClick(object sender,EventArgs e) => System.Diagnostics.Debug.WriteLine("Copy Click");
-        public void PasteInterClick(object sender,EventArgs e) => System.Diagnostics.Debug.WriteLine("Paste Click");
+        public void CopyInterClick(object sender,EventArgs e)
+        {
+            if(!focusedID.ToByteArray().All(x => x == 0))
+            {
+                System.Diagnostics.Debug.WriteLine("Copied");
+                copyBuffer = focusedID;
+            }
+        }
+        public void PasteInterClick(object sender,EventArgs e)
+        {
+            if(focusedID != copyBuffer && NodeLibrary.ContainsKey(focusedID) && NodeLibrary.ContainsKey(copyBuffer))
+            {
+                XBorder source = NodeLibrary[copyBuffer];
+                XBorder target = NodeLibrary[focusedID];
+                if (source.Parent is VerticalStackLayout vsl1 && target.Parent is VerticalStackLayout vsl2)
+                {
+                    vsl1.Children.Remove(source);
+                    vsl2.Children.Remove(target);
+                    vsl1.Children.Add(target);
+                    vsl2.Children.Add(source);
+                }
+            }
+        }
         public void EditInterClick(object sender,EventArgs e) => System.Diagnostics.Debug.WriteLine("Edit Click");
         public void FlagInterClick(object sender,EventArgs e) => System.Diagnostics.Debug.WriteLine("Flag Click");
         public void NotifyInterClick(object sender,EventArgs e) => System.Diagnostics.Debug.WriteLine("Notify Click");
@@ -458,19 +490,8 @@ namespace fltstd26
         public Types.TGT Tgt { get; set; }
         public Types.LFZ Lfz { get; set; }
         public Types.FTS Fts { get; set; }
-        public Types.FLT Flt { get; private set; }
 
         ///<summary>quick, pin, notify, flag</summary>
         public bool[] Attrib = new bool[4];
-
-        public void GenFLT()
-        {
-            Types.FLT flt = new()
-            {
-                Aircraft = Lfz,
-                TimeSlot = Fts,
-                Target = [Tgt],
-            };
-        }
     }
 }

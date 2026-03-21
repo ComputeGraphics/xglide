@@ -80,11 +80,11 @@ namespace fltstd26.XFly
 
 
         /// <summary>
-        /// Initializes a new Target
+        /// Initializes a new Target (NOT LINKED)
         /// </summary>
-        public static Types.TGT CreateTarget(string name,int weight,int price,bool quick = false,bool persistent = false)
+        public static Types.TGT CreateTarget(string name,int weight,int price, bool quick = false,bool persistent = false)
         {
-            return new()
+            Types.TGT t = new()
             {
                 Name = name,
                 Weight = weight,
@@ -92,12 +92,54 @@ namespace fltstd26.XFly
                 QuickTicket = quick,
                 Persistent = persistent,
             };
+            return t;
         }
 
         /// <summary>
-        /// Initializes a new Slot
+        /// Initializes a new Linked Target
         /// </summary>
+        public static Types.TGT CreateLinkedTarget(int lid, string name,int weight,int price,bool quick = false,bool persistent = false)
+        {
+            Types.TGT t = new()
+            {
+                Name = name,
+                Weight = weight,
+                Price = price < 0 ? USettings.PriceCategories[price * -1].Item2 : price,
+                QuickTicket = quick,
+                Persistent = persistent,
+            };
+            t.Id = RData.Handler!.InsertTarget(t, lid);
+            return t;
+        }
 
+        /// <summary>
+        /// Initializes a new Flight
+        /// </summary>
+        public static Types.FLT CreateFlight(int eId, int lfz, List<Types.TGT> tgt, int slot, byte status, string Add = "")
+        {
+            Types.FLT f = new()
+            {
+                eId = eId,
+                Status = status,
+                TimeSlot = slot,
+                Aircraft = lfz,
+                Target = tgt,
+                Add = Add,
+            };
+            (int, int[]) t = RData.Handler!.InsertFlight(f,true);
+            if (t.Item1 != -1 && t.Item2[0] != -1)
+            {
+                f.Id = t.Item1;
+                for (int i = 0; i < f.Target.Count; i++)
+                {
+                    var tgtItem = f.Target[i];
+                    tgtItem.Id = t.Item2[i];
+                    f.Target[i] = tgtItem;
+                }
+                return f;
+            }
+            else return new() { Id = -1 };
+        }
 
     }
 }

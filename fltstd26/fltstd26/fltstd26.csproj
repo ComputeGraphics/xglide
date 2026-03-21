@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
 		<TargetFrameworks>net9.0-maccatalyst</TargetFrameworks>
@@ -41,6 +41,26 @@
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'tizen'">6.5</SupportedOSPlatformVersion>
 		<NeutralLanguage>de</NeutralLanguage>
 		<DefaultLanguage>de</DefaultLanguage>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net9.0-maccatalyst|AnyCPU'">
+	  <ApplicationId>com.qwix.fltstd26</ApplicationId>
+	  <ApplicationTitle>Flight Management Studio 2026</ApplicationTitle>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net9.0-windows10.0.19041.0|AnyCPU'">
+	  <ApplicationId>com.qwix.fltstd26</ApplicationId>
+	  <ApplicationTitle>Flight Management Studio 2026</ApplicationTitle>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net9.0-maccatalyst|AnyCPU'">
+	  <ApplicationId>com.qwix.fltstd26</ApplicationId>
+	  <ApplicationTitle>Flight Management Studio 2026</ApplicationTitle>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net9.0-windows10.0.19041.0|AnyCPU'">
+	  <ApplicationId>com.qwix.fltstd26</ApplicationId>
+	  <ApplicationTitle>Flight Management Studio 2026</ApplicationTitle>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -155,7 +175,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <MauiImage Include="Resources\Icons\archive.svg" />
+	  <MauiImage Include="Resources\Icons\archive.svg"/>
 	  <MauiImage Include="Resources\Icons\audio_off.svg" />
 	  <MauiImage Include="Resources\Icons\audio_on.svg" />
 	  <MauiImage Include="Resources\Icons\auto.svg" />
@@ -192,7 +212,7 @@
 	  <MauiImage Include="Resources\Icons\settings.svg" />
 	  <MauiImage Include="Resources\Icons\signal.svg" />
 	  <MauiImage Include="Resources\Icons\undo.svg" />
-	  <MauiImage Include="Resources\Icons\x.svg" />
+	  <MauiImage Include="Resources\Icons\x.svg"/>
 	</ItemGroup>
 
 </Project>

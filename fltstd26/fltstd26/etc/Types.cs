@@ -43,9 +43,9 @@ namespace fltstd26.etc
         {
             public int Id;
             public int eId; //Custom Flight ID to match with external systems by Algorithm or Name = eId
-            public LFZ Aircraft;
+            public int Aircraft;
             public List<TGT> Target;
-            public FTS TimeSlot; 
+            public int TimeSlot; 
             public byte Status; //Status Number
             public string Add; //Additional Info separated by ';'
         }

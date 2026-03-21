@@ -30,8 +30,8 @@ namespace fltstd26.core
                     Sheets.Flt f = db!.Find<Sheets.Flt>(Id);
                     if (f is null) return new() { Id = -1 };
                     List<Types.TGT> tgts = [.. db!.Table<Sheets.Target>().Where(x => x.LId == f.Id).ToList().Select(Converter.Convert)];
-                    Types.LFZ aircraft = Converter.Convert(db!.Find<Sheets.Lfz>(f.Lfz));
-                    Types.FTS timeslot = Converter.Convert(db!.Find<Sheets.Slots>(f.Slot));
+                    int aircraft = db!.Find<Sheets.Lfz>(f.Lfz).Id;
+                    int timeslot = db!.Find<Sheets.Slots>(f.Slot).Id;
                     Types.FLT flt = Converter.Convert(f);
                     flt.Aircraft = aircraft;
                     flt.TimeSlot = timeslot;
@@ -60,8 +60,8 @@ namespace fltstd26.core
                     foreach (Sheets.Flt f in q)
                     {
                         List<Types.TGT> tgts = [.. db!.Table<Sheets.Target>().Where(x => x.LId == f.Id).ToList().Select(Converter.Convert)];
-                        Types.LFZ aircraft = Converter.Convert(db!.Find<Sheets.Lfz>(f.Lfz));
-                        Types.FTS timeslot = Converter.Convert(db!.Find<Sheets.Slots>(f.Slot));
+                        int aircraft = db!.Find<Sheets.Lfz>(f.Lfz).Id;
+                        int timeslot = db!.Find<Sheets.Slots>(f.Slot).Id;
                         Types.FLT flt = Converter.Convert(f);
                         flt.Aircraft = aircraft;
                         flt.TimeSlot = timeslot;
@@ -187,8 +187,8 @@ namespace fltstd26.core
                         foreach (Sheets.Flt f in db!.Table<Sheets.Flt>())
                         {
                             List<Types.TGT> tgts = [.. db!.Table<Sheets.Target>().Where(x => x.LId == f.Id).ToList().Select(Converter.Convert)];
-                            Types.LFZ aircraft = Converter.Convert(db!.Find<Sheets.Lfz>(f.Lfz));
-                            Types.FTS timeslot = Converter.Convert(db!.Find<Sheets.Slots>(f.Slot));
+                            int aircraft = db!.Find<Sheets.Lfz>(f.Lfz).Id;
+                            int timeslot = db!.Find<Sheets.Slots>(f.Slot).Id;
                             Types.FLT flt = Converter.Convert(f);
                             flt.Aircraft = aircraft;
                             flt.TimeSlot = timeslot;
@@ -222,23 +222,23 @@ namespace fltstd26.core
             #region Modification Systems
             /// <summary>
             /// Insert new flight into database.
-            /// WITHOUT TARGETS
             /// </summary>
             /// <param name="flt">FLT</param>
-            /// <returns>Identifier or -1</returns>
-            public int InsertFlight(Types.FLT flt,bool auto = false)
+            /// <param name="auto">Auto Insert Targets</param>
+            /// <returns>Identifier or -1 in Value 1 - Identifiers of Targets or also -1</returns>
+            public (int, int[]) InsertFlight(Types.FLT flt,bool auto = false)
             {
                 try
                 {
                     Sheets.Flt f = Converter.Convert(flt);
-                    if (auto) _ = flt.Target.Select(x => InsertTarget(x,flt.Id));
+                    int[] tgtids = auto ? [.. InsertTargetT(flt.Target)] : [-1];
                     db!.Insert(f);
-                    return f.Id;
+                    return (db!.Table<Sheets.Flt>().Last().Id, tgtids);
                 }
                 catch (Exception ex)
                 {
                     ConProc.Log(err + "inserting the flight: " + ex.Message,2);
-                    return -1;
+                    return (-1, [-1]);
                 }
             }
 
@@ -269,7 +269,7 @@ namespace fltstd26.core
                     Sheets.Target s = Converter.Convert(tgt);
                     s.LId = lid;
                     db!.Insert(s);
-                    return s.Id;
+                    return db!.Table<Sheets.Target>().Last().Id;
                 }
                 catch (Exception ex)
                 {
@@ -304,7 +304,7 @@ namespace fltstd26.core
                 {
                     Sheets.Slots s = Converter.Convert(fts);
                     db!.Insert(s);
-                    return s.Id;
+                    return db!.Table<Sheets.Slots>().Last().Id;
                 }
                 catch (Exception ex)
                 {
@@ -339,7 +339,7 @@ namespace fltstd26.core
                 {
                     Sheets.Lfz s = Converter.Convert(lfz);
                     db!.Insert(s);
-                    return s.Id;
+                    return db!.Table<Sheets.Lfz>().Last().Id;
                 }
                 catch (Exception ex)
                 {
@@ -377,7 +377,7 @@ namespace fltstd26.core
                         Price = price
                     };
                     db!.Insert(s);
-                    return s.Id;
+                    return db!.Table<Sheets.PriceCat>().Last().Id;
                 }
                 catch (Exception ex)
                 {
@@ -484,20 +484,23 @@ namespace fltstd26.core
             /// Creates multiple flights in a transaction. If one update fails, all updates will be rolled back.
             /// </summary>
             /// <param name="flts">List of Flights that shall be created</param>
-            /// <returns>Created IDs or empty</returns>
-            public List<int> InsertFlightT(List<Types.FLT> flts, bool auto = false)
+            /// <param name="auto">Auto add Targets of Flight to Target DB</param>
+            /// <returns>Tuple of Created Flight ID and Target IDs or empty</returns>
+            public List<(int, int[])> InsertFlightT(List<Types.FLT> flts, bool auto = false)
             {
                 try
                 {
-                    List<int> ids = [];
+                    List<(int, int[]) > ids = [];
+
+                    int insertedRows = 0;
                     db!.RunInTransaction(() =>
-                    {
+                    {    
                         flts.ForEach(x =>
                         {
-                            Sheets.Flt f = Converter.Convert(x);
-                            if (auto) _ = x.Target.Select(a => InsertTarget(a,x.Id));
-                            db!.Insert(f);
-                            ids.Add(f.Id);
+                            int[] tgtIDs = [];
+                            if (auto) tgtIDs = [.. x.Target.Select(a => InsertTarget(a,x.Id))];
+                            insertedRows += db!.Insert(Converter.Convert(x));
+                            ids.Add((db!.Table<Sheets.Flt>().Last().Id, tgtIDs));
                         });
                     });
                     return ids;
@@ -523,9 +526,8 @@ namespace fltstd26.core
                     {
                         s.ForEach(x =>
                         {
-                            Sheets.Target f = Converter.Convert(x);
-                            db!.Insert(f);
-                            ids.Add(f.Id);
+                            db!.Insert(Converter.Convert(x));
+                            ids.Add(db!.Table<Sheets.Target>().Last().Id);
                         });
                     });
                     return ids;
@@ -553,9 +555,8 @@ namespace fltstd26.core
                         {
                             s.ForEach(x =>
                             {
-                                Sheets.Slots f = Converter.Convert(x);
-                                db!.Insert(f);
-                                ids.Add(f.Id);
+                                db!.Insert(Converter.Convert(x));
+                                ids.Add(db!.Table<Sheets.Slots>().Last().Id);
                             });
                         });
                         return ids;
@@ -589,9 +590,8 @@ namespace fltstd26.core
                         {
                             s.ForEach(x =>
                             {
-                                Sheets.Lfz f = Converter.Convert(x);
-                                db!.Insert(f);
-                                ids.Add(f.Id);
+                                db!.Insert(Converter.Convert(x));
+                                ids.Add(db!.Table<Sheets.Lfz>().Last().Id);
                             });
                         });
                         return ids;
@@ -629,7 +629,7 @@ namespace fltstd26.core
                                 Price = price[i]
                             };
                             db!.Insert(s);
-                            ids.Add(s.Id);
+                            ids.Add(db!.Table<Sheets.PriceCat>().Last().Id);
                         }
                     });
                     return ids;
@@ -804,8 +804,8 @@ namespace fltstd26.core
                     Id = Con.Id,
                     EId = Con.eId,
                     Add = Con.Add,
-                    Lfz = Con.Aircraft.Id,
-                    Slot = Con.TimeSlot.Id,
+                    Lfz = Con.Aircraft,
+                    Slot = Con.TimeSlot,
                     Status = Con.Status,
                 };
             }

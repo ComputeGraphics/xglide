@@ -1,17 +1,16 @@
-﻿using CommunityToolkit.Maui.Behaviors;
-using fltstd26.core;
-using fltstd26.etc;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace fltstd26.XFly
 {
-    class Builder
+    internal class Builder
     {
-
-        public XBorder CreateNode(Types.FTS timeIn,Types.LFZ lfzIn,Types.TGT tgtIn, bool auto = false)
+        public void NewTarget()
         {
 
-
-            return node;
         }
     }
 }
