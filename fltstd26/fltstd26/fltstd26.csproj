@@ -66,6 +66,7 @@
 	<ItemGroup>
 		<!-- App Icon -->
 		<MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg.svg" Color="#512BD4" />
+		<MauiImage Include="Resources\Icons\takeoff_large.svg" />
 
 		<!-- Splash Screen -->
 		<MauiSplashScreen Include="Resources\Splash\splash.svg" Color="#512BD4" BaseSize="128,128" />
@@ -118,6 +119,7 @@
 	  <None Remove="Resources\Icons\search.svg" />
 	  <None Remove="Resources\Icons\settings.svg" />
 	  <None Remove="Resources\Icons\signal.svg" />
+	  <None Remove="Resources\Icons\takeoff_large.svg" />
 	  <None Remove="Resources\Icons\undo.svg" />
 	  <None Remove="Resources\Icons\x.svg" />
 	</ItemGroup>
@@ -160,7 +162,7 @@
 	  <MauiXaml Update="assistant\IABoard.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Board.xaml">
+	  <MauiXaml Update="board\BoardPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="debug\DBPreview.xaml">
@@ -175,7 +177,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <MauiImage Include="Resources\Icons\archive.svg"/>
+	  <MauiImage Include="Resources\Icons\archive.svg" />
 	  <MauiImage Include="Resources\Icons\audio_off.svg" />
 	  <MauiImage Include="Resources\Icons\audio_on.svg" />
 	  <MauiImage Include="Resources\Icons\auto.svg" />
@@ -212,7 +214,7 @@
 	  <MauiImage Include="Resources\Icons\settings.svg" />
 	  <MauiImage Include="Resources\Icons\signal.svg" />
 	  <MauiImage Include="Resources\Icons\undo.svg" />
-	  <MauiImage Include="Resources\Icons\x.svg"/>
+	  <MauiImage Include="Resources\Icons\x.svg" />
 	</ItemGroup>
 
 </Project>

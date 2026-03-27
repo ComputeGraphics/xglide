@@ -1,7 +1,5 @@
 is_global = true
 build_property.TargetFramework = net9.0-windows10.0.19041.0
-build_property.TargetFrameworkIdentifier = .NETCoreApp
-build_property.TargetFrameworkVersion = v9.0
 build_property.TargetPlatformMinVersion = 10.0.17763.0
 build_property.UsingMicrosoftNETSdkWeb = 
 build_property.ProjectTypeGuids = 9A19103F-16F7-4668-BE54-9A1E7A4F7556
@@ -48,11 +46,11 @@ build_metadata.AdditionalFiles.ManifestResourceName = fltstd26.assistant.IABoard
 build_metadata.AdditionalFiles.TargetPath = assistant\IABoard.xaml
 build_metadata.AdditionalFiles.RelativePath = assistant\IABoard.xaml
 
-[C:/Users/Arthur/Documents/GitHub/xglide/fltstd26/fltstd26/Board.xaml]
+[C:/Users/Arthur/Documents/GitHub/xglide/fltstd26/fltstd26/board/BoardPage.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
-build_metadata.AdditionalFiles.ManifestResourceName = fltstd26.Board.xaml
-build_metadata.AdditionalFiles.TargetPath = Board.xaml
-build_metadata.AdditionalFiles.RelativePath = Board.xaml
+build_metadata.AdditionalFiles.ManifestResourceName = fltstd26.board.BoardPage.xaml
+build_metadata.AdditionalFiles.TargetPath = board\BoardPage.xaml
+build_metadata.AdditionalFiles.RelativePath = board\BoardPage.xaml
 
 [C:/Users/Arthur/Documents/GitHub/xglide/fltstd26/fltstd26/debug/DBPreview.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml

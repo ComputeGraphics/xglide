@@ -236,16 +236,16 @@
                         <Grid ColumnDefinitions="Auto, *">
                             <HorizontalStackLayout>
                                 <CheckBox x:Name="TGT_LFZ_Dropdown_Enable"
-                                      IsChecked="True"
-                                      CheckedChanged="AutoAircraft_Toggled"/>
+                                          IsChecked="True"/>
                                 <Label Text="{x:Static local:Lang.xplan_auto}" 
-                                    VerticalOptions="Center"/>
+                                       VerticalOptions="Center"/>
                             </HorizontalStackLayout>
                             <Picker x:Name="TGT_LFZ_Dropdown"
                                     Grid.Column="1"
-                                    IsEnabled="False"
                                     WidthRequest="100"
-                                    Margin="0,10,0,10"/>
+                                    Margin="0,10,0,10"
+                                    BindingContext="{x:Reference TGT_LFZ_Dropdown_Enable}"
+                                    IsEnabled="{Binding Path=IsChecked, Converter={toolkit:InvertedBoolConverter}}"/>
                         </Grid>
                         <Entry x:Name="TGT_Name_Entry"
                                Placeholder="{x:Static local:Lang.xplan_name}"
@@ -268,15 +268,15 @@
 
                         <HorizontalStackLayout HorizontalOptions="Center">
                             <CheckBox x:Name="TGT_Autotime_Enable"
-                                      IsChecked="True"
-                                      CheckedChanged="AutoTime_Toggled"/>
+                                      IsChecked="True"/>
                             <Label Text="{x:Static local:Lang.xplan_auto}" 
                                    VerticalOptions="Center"/>
                         </HorizontalStackLayout>
                         <TimePicker x:Name="TGT_Time_Picker"
-                                        IsEnabled="False"
                                         Format="HH:mm"
-                                        HorizontalOptions="Center"/>
+                                        HorizontalOptions="Center"
+                                        BindingContext="{x:Reference TGT_Autotime_Enable}"
+                                        IsEnabled="{Binding Path=IsChecked, Converter={toolkit:InvertedBoolConverter}}"/>
 
                         <Entry x:Name="FLT_Length_Entry"
                                Placeholder="{x:Static local:Lang.xplan_length}"
@@ -296,17 +296,17 @@
                         <Grid ColumnDefinitions="Auto, *">
                             <HorizontalStackLayout>
                                 <CheckBox x:Name="FLT_Status_Dropdown_Enable"
-                                      IsChecked="True"
-                                      CheckedChanged="AutoStatus_Toggled"/>
+                                          IsChecked="True"/>
                                 <Label Text="{x:Static local:Lang.xplan_auto}" 
                                     VerticalOptions="Center"/>
                             </HorizontalStackLayout>
                             <Picker x:Name="FLT_Status_Dropdown"
                                     Grid.Column="1"
-                                    IsEnabled="False"
                                     WidthRequest="100"
                                     ItemsSource="{x:Static gs:GSettings.Status}"
-                                    Margin="0,10,0,10"/>
+                                    Margin="0,10,0,10"
+                                    BindingContext="{x:Reference FLT_Status_Dropdown_Enable}"
+                                    IsEnabled="{Binding Path=IsChecked, Converter={toolkit:InvertedBoolConverter}}"/>
                         </Grid>
 
                         <Entry x:Name="TGT_Price_Entry"

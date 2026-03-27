@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="fltstd26.board.BoardPage"
+             Title="BoardPage">
+    <Grid RowDefinitions="Auto,*,Auto">
+        <Grid ColumnDefinitions="Auto,*,Auto,Auto">
+            <Image Aspect="AspectFit"
+                   x:Name="TopIconL"/>
+            <Label HorizontalOptions="Start"
+                   Grid.Column="1"
+                   FontSize="Header"
+                   x:Name="BoardTitle"/>
+            <Image Aspect="AspectFit"
+                   Grid.Column="2"
+                   x:Name="TopIconR"/>
+            <Grid RowDefinitions="*, Auto">
+                <Label x:Name="BoardTime"/>
+                <Label x:Name="BoardDate"
+                       Grid.Row="1"/>
+            </Grid>
+        </Grid>
+        <Grid Grid.Row="1"
+              RowDefinitions="Auto,*">
+            <Grid x:Name="XTitles"/>
+            <Grid Grid.Row="1"
+                  x:Name="XBoard"/>
+        </Grid>
+        <Grid>
+        </Grid>
+    </Grid>
+</ContentPage>

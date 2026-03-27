@@ -384,20 +384,6 @@ namespace fltstd26
 
         }
 
-        public void AutoAircraft_Toggled(object sender,CheckedChangedEventArgs e)
-        {
-            TGT_LFZ_Dropdown.IsEnabled = !e.Value;
-        }
-
-        public void AutoTime_Toggled(object sender,CheckedChangedEventArgs e)
-        {
-            TGT_Time_Picker.IsEnabled = !e.Value;
-        }
-
-        public void AutoStatus_Toggled(object sender,CheckedChangedEventArgs e)
-        {
-            FLT_Status_Dropdown.IsEnabled = !e.Value;
-        }
         public void CreateDemoNode_Click(object sender,EventArgs e)
         {
             Types.TGT demoTGT = new()
@@ -432,7 +418,6 @@ namespace fltstd26
         {
             if(!focusedID.ToByteArray().All(x => x == 0))
             {
-                System.Diagnostics.Debug.WriteLine("Copied");
                 copyBuffer = focusedID;
             }
         }

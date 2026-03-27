@@ -4,6 +4,7 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:local="clr-namespace:fltstd26"
+    xmlns:board="clr-namespace:fltstd26.board"
     Title="fltstd26">
 
     <ShellContent
@@ -15,7 +16,12 @@
         Title="Assistant_Config"
         ContentTemplate="{DataTemplate local:Assistant}"
         Route="Assistant" />
-    
+
+    <ShellContent
+        Title="Board"
+        ContentTemplate="{DataTemplate board:BoardPage}"
+        Route="BoardPage"/>
+
     <Tab Route="assistant">
         <ShellContent
             Title="IABoard"
