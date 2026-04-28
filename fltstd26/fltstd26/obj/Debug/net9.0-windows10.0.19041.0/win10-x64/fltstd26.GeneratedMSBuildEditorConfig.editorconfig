@@ -1,5 +1,7 @@
 is_global = true
 build_property.TargetFramework = net9.0-windows10.0.19041.0
+build_property.TargetFrameworkIdentifier = .NETCoreApp
+build_property.TargetFrameworkVersion = v9.0
 build_property.TargetPlatformMinVersion = 10.0.17763.0
 build_property.UsingMicrosoftNETSdkWeb = 
 build_property.ProjectTypeGuids = 9A19103F-16F7-4668-BE54-9A1E7A4F7556
@@ -58,11 +60,11 @@ build_metadata.AdditionalFiles.ManifestResourceName = fltstd26.debug.DBPreview.x
 build_metadata.AdditionalFiles.TargetPath = debug\DBPreview.xaml
 build_metadata.AdditionalFiles.RelativePath = debug\DBPreview.xaml
 
-[C:/Users/Arthur/Documents/GitHub/xglide/fltstd26/fltstd26/MainPage.xaml]
+[C:/Users/Arthur/Documents/GitHub/xglide/fltstd26/fltstd26/debug/OnlineFetch.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
-build_metadata.AdditionalFiles.ManifestResourceName = fltstd26.MainPage.xaml
-build_metadata.AdditionalFiles.TargetPath = MainPage.xaml
-build_metadata.AdditionalFiles.RelativePath = MainPage.xaml
+build_metadata.AdditionalFiles.ManifestResourceName = fltstd26.debug.OnlineFetch.xaml
+build_metadata.AdditionalFiles.TargetPath = debug\OnlineFetch.xaml
+build_metadata.AdditionalFiles.RelativePath = debug\OnlineFetch.xaml
 
 [C:/Users/Arthur/Documents/GitHub/xglide/fltstd26/fltstd26/Resources/Styles/Colors.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
@@ -76,6 +78,18 @@ build_metadata.AdditionalFiles.ManifestResourceName = fltstd26.Resources.Styles.
 build_metadata.AdditionalFiles.TargetPath = Resources\Styles\Styles.xaml
 build_metadata.AdditionalFiles.RelativePath = Resources\Styles\Styles.xaml
 
+[C:/Users/Arthur/Documents/GitHub/xglide/fltstd26/fltstd26/system/modals/Selector.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = fltstd26.system.modals.Selector.xaml
+build_metadata.AdditionalFiles.TargetPath = system\modals\Selector.xaml
+build_metadata.AdditionalFiles.RelativePath = system\modals\Selector.xaml
+
+[C:/Users/Arthur/Documents/GitHub/xglide/fltstd26/fltstd26/system/modals/YesNo.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = fltstd26.system.modals.YesNo.xaml
+build_metadata.AdditionalFiles.TargetPath = system\modals\YesNo.xaml
+build_metadata.AdditionalFiles.RelativePath = system\modals\YesNo.xaml
+
 [C:/Users/Arthur/Documents/GitHub/xglide/fltstd26/fltstd26/system/XConsole.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
 build_metadata.AdditionalFiles.ManifestResourceName = fltstd26.system.XConsole.xaml
@@ -87,3 +101,9 @@ build_metadata.AdditionalFiles.GenKind = Xaml
 build_metadata.AdditionalFiles.ManifestResourceName = fltstd26.TargetCreator.xaml
 build_metadata.AdditionalFiles.TargetPath = TargetCreator.xaml
 build_metadata.AdditionalFiles.RelativePath = TargetCreator.xaml
+
+[C:/Users/Arthur/Documents/GitHub/xglide/fltstd26/fltstd26/XMain.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = fltstd26.XMain.xaml
+build_metadata.AdditionalFiles.TargetPath = XMain.xaml
+build_metadata.AdditionalFiles.RelativePath = XMain.xaml

@@ -70,6 +70,15 @@ namespace fltstd26.Resources.Texts {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Abbrechen ähnelt.
+        /// </summary>
+        internal static string cancel {
+            get {
+                return ResourceManager.GetString("cancel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Schließen ähnelt.
         /// </summary>
         internal static string close {
@@ -84,6 +93,15 @@ namespace fltstd26.Resources.Texts {
         internal static string config_editor {
             get {
                 return ResourceManager.GetString("config_editor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Bestätigen ähnelt.
+        /// </summary>
+        internal static string confirm {
+            get {
+                return ResourceManager.GetString("confirm", resourceCulture);
             }
         }
         
@@ -268,6 +286,24 @@ namespace fltstd26.Resources.Texts {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Neuen Flug erstellen... ähnelt.
+        /// </summary>
+        internal static string newflt {
+            get {
+                return ResourceManager.GetString("newflt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Soll ein neuer automatisch ein neuer Flug für das angegebene Ziel angelegt werden? ähnelt.
+        /// </summary>
+        internal static string newflt_warning {
+            get {
+                return ResourceManager.GetString("newflt_warning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Neu... ähnelt.
         /// </summary>
         internal static string newobj {
@@ -340,6 +376,15 @@ namespace fltstd26.Resources.Texts {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Flug auswählen ähnelt.
+        /// </summary>
+        internal static string select_flight {
+            get {
+                return ResourceManager.GetString("select_flight", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Beginnen ähnelt.
         /// </summary>
         internal static string startButton {
@@ -363,6 +408,15 @@ namespace fltstd26.Resources.Texts {
         internal static string view {
             get {
                 return ResourceManager.GetString("view", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Warnung ähnelt.
+        /// </summary>
+        internal static string warning {
+            get {
+                return ResourceManager.GetString("warning", resourceCulture);
             }
         }
         
@@ -430,7 +484,7 @@ namespace fltstd26.Resources.Texts {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Preis in Eurocent ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Preis in Eurocent (Standardwert) ähnelt.
         /// </summary>
         internal static string xplan_price {
             get {
@@ -574,7 +628,7 @@ namespace fltstd26.Resources.Texts {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Gewicht ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Gewicht (1) ähnelt.
         /// </summary>
         internal static string xplan_weight {
             get {

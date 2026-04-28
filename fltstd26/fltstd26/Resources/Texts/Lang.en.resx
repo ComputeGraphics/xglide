@@ -154,10 +154,10 @@
     <value>Info</value>
   </data>
   <data name="menubar_cachefolder" xml:space="preserve">
-    <value>Open Cache Folder...</value>
+    <value>Open Cache-Folder...</value>
   </data>
   <data name="menubar_datafolder" xml:space="preserve">
-    <value>Open Data Folder...</value>
+    <value>Open Data-Folder...</value>
   </data>
   <data name="menubar_file" xml:space="preserve">
     <value>File</value>
@@ -217,7 +217,7 @@
     <value>Fixed</value>
   </data>
   <data name="xplan_price" xml:space="preserve">
-    <value>Price in Cents</value>
+    <value>Price in Cents (Default)</value>
   </data>
   <data name="xplan_quickticket" xml:space="preserve">
     <value>A.S.A.P.</value>
@@ -265,10 +265,10 @@
     <value>Waiting</value>
   </data>
   <data name="xplan_weight" xml:space="preserve">
-    <value>Weight</value>
+    <value>Weight (1)</value>
   </data>
   <data name="profile_editor" xml:space="preserve">
-    <value>Open Profile Editor...</value>
+    <value>Open Profile-Editor...</value>
   </data>
   <data name="open" xml:space="preserve">
     <value>Open</value>
@@ -283,12 +283,30 @@
     <value>Configuration</value>
   </data>
   <data name="config_editor" xml:space="preserve">
-    <value>Open Config Editor...</value>
+    <value>Open Config-Editor...</value>
   </data>
   <data name="close" xml:space="preserve">
     <value>Close</value>
   </data>
   <data name="newobj" xml:space="preserve">
     <value>New...</value>
+  </data>
+  <data name="cancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="confirm" xml:space="preserve">
+    <value>Confirm</value>
+  </data>
+  <data name="newflt" xml:space="preserve">
+    <value>Create new flight....</value>
+  </data>
+  <data name="select_flight" xml:space="preserve">
+    <value>Select a flight</value>
+  </data>
+  <data name="warning" xml:space="preserve">
+    <value>Warning</value>
+  </data>
+  <data name="newflt_warning" xml:space="preserve">
+    <value>Shall the software create a new flight for the given target automatically?</value>
   </data>
 </root>

@@ -18,20 +18,22 @@ namespace fltstd26.XFly
         /// <summary>
         /// Find all existing flights, that can take the required weight
         /// </summary>
-        public static List<int> FindFitWeight(int Weight, bool Now, bool Quick)
+        public static List<Sheets.Flt> FindFitWeightLength(int Length, int Weight,bool Now,bool Quick)
         {
-            List<int> flts = [];
+            List<Sheets.Flt> flts = [];
             foreach (Sheets.Flt flt in RData.GetFlightTable())
             {
-                Sheets.Slots? slot = RData.Get<Sheets.Slots>(flt.Slot);
-                if (!Now || (slot is not null && slot.STime > (Quick ? DateTime.Now.Subtract(new TimeSpan(0,GSettings.QuickVolume,0)) : DateTime.Now)))
+                Sheets.Slot? slot = RData.Get<Sheets.Slot>(flt.Slot);
+                if (slot is null || slot.Length != Length) continue;
+                if (!Now || slot.STime > (Quick ? DateTime.Now.AddMinutes(Quick ? -USettings.QuickTolerance : 0) : DateTime.Now))
                 {
                     Sheets.Lfz? lfz = RData.Get<Sheets.Lfz>(flt.Lfz);
-                    if (lfz is not null)
+                    List<Sheets.Target>? tgt = RData.GetWhere<Sheets.Target>($"lid = {flt.Id}");
+                    if (lfz is not null && tgt is not null)
                     {
                         int curWeight = 0;
-                        RData.Handler!.GetTargetsByLink(flt.Id).ForEach(x => curWeight += x.Weight);
-                        if (curWeight + Weight <= lfz.Seats) flts.Add(flt.Id);
+                        tgt.ForEach(x => curWeight += x.Weight);
+                        if (curWeight + Weight <= lfz.Seats) flts.Add(flt);
                     }
                 }
             }
@@ -48,25 +50,18 @@ namespace fltstd26.XFly
             {
                 if (slot.Length == Length)
                 {
-                    if (times is not null)
-                    {
-                        if(slot.STime >= times) CompatibleSlots.Add(slot.Id);
-                    }
-                    else
-                    {
-                        CompatibleSlots.Add(slot.Id);
-                    }
+                    if (times is null || slot.STime >= times) CompatibleSlots.Add(slot.Id);
                 }
             }
             return CompatibleSlots;
         }
 
-        public static List<int> FindAvailableAircraft(int SlotID,bool auto)
+        public static List<int> FindAvailableAircraft(int SlotID, bool Auto)
         {
             List<int> AvailableAircraft = [];
             foreach (Sheets.Lfz lfz in RData.GetAircraftTable())
             {
-                if (lfz.AvailTimes is not null && lfz.AvailTimes.Select(x => x == SlotID).FirstOrDefault())
+                if ((!Auto || lfz.AutoAssign == true) && lfz.AvailTimes is not null && lfz.AvailTimes.Select(x => x == SlotID).FirstOrDefault())
                 {
                     AvailableAircraft.Add(lfz.Id);
                 }
@@ -74,21 +69,32 @@ namespace fltstd26.XFly
             return AvailableAircraft;
         }
 
-
-
+        public static bool AvailableIn(int LFZID,int FTSID)
+        {
+            try
+            {
+                Sheets.Lfz? lfz = RData.Get<Sheets.Lfz>(LFZID);
+                return lfz is null ? throw new Exception("Lfz not found in database") : lfz.AvailTimes!.Any(x => x == FTSID);
+            }
+            catch (Exception e)
+            {
+                ConProc.Log("[XFLY.GET] Can't test for Aircraft availability: " + e,2);
+                return false;
+            }
+        }
         #endregion
 
 
         /// <summary>
-        /// Initializes a new Target (NOT LINKED)
+        /// Initializes a new Target (Not saved to database)
         /// </summary>
-        public static Types.TGT CreateTarget(string name,int weight,int price, bool quick = false,bool persistent = false)
+        public static Sheets.Target CreateTarget(string name,int weight,int price,bool quick = false,bool persistent = false)
         {
-            Types.TGT t = new()
+            Sheets.Target t = new()
             {
                 Name = name,
                 Weight = weight,
-                Price = price < 0 ? USettings.PriceCategories[price * -1].Item2 : price,
+                Price = price < 0 ? RData.Get<Sheets.PriceCat>(price * -1)?.Price ?? -1 : price,
                 QuickTicket = quick,
                 Persistent = persistent,
             };
@@ -96,49 +102,40 @@ namespace fltstd26.XFly
         }
 
         /// <summary>
-        /// Initializes a new Linked Target
+        /// Initializes a new Linked Target. Returns Id=-1 on failure.
         /// </summary>
-        public static Types.TGT CreateLinkedTarget(int lid, string name,int weight,int price,bool quick = false,bool persistent = false)
+        public static int CreateLinkedTarget(int lid,string name,int weight,int price,bool quick = false,bool persistent = false)
         {
-            Types.TGT t = new()
+            Sheets.Target t = new()
             {
                 Name = name,
                 Weight = weight,
-                Price = price < 0 ? USettings.PriceCategories[price * -1].Item2 : price,
+                Price = price < 0 ? RData.Get<Sheets.PriceCat>(price * -1)?.Price ?? -1 : price,
+                LId = lid,
                 QuickTicket = quick,
                 Persistent = persistent,
             };
-            t.Id = RData.Handler!.InsertTarget(t, lid);
-            return t;
+            int resp = RData.Insert(t);
+            if (resp != -1) return resp;
+            return -1;
         }
 
         /// <summary>
-        /// Initializes a new Flight
+        /// Initializes a new Flight. Returns Id=-1 on failure.
         /// </summary>
-        public static Types.FLT CreateFlight(int eId, int lfz, List<Types.TGT> tgt, int slot, byte status, string Add = "")
+        public static int CreateFlight(string eId,int lfz,int slot,byte status,string Add = "")
         {
-            Types.FLT f = new()
+            Sheets.Flt f = new()
             {
-                eId = eId,
+                EId = eId,
                 Status = status,
-                TimeSlot = slot,
-                Aircraft = lfz,
-                Target = tgt,
+                Slot = slot,
+                Lfz = lfz,
                 Add = Add,
             };
-            (int, int[]) t = RData.Handler!.InsertFlight(f,true);
-            if (t.Item1 != -1 && t.Item2[0] != -1)
-            {
-                f.Id = t.Item1;
-                for (int i = 0; i < f.Target.Count; i++)
-                {
-                    var tgtItem = f.Target[i];
-                    tgtItem.Id = t.Item2[i];
-                    f.Target[i] = tgtItem;
-                }
-                return f;
-            }
-            else return new() { Id = -1 };
+            int resp = RData.Insert(f);
+            if (resp != -1) return resp;
+            return -1;
         }
 
     }

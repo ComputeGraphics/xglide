@@ -9,26 +9,22 @@ namespace fltstd26.core
     //Runtime Database Access
     internal static class RData
     {
-        public static bool Active => rdb != null ;
+        public static bool Active => rdb != null;
 
         private static SQLiteConnection? rdb;
         private static readonly string DatabaseFilename = "RData.db3";
-        private static string DatabasePath =>
-            Path.Combine(GSettings.dbpath, DatabaseFilename);
+        private static readonly string DatabasePath = GSettings.Paths["Database"];
 
-        public static DBSys.Handler? Handler;
-
-        public static void Init()
+        internal static void Init()
         {
             try
             {
-                rdb = new SQLiteConnection(DatabasePath);
+                rdb = new SQLiteConnection(Path.Combine(DatabasePath,DatabaseFilename));
                 rdb.CreateTable<Sheets.Flt>();
                 rdb.CreateTable<Sheets.Lfz>();
-                rdb.CreateTable<Sheets.Slots>();
+                rdb.CreateTable<Sheets.Slot>();
                 rdb.CreateTable<Sheets.Target>();
                 rdb.CreateTable<Sheets.PriceCat>();
-                Handler = new DBSys.Handler(rdb);
             }
             catch (Exception ex)
             {
@@ -36,7 +32,7 @@ namespace fltstd26.core
             }
         }
 
-        public static void Reset()
+        internal static void Reset()
         {
             try
             {
@@ -44,12 +40,12 @@ namespace fltstd26.core
                 {
                     rdb?.DropTable<Sheets.Flt>();
                     rdb?.DropTable<Sheets.Lfz>();
-                    rdb?.DropTable<Sheets.Slots>();
+                    rdb?.DropTable<Sheets.Slot>();
                     rdb?.DropTable<Sheets.Target>();
                     rdb?.DropTable<Sheets.PriceCat>();
                     rdb?.CreateTable<Sheets.Flt>();
                     rdb?.CreateTable<Sheets.Lfz>();
-                    rdb?.CreateTable<Sheets.Slots>();
+                    rdb?.CreateTable<Sheets.Slot>();
                     rdb?.CreateTable<Sheets.Target>();
                     rdb?.CreateTable<Sheets.PriceCat>();
                     rdb?.Execute("VACUUM");
@@ -61,13 +57,13 @@ namespace fltstd26.core
             }
         }
 
-        public static void Backup(string name)
+        internal static void Backup(string name)
         {
             try
             {
                 if (Active)
                 {
-                    rdb?.Backup(Path.Combine(GSettings.dbpath,name));
+                    rdb?.Backup(Path.Combine(DatabasePath,name));
                 }
             }
             catch (Exception ex)
@@ -76,7 +72,7 @@ namespace fltstd26.core
             }
         }
 
-        public static void Close()
+        internal static void Close()
         {
             try
             {
@@ -93,14 +89,14 @@ namespace fltstd26.core
         }
 
         //////////////////////////////////////////////LANG REDIRECTION//////////////////////////////////////////////
-        
-        public static List<Sheets.Flt> GetFlightTable() => (Active ? rdb?.Table<Sheets.Flt>().ToList() : []) ?? [];
-        public static List<Sheets.Slots> GetSlotsTable() => (Active ? rdb?.Table<Sheets.Slots>().ToList() : []) ?? [];
-        public static List<Sheets.Lfz> GetAircraftTable() => (Active ? rdb?.Table<Sheets.Lfz>().ToList() : []) ?? [];
-        public static List<Sheets.Target> GetTargetTable() => (Active ? rdb?.Table<Sheets.Target>().ToList() : []) ?? [];
-        public static List<Sheets.PriceCat> GetPriceTable() => (Active ? rdb?.Table<Sheets.PriceCat>().ToList() : []) ?? [];
 
-        public static T? Get<T>(object pk) where T : class, new()
+        internal static List<Sheets.Flt> GetFlightTable() => (Active ? rdb?.Table<Sheets.Flt>().ToList() : []) ?? [];
+        internal static List<Sheets.Slot> GetSlotsTable() => (Active ? rdb?.Table<Sheets.Slot>().ToList() : []) ?? [];
+        internal static List<Sheets.Lfz> GetAircraftTable() => (Active ? rdb?.Table<Sheets.Lfz>().ToList() : []) ?? [];
+        internal static List<Sheets.Target> GetTargetTable() => (Active ? rdb?.Table<Sheets.Target>().ToList() : []) ?? [];
+        internal static List<Sheets.PriceCat> GetPriceTable() => (Active ? rdb?.Table<Sheets.PriceCat>().ToList() : []) ?? [];
+
+        internal static T? Get<T>(object pk) where T : class, new()
         {
             try
             {
@@ -113,7 +109,21 @@ namespace fltstd26.core
             }
         }
 
-        public static bool InsertRange<T>(List<T> value) where T : class, new()
+        //FUNKTIONIERT NICHT!!!
+        internal static List<T>? GetWhere<T>(string Predicate) where T : class, new()
+        {
+            try
+            {
+                return rdb?.Query<T>($"SELECT * FROM {typeof(T).Name} WHERE {Predicate}") ?? null;
+            }
+            catch (Exception e)
+            {
+                ConProc.Log($"[RDATA] Get-Where failed: {e.Message}",2);
+                return null;
+            }
+        }
+
+        internal static bool InsertRange<T>(List<T> value) where T : class, new()
         {
             try
             {
@@ -122,24 +132,23 @@ namespace fltstd26.core
             }
             catch (Exception e)
             {
-                ConProc.Log($"[RDATA] Insert Process failed: {e.Message}",2);
+                ConProc.Log($"[RDATA] Insert Transaction failed: {e.Message}",2);
                 return false;
             }
         }
-        public static void SyncPriceTable()
-        {
-            GetPriceTable().ForEach(x =>
-            {
-                if (!USettings.PriceCategories.ContainsKey(x.Id))
-                {
-                    USettings.PriceCategories.Add(x.Id, (x.Name ?? "", x.Price));
-                }
-                else
-                {
-                    USettings.PriceCategories[x.Id] = (x.Name ?? "", x.Price);
-                }
-            });
-        }
 
+        internal static int Insert<T>(T value) where T : class, new()
+        {
+            try
+            {
+                rdb?.Insert(value);
+                return rdb!.ExecuteScalar<int>("SELECT last_insert_rowid()");
+            }
+            catch (Exception e)
+            {   
+                ConProc.Log($"[RDATA] Insert Process failed: {e.Message}",2);
+                return -1;
+            }
+        }
     }
 }

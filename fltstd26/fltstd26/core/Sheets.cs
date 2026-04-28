@@ -19,7 +19,7 @@ namespace fltstd26.core
             [Column("seats")]
             public byte Seats { get; set; }
             [Column("interval")]
-            public byte Interval { get; set; }
+            public byte Interval { get; set; } //Zeit zwischen jedem Flug. Im Slotting System nicht berücksichtigt
             [Column("pricecat")]
             public byte PriceCat { get; set; }
             [Column("avail")]
@@ -28,8 +28,8 @@ namespace fltstd26.core
             public bool AutoAssign { get; set; }
         }
 
-        [Table("Slots")]
-        public class Slots
+        [Table("Slot")]
+        public class Slot
         {
             [PrimaryKey, AutoIncrement]
             [Column("id")]
@@ -51,7 +51,7 @@ namespace fltstd26.core
             public int Id { get; set; }
             [Indexed]
             [Column("eid")]
-            public int EId { get; set; }
+            public string? EId { get; set; }
             [Column("lfz")]
             public int Lfz { get; set; }
             [Column("slot")]
@@ -59,7 +59,7 @@ namespace fltstd26.core
             [Column("status")]
             public byte Status { get; set; }
             [Column("add")]
-            public string? Add { get; set; }
+            public string? Add { get; set; } //Additional Info separated by ';'
         }
 
         [Table("Target")]
@@ -78,9 +78,9 @@ namespace fltstd26.core
             [Column("quickticket")]
             public bool QuickTicket { get; set; }
             [Column("price")]
-            public int Price { get; set; } //Price Cat for negative - Price Absolute for positive  
+            public int Price { get; set; } //Price Cat for negative or 0 - Price Absolute for positive  
             [Column("persistent")]
-            public bool Persistent { get; set; }
+            public bool Persistent { get; set; } //Flight will not be deleted by Software and cannot be moved by User.
         }
 
         [Table("PriceCat")]
@@ -92,7 +92,7 @@ namespace fltstd26.core
             [Column("name")]
             public string? Name { get; set; }
 
-            [Column("Price")]
+            [Column("price")]
             public int Price { get; set; }
         }
     }

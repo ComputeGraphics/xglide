@@ -8,9 +8,9 @@ public partial class XConsole : Window
     public XConsole()
 	{
 		InitializeComponent();
-		instance = this;
+        GSettings.XConsoleOpen = true;
+        instance = this;
         ConProc.Log("Welcome to the XConsole!");
-		USettings.XConsoleOpen = true;
     }
 
 	public static void Update()
@@ -23,6 +23,6 @@ public partial class XConsole : Window
     }
 	private void Window_Closed(object sender, EventArgs e)
 	{
-		USettings.XConsoleOpen = false;
+		GSettings.XConsoleOpen = false;
     }
 }

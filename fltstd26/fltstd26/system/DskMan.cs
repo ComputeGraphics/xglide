@@ -8,13 +8,14 @@ using System.Threading.Tasks;
 
 namespace fltstd26.system
 {
-    public static class DskMan
+    internal class DskMan
     {
-        public static string IAppData = FileSystem.Current.AppDataDirectory;
-        public static string ICache = FileSystem.Current.CacheDirectory;
+        public static string[] IAppDataFolders = ["Database","Logs","Config"];
+        public static string[] ICacheFolders = ["Temp","Downloads"];
 
-        public static string[] IAppDataFolders = ["Database", "Logs", "Config"];
-        public static string[] ICacheFolders = ["Temp", "Downloads"];
+        public static readonly string IAppData = FileSystem.Current.AppDataDirectory;
+        public static readonly string IDynIcons = Path.Combine(FileSystem.Current.AppDataDirectory,"Config");
+        public static readonly string ICache = FileSystem.Current.CacheDirectory;
         public static bool Init()
         {
             try

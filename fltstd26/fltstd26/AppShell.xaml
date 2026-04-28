@@ -9,8 +9,8 @@
 
     <ShellContent
         Title="Home"
-        ContentTemplate="{DataTemplate local:MainPage}"
-        Route="MainPage" />
+        ContentTemplate="{DataTemplate local:XMain}"
+        Route="XMain" />
     
     <ShellContent
         Title="Assistant_Config"

@@ -41,6 +41,7 @@
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'tizen'">6.5</SupportedOSPlatformVersion>
 		<NeutralLanguage>de</NeutralLanguage>
 		<DefaultLanguage>de</DefaultLanguage>
+		<SignAssembly>True</SignAssembly>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net9.0-maccatalyst|AnyCPU'">
@@ -108,7 +109,6 @@
 	  <None Remove="Resources\Icons\notify.svg" />
 	  <None Remove="Resources\Icons\paste.svg" />
 	  <None Remove="Resources\Icons\pin.svg" />
-	  <None Remove="Resources\Icons\plane.svg" />
 	  <None Remove="Resources\Icons\plus.svg" />
 	  <None Remove="Resources\Icons\price.svg" />
 	  <None Remove="Resources\Icons\quick.svg" />
@@ -132,6 +132,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Compile Update="XMain.xaml.cs">
+	    <DependentUpon>XMain.xaml</DependentUpon>
+	  </Compile>
 	  <Compile Update="Properties\Resources.Designer.cs">
 	    <DesignTime>True</DesignTime>
 	    <AutoGen>True</AutoGen>
@@ -168,6 +171,15 @@
 	  <MauiXaml Update="debug\DBPreview.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="debug\OnlineFetch.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="system\modals\Selector.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="system\modals\YesNo.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="system\XConsole.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
@@ -202,7 +214,6 @@
 	  <MauiImage Include="Resources\Icons\notify.svg" />
 	  <MauiImage Include="Resources\Icons\paste.svg" />
 	  <MauiImage Include="Resources\Icons\pin.svg" />
-	  <MauiImage Include="Resources\Icons\plane.svg" />
 	  <MauiImage Include="Resources\Icons\plus.svg" />
 	  <MauiImage Include="Resources\Icons\price.svg" />
 	  <MauiImage Include="Resources\Icons\quick.svg" />
@@ -215,6 +226,10 @@
 	  <MauiImage Include="Resources\Icons\signal.svg" />
 	  <MauiImage Include="Resources\Icons\undo.svg" />
 	  <MauiImage Include="Resources\Icons\x.svg" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="profile\" />
 	</ItemGroup>
 
 </Project>

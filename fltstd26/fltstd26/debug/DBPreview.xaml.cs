@@ -10,11 +10,9 @@ public partial class DBPreview : Window
 	public DBPreview()
 	{
 		InitializeComponent();
-		
-
 	}
 
-	public void Refresh_Click(object sender,EventArgs e)
+    private void Refresh_Click(object sender,EventArgs e)
 	{
         DBPreviewGrid.Clear();
         DBPreviewGrid.RowDefinitions.Clear();
@@ -30,7 +28,7 @@ public partial class DBPreview : Window
                 Draw(lfzList);
                 break;
             case 2:
-                List<Sheets.Slots> slotsList = RData.GetSlotsTable();
+                List<Sheets.Slot> slotsList = RData.GetSlotsTable();
                 Draw(slotsList);
                 break;
             case 3:
@@ -47,7 +45,7 @@ public partial class DBPreview : Window
         }
     }
 
-    public void Draw<T>(List<T> flts)
+    private void Draw<T>(List<T> flts)
     {
         try
         {

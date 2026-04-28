@@ -28,7 +28,7 @@ namespace fltstd26.system
             _Log.Add((type, message));
             Stamp.Add(DateTime.Now);
 
-            if(USettings.XConsoleOpen) XConsole.Update();
+            if(GSettings.XConsoleOpen) XConsole.Update();
         }
 
         public static List<string> GetLog()

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Window xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="fltstd26.debug.OnlineFetch"
+             Title="OnlineFetch">
+    <ContentPage>
+        <ScrollView
+                VerticalOptions="Fill"
+                VerticalScrollBarVisibility="Always">
+            <VerticalStackLayout>
+                <Grid Margin="10"
+                      ColumnDefinitions="Auto, Auto, Auto, *, Auto, *">
+                    <Label Text="Online OGN Fetcher Preview"
+                       FontSize="Medium"
+                       FontAttributes="Bold"/>
+                    <CheckBox x:Name="ViewRaw"
+                              Grid.Column="1"/>
+                    <Label Text="View Raw Data"
+                           VerticalOptions="Center"
+                           Grid.Column="2"/>
+                    <Entry x:Name="AP"
+                           Placeholder="ICAO Code"
+                           WidthRequest="360"
+                           Keyboard="Text"
+                           Grid.Column="3"/>
+                    <Button Text="Refresh"
+                        ImageSource="refresh.png"
+                        Clicked="Refresh_Click"
+                        HorizontalOptions="End"
+                            Grid.Column="4"/>
+                    <Label x:Name="FetchStatus"
+                           Text="N/A"
+                           Grid.Column="5"/>
+                </Grid>
+
+                <Grid x:Name="FetcherGrid"
+                      RowDefinitions="Auto,Auto,Auto"/>
+
+            </VerticalStackLayout>
+        </ScrollView>
+    </ContentPage>
+</Window>

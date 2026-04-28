@@ -9,12 +9,6 @@ namespace fltstd26.etc
 {
     class GSettings
     {
-        public static bool slots_enabled = true; // IDE0044: Made field readonly
-        public static readonly string dbpath = Path.Combine(FileSystem.Current.AppDataDirectory,"Database");
-        public static readonly string cachepath = Path.Combine(FileSystem.Current.CacheDirectory,"FLTSTD26");
-
-        ////////////// NEW SETTINGS //////////////
-
         public static string[] Status = [
             Lang.xplan_status_airborne,
             Lang.xplan_status_app,
@@ -31,13 +25,14 @@ namespace fltstd26.etc
             Lang.xplan_status_waiting
         ];
 
+        public static bool XConsoleOpen = false;
+
+        public static bool AutoASAP = false; //Keine Fragen. Einfach machen
+        public static bool AutoTimeCheck = false;
+
         public static Dictionary<string,string> Paths = [];
 
-        public static int QuickVolume = 5;
-
-        public static List<string> Additionals = [];
-
-
+        public static bool DarkMode = Application.Current!.RequestedTheme == AppTheme.Dark;
         public static Func<string,Color> GetColour = (string c) => (Color)Application.Current!.Resources[c];
         public static Color InactiveIcon = Application.Current!.RequestedTheme == AppTheme.Dark ? GSettings.GetColour("Gray500") : GSettings.GetColour("Gray400");
         public static Color PrimaryColour = Application.Current!.RequestedTheme == AppTheme.Dark ? GSettings.GetColour("Primary") : GSettings.GetColour("PrimaryDark");

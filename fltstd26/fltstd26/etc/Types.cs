@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace fltstd26.etc
 {
-    public class Types
+    /*public class Types
     {
         public record struct LFZ
         {
@@ -36,18 +36,18 @@ namespace fltstd26.etc
             public int Weight;
             public int Price; //in Cents
             public bool QuickTicket; //When Slots disabled, QuickTicket ignores Interval,Contigent and does not round Time to next 15min, but uses exact time. 
-            public bool Persistent; //Flight will not be deleted by Software and cannot be moved by User.
+            public bool Persistent; 
         }
 
         public record struct FLT
         {
             public int Id;
-            public int eId; //Custom Flight ID to match with external systems by Algorithm or Name = eId
+            public string eId; //Custom Flight ID to match with external systems by Algorithm or Name = eId
             public int Aircraft;
             public List<TGT> Target;
             public int TimeSlot; 
             public byte Status; //Status Number
-            public string Add; //Additional Info separated by ';'
+            public string Add; 
         }
-    }
+    }*/
 }

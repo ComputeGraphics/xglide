@@ -1,4 +1,4 @@
-﻿using CommunityToolkit.Maui.Converters;
+﻿/*using CommunityToolkit.Maui.Converters;
 using fltstd26.etc;
 using fltstd26.system;
 using SQLite;
@@ -14,7 +14,7 @@ namespace fltstd26.core
     {
         public class Handler(SQLiteConnection dbin)
         {
-            private SQLiteConnection db = dbin;
+            private readonly SQLiteConnection db = dbin;
             private readonly string err = "[DBMNGR] An error occurred while ";
             #region Realtime Systems
             #region Request Systems
@@ -661,154 +661,6 @@ namespace fltstd26.core
             }
             #endregion
         }
-
-        public class Converter
-        {
-            //////////////////////CONVERT TO PROCESSING TYPES//////////////////////
-
-            /// <summary>
-            /// Full Conversion. Converts Database Sheet into Record
-            /// </summary>
-            /// <param name="Con">Sheet Slot</param>
-            /// <returns>FTS</returns>
-            public static Types.FTS Convert(Sheets.Slots Con)
-            {
-                return new()
-                {
-                    Id = Con.Id,
-                    End = Con.FTime,
-                    Start = Con.STime,
-                    Length = Con.Length,
-                };
-            }
-
-            /// <summary>
-            /// Full Conversion. Converts Database Sheet into Record
-            /// </summary>
-            /// <param name="Con">Sheet Aircraft</param>
-            /// <returns>LFZ</returns>
-            public static Types.LFZ Convert(Sheets.Lfz Con)
-            {
-                return new()
-                {
-                    Id = Con.Id,
-                    Reg = Con.Reg ?? "",
-                    Type = Con.Type ?? "",
-                    AutoAssign = Con.AutoAssign,
-                    Interval = Con.Interval,
-                    PriceCat = Con.PriceCat,
-                    AvailTimes = Con.AvailTimes ?? [],
-                    Seats = Con.Seats,
-                };
-            }
-
-            /// <summary>
-            /// Partial Conversion [Link is not carried]. Converts Database Sheet into Record
-            /// </summary>
-            /// <param name="Con">Sheet Aircraft</param>
-            /// <returns>TGT</returns>
-            public static Types.TGT Convert(Sheets.Target Con)
-            {
-                return new()
-                {
-                    Id = Con.Id,
-                    Name = Con.Name ?? "",
-                    Persistent = Con.Persistent,
-                    Price = Con.Price,
-                    QuickTicket = Con.QuickTicket,
-                    Weight = Con.Weight,
-                };
-            }
-
-            /// <summary>
-            /// Partial Conversion [Aircraft, TimeSlot, Target not carried]. Converts Database Sheet into Record
-            /// </summary>
-            /// <param name="Con">Sheet Aircraft</param>
-            /// <returns>TGT</returns>
-            public static Types.FLT Convert(Sheets.Flt Con)
-            {
-                return new()
-                {
-                    Id = Con.Id,
-                    eId = Con.EId,
-                    Status = Con.Status,
-                    Add = Con.Add ?? "",
-                };
-            }
-
-            ///////////////////////CONVERT TO DATABASE TYPES///////////////////////
-
-            /// <summary>
-            /// Full Conversion. Converts Record into Database Sheet
-            /// </summary>
-            /// <param name="Con">FTS</param>
-            /// <returns>Sheet Slot</returns>
-            public static Sheets.Slots Convert(Types.FTS Con)
-            {
-                return new()
-                {
-                    Id = Con.Id,
-                    STime = Con.Start,
-                    FTime = Con.End,
-                    Length = Con.Length,
-                };
-            }
-
-            /// <summary>
-            /// Full Conversion. Converts Record into Database Sheet
-            /// </summary>
-            /// <param name="Con">LFZ</param>
-            /// <returns>Sheet Aircraft</returns>
-            public static Sheets.Lfz Convert(Types.LFZ Con)
-            {
-                return new()
-                {
-                    Id = Con.Id,
-                    Interval = Con.Interval,
-                    AutoAssign = Con.AutoAssign,
-                    PriceCat = Con.PriceCat,
-                    Type = Con.Type,
-                    Reg = Con.Reg,
-                    AvailTimes = Con.AvailTimes ?? [],
-                    Seats = Con.Seats,
-                };
-            }
-
-            /// <summary>
-            /// Partial Conversion [Link not carried]. Converts Record into Database Sheet
-            /// </summary>
-            /// <param name="Con">TGT</param>
-            /// <returns>Sheet Target</returns>
-            public static Sheets.Target Convert(Types.TGT Con)
-            {
-                return new()
-                {
-                    Id = Con.Id,
-                    Name = Con.Name,
-                    Persistent = Con.Persistent,
-                    QuickTicket = Con.QuickTicket,
-                    Price = Con.Price,
-                    Weight = Con.Weight,
-                };
-            }
-
-            /// <summary>
-            /// Full Conversion [Given Links are carried]. Converts Record into Database Sheet
-            /// </summary>
-            /// <param name="Con">FLT</param>
-            /// <returns>Sheet Flight</returns>
-            public static Sheets.Flt Convert(Types.FLT Con)
-            {
-                return new()
-                {
-                    Id = Con.Id,
-                    EId = Con.eId,
-                    Add = Con.Add,
-                    Lfz = Con.Aircraft,
-                    Slot = Con.TimeSlot,
-                    Status = Con.Status,
-                };
-            }
-        }
     }
 }
+*/

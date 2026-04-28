@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:sys="clr-namespace:System;assembly=netstandard"
              x:Class="fltstd26.board.BoardPage"
-             Title="BoardPage">
+             Title="">
     <Grid RowDefinitions="Auto,*,Auto">
-        <Grid ColumnDefinitions="Auto,*,Auto,Auto">
+        <Grid ColumnDefinitions="Auto,*,Auto,Auto"
+              BackgroundColor="{AppThemeBinding Dark={StaticResource PrimaryDark}, Light={StaticResource Primary}}">
             <Image Aspect="AspectFit"
                    x:Name="TopIconL"/>
             <Label HorizontalOptions="Start"
@@ -14,9 +16,14 @@
             <Image Aspect="AspectFit"
                    Grid.Column="2"
                    x:Name="TopIconR"/>
-            <Grid RowDefinitions="*, Auto">
-                <Label x:Name="BoardTime"/>
+            <Grid RowDefinitions="*, Auto"
+                  Grid.Column="3">
+                <Label x:Name="BoardTime"
+                       HorizontalOptions="Center"
+                       FontFamily="Archive"
+                       FontAttributes="Bold"/>
                 <Label x:Name="BoardDate"
+                       FontFamily="ZenDots"
                        Grid.Row="1"/>
             </Grid>
         </Grid>
@@ -24,9 +31,11 @@
               RowDefinitions="Auto,*">
             <Grid x:Name="XTitles"/>
             <Grid Grid.Row="1"
+                  BackgroundColor="{AppThemeBinding Dark={StaticResource Gray800}, Light={StaticResource Gray200}}"
                   x:Name="XBoard"/>
         </Grid>
-        <Grid>
+        <Grid Grid.Row="2">
+            <Label Text="Message Center"/>
         </Grid>
     </Grid>
 </ContentPage>
