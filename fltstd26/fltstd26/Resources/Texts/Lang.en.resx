@@ -265,7 +265,7 @@
     <value>Waiting</value>
   </data>
   <data name="xplan_weight" xml:space="preserve">
-    <value>Weight (1)</value>
+    <value>Seats</value>
   </data>
   <data name="profile_editor" xml:space="preserve">
     <value>Open Profile-Editor...</value>
@@ -308,5 +308,8 @@
   </data>
   <data name="newflt_warning" xml:space="preserve">
     <value>Shall the software create a new flight for the given target automatically?</value>
+  </data>
+  <data name="custom" xml:space="preserve">
+    <value>Custom</value>
   </data>
 </root>

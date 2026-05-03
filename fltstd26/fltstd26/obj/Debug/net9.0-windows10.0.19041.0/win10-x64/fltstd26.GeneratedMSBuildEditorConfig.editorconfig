@@ -66,6 +66,12 @@ build_metadata.AdditionalFiles.ManifestResourceName = fltstd26.debug.OnlineFetch
 build_metadata.AdditionalFiles.TargetPath = debug\OnlineFetch.xaml
 build_metadata.AdditionalFiles.RelativePath = debug\OnlineFetch.xaml
 
+[C:/Users/Arthur/Documents/GitHub/xglide/fltstd26/fltstd26/etc/XBlock.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = fltstd26.etc.XBlock.xaml
+build_metadata.AdditionalFiles.TargetPath = etc\XBlock.xaml
+build_metadata.AdditionalFiles.RelativePath = etc\XBlock.xaml
+
 [C:/Users/Arthur/Documents/GitHub/xglide/fltstd26/fltstd26/Resources/Styles/Colors.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
 build_metadata.AdditionalFiles.ManifestResourceName = fltstd26.Resources.Styles.Colors.xaml
@@ -83,6 +89,12 @@ build_metadata.AdditionalFiles.GenKind = Xaml
 build_metadata.AdditionalFiles.ManifestResourceName = fltstd26.system.modals.Selector.xaml
 build_metadata.AdditionalFiles.TargetPath = system\modals\Selector.xaml
 build_metadata.AdditionalFiles.RelativePath = system\modals\Selector.xaml
+
+[C:/Users/Arthur/Documents/GitHub/xglide/fltstd26/fltstd26/system/modals/SelectorItem.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = fltstd26.system.modals.SelectorItem.xaml
+build_metadata.AdditionalFiles.TargetPath = system\modals\SelectorItem.xaml
+build_metadata.AdditionalFiles.RelativePath = system\modals\SelectorItem.xaml
 
 [C:/Users/Arthur/Documents/GitHub/xglide/fltstd26/fltstd26/system/modals/YesNo.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml

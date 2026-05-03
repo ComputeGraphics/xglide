@@ -289,7 +289,7 @@
     <comment>FLT Status</comment>
   </data>
   <data name="xplan_weight" xml:space="preserve">
-    <value>Gewicht (1)</value>
+    <value>Sitze</value>
   </data>
   <data name="profile_editor" xml:space="preserve">
     <value>Profileditor öffnen...</value>
@@ -333,5 +333,8 @@
   </data>
   <data name="newflt_warning" xml:space="preserve">
     <value>Soll ein neuer automatisch ein neuer Flug für das angegebene Ziel angelegt werden?</value>
+  </data>
+  <data name="custom" xml:space="preserve">
+    <value>Benutzerdefiniert</value>
   </data>
 </root>

@@ -115,6 +115,15 @@ namespace fltstd26.Resources.Texts {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Benutzerdefiniert ähnelt.
+        /// </summary>
+        internal static string custom {
+            get {
+                return ResourceManager.GetString("custom", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Entfernen ähnelt.
         /// </summary>
         internal static string delete {
@@ -628,7 +637,7 @@ namespace fltstd26.Resources.Texts {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Gewicht (1) ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Sitze ähnelt.
         /// </summary>
         internal static string xplan_weight {
             get {

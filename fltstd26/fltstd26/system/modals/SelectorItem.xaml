@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             x:DataType="AppThemeBindingExtension"
+             x:Class="fltstd26.system.modals.SelectorItem">
+    <Border StrokeThickness="3"
+            x:Name="ElementBorder"
+            HorizontalOptions="Fill">
+        <Grid Margin="5,10"
+              ColumnDefinitions="Auto,Auto,*">
+            <Grid Grid.Column="0"
+                  Margin="15,0">
+                <Ellipse Stroke="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource Gray800}}"
+                         x:Name="CheckCircle"
+                                 WidthRequest="16"
+                                 HeightRequest="16"
+                                 HorizontalOptions="Center"
+                                 VerticalOptions="Center" />
+                <Ellipse x:Name="Check"
+                                 Fill="{StaticResource Primary}"
+                                 WidthRequest="8"
+                         IsVisible="False"
+                                 HeightRequest="8"
+                                 HorizontalOptions="Center"
+                                 VerticalOptions="Center" />
+            </Grid>
+            <Image WidthRequest="56"
+                   HeightRequest="56"
+                   x:Name="Icon"
+                   Grid.Column="1">
+                <Image.Behaviors>
+                    <toolkit:IconTintColorBehavior TintColor="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}"/>
+                </Image.Behaviors>
+            </Image>
+            <Grid Grid.Column="2"
+                  Margin="15,0"
+                  RowDefinitions="*,*">
+                <Label x:Name="Title"
+                       VerticalOptions="End"
+                       HorizontalOptions="Start"
+                       FontAttributes="Bold"
+                       FontSize="Title"/>
+                <Label x:Name="Description"
+                       Grid.Row="1"
+                       VerticalOptions="Start"
+                       HorizontalOptions="Start"
+                       FontSize="Subtitle"/>
+            </Grid>
+        </Grid>
+    </Border>
+</ContentView>

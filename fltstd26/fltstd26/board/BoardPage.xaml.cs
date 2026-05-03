@@ -36,7 +36,6 @@ public partial class BoardPage : ContentPage
         
     }
 
-
     private static DateTime RoundToMinute(DateTime dateTime)
     {
         if (dateTime.Second == 0 && dateTime.Millisecond == 0)

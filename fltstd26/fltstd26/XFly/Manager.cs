@@ -61,7 +61,7 @@ namespace fltstd26.XFly
             List<int> AvailableAircraft = [];
             foreach (Sheets.Lfz lfz in RData.GetAircraftTable())
             {
-                if ((!Auto || lfz.AutoAssign == true) && lfz.AvailTimes is not null && lfz.AvailTimes.Select(x => x == SlotID).FirstOrDefault())
+                if ((!Auto || lfz.AutoAssign == true) && lfz.AvailTimes is not null && lfz.AvailTimes.Where(x => x == SlotID).Any())
                 {
                     AvailableAircraft.Add(lfz.Id);
                 }
@@ -123,7 +123,7 @@ namespace fltstd26.XFly
         /// <summary>
         /// Initializes a new Flight. Returns Id=-1 on failure.
         /// </summary>
-        public static int CreateFlight(string eId,int lfz,int slot,byte status,string Add = "")
+        public static int CreateFlight(string? eId,int lfz,int slot,byte status,string? Add)
         {
             Sheets.Flt f = new()
             {
@@ -138,5 +138,9 @@ namespace fltstd26.XFly
             return -1;
         }
 
+        public static string? CreateEID()
+        {
+            return null;
+        }
     }
 }

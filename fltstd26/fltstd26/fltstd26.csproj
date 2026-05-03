@@ -132,6 +132,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Compile Update="etc\XBlock.xaml.cs">
+	    <DependentUpon>XBlock.xaml</DependentUpon>
+	  </Compile>
 	  <Compile Update="XMain.xaml.cs">
 	    <DependentUpon>XMain.xaml</DependentUpon>
 	  </Compile>
@@ -177,6 +180,9 @@
 	  <MauiXaml Update="system\modals\Selector.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="system\modals\SelectorItem.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="system\modals\YesNo.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
@@ -184,6 +190,9 @@
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="TargetCreator.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="etc\XBlock.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	</ItemGroup>

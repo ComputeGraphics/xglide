@@ -3,14 +3,16 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:local="clr-namespace:fltstd26.Resources.Texts"
              x:Class="fltstd26.system.modals.YesNo"
+             BackgroundColor="#88000000"
              Title="YesNo">
     <Border StrokeThickness="2"
             WidthRequest="600"
+            BackgroundColor="{x:AppThemeBinding Dark={StaticResource Gray950}, Light={StaticResource Gray200}}"
             VerticalOptions="Center"
             HorizontalOptions="Center">
         <Grid RowDefinitions="Auto,Auto,Auto"
               Padding="20">
-            <Label FontSize="36"
+            <Label FontSize="Header"
                    x:Name="ItemTitle"
                    FontAttributes="Bold"
                    FontFamily="Archive"
@@ -18,6 +20,7 @@
                    Grid.Row="0"/>
             <Label FontSize="24"
                    x:Name="ItemSubtitle"
+                   Margin="0,5"
                    HorizontalOptions="Start"
                    Grid.Row="1"/>
             <Grid Grid.Row="2"

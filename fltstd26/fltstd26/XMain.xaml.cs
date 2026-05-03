@@ -3,16 +3,18 @@ using fltstd26.board;
 using fltstd26.core;
 using fltstd26.debug;
 using fltstd26.etc;
+using fltstd26.Resources.Texts;
 using fltstd26.system;
 using fltstd26.XFly;
+using System.Xml.Linq;
 namespace fltstd26
 {
     public partial class XMain : ContentPage
     {
         List<List<Border>> cells = [];
-        List<List<VerticalStackLayout>> containers = [];
+        List<List<VerticalStackLayout>> StackContainers = [];
 
-        Dictionary<Guid,XBorder> NodeLibrary = [];
+        Dictionary<Guid,XBlock> NodeLibrary = [];
         Guid copyBuffer = new(new byte[16]);
         Guid focusedID = new(new byte[16]);
 
@@ -30,33 +32,72 @@ namespace fltstd26
 
         private void SidebarRefresh()
         {
-            //LFZ Selector füllen
+            //LFZ & PRICE Selector füllen
             TGT_LFZ_Dropdown.Items.Clear();
-            List<Sheets.Lfz> allLFZ = RData.GetAircraftTable();
-            foreach (Sheets.Lfz lfz in allLFZ)
-            {
-                TGT_LFZ_Dropdown.Items.Add(lfz.Reg);
-            }
-            //
+            TGT_Price_Dropdown.Items.Clear();
+            RData.GetAircraftTable().ForEach(x => TGT_LFZ_Dropdown.Items.Add(x.Reg));
+            TGT_Price_Dropdown.Items.Add(Lang.custom);
+            RData.GetPriceTable().ForEach(x => TGT_Price_Dropdown.Items.Add($"{x.Name} ({GSettings.FormatPrice(x.Price)})"));
         }
 
-        private void XPlan_Refresh()
+        private void XPlanRefresh()
         {
+            List<Sheets.Flt> allFLT = RData.GetFlightTable();
+            List<Sheets.Target> allTGT = RData.GetTargetTable();
 
+            //Alle Nodes löschen
+            StackContainers.ForEach(c => c.ForEach(x => x.Clear()));
+            NodeLibrary.Clear();
+            copyBuffer = new(new byte[16]);
+            focusedID = new(new byte[16]);
 
+            //Datenbank Nodes einfügen
+            if (allFLT.Count != 0 && allTGT.Count != 0)
+            {
+                AddFlightNo(allFLT);
+                foreach (var t in allTGT)
+                {
+                    Sheets.Flt? f = allFLT.Find(x => x.Id == t.LId);
+                    if (f == null)
+                    {
+                        ConProc.Log("[XPLAN-SYNC] Target " + t.Id.ToString() + " konnte kein Flug zugeordnet werden",2);
+                        continue;
+                    };
+                    Sheets.Slot? s = RData.Get<Sheets.Slot>(f.Slot);
+                    if (s == null)
+                    {
+                        ConProc.Log("[XPLAN-SYNC] Target " + t.Id.ToString() + " konnte kein Slot zugeordnet werden",2);
+                        continue;
+                    };
+                    AddNode(s,f.Lfz,t);
+                }
+            }
+        }
+
+        private void AddFlightNo(List<Sheets.Flt> allFLT)
+        {
+            Drawer drawer = new();
+            foreach (Sheets.Flt flt in allFLT)
+            {
+                int rowIndex = RData.GetSlotsTable().FindIndex(fts => fts.Id.Equals(flt.Slot));
+                System.Diagnostics.Debug.WriteLine($"Row Index: {rowIndex}");
+                int colIndex = RData.GetAircraftTable().FindIndex(lfz => lfz.Id.Equals(flt.Lfz));
+                System.Diagnostics.Debug.WriteLine($"Col Index: {colIndex}");
+                if (rowIndex == -1 || colIndex == -1)
+                {
+                    ConProc.Log($"[XPLAN-RENDERER] Dem Flug {flt.Id} konnte keine Zelle zugeordnet werden",2);
+                    continue;
+                }
+                StackContainers.ElementAt(rowIndex).ElementAt(colIndex).Children.Add(drawer.CreateFltCollector(flt.Id,flt.EId));
+            }
 
         }
 
         internal void XPlan_Restart()
         {
             Color stroke = GSettings.DarkMode ? Colors.DarkGray : Colors.LightGray;
-
-            TGT_LFZ_Dropdown.Items.Clear();
             List<Sheets.Lfz> allLFZ = RData.GetAircraftTable();
-            foreach (Sheets.Lfz lfz in allLFZ)
-            {
-                TGT_LFZ_Dropdown.Items.Add(lfz.Reg);
-            }
+            SidebarRefresh();
             //XPLAN AUFBAUEN
             TapGestureRecognizer Deselector = new();
             Deselector.Tapped += NodeDeselectionHandler;
@@ -134,7 +175,7 @@ namespace fltstd26
                 for (int i = 0; i < allLFZ.Count; i++)
                 {
                     // Event Handlers
-                    
+
                     Border cellBorder = new()
                     {
                         Stroke = stroke,
@@ -142,18 +183,17 @@ namespace fltstd26
                     };
 
 
+                    DropGestureRecognizer d = new();
+
                     if (Manager.AvailableIn(allLFZ[i].Id,fts.Id))
                     {
                         VerticalStackLayout cellContainer = [];
                         cellBorder.Content = cellContainer;
-                        cellBorder.GestureRecognizers.Add(new DropGestureRecognizer());
+                        
+                        d.AllowDrop = true;
+                        d.DragOver += (s,e) => OnHoverNode(s,e,true);
+                        d.Drop += (s,e) => OnDropNode(cellBorder,e);
 
-                        if (cellBorder.GestureRecognizers[0] is DropGestureRecognizer dropGesture)
-                        {
-                            dropGesture.DragOver += (s,e) => OnHoverNode(s,e,true);
-                            dropGesture.AllowDrop = true;
-                            dropGesture.Drop += (s,e) => OnDropNode(cellBorder,e);
-                        }
                         containersRow.Add(cellContainer);
                     }
                     else
@@ -167,185 +207,72 @@ namespace fltstd26
                             VerticalTextAlignment = TextAlignment.Center,
                             FontSize = 24
                         };
+
+                        d.AllowDrop = false;
+                        d.DragOver += (s,e) => OnHoverNode(s,e,false);
+
+                        containersRow.Add([]); //Ghost-Element, damit die Indizes stimmen
                         cellBorder.Content = x;
                     }
+                    cellBorder.GestureRecognizers.Add(d);
 
                     borders.Add(cellBorder);
                     XPlan.Add(cellBorder,i + 1,XPlan.RowDefinitions.Count - 1);
                 }
-                containers.Add(containersRow);
+                StackContainers.Add(containersRow);
 
                 cells.Add(borders);
             }
+            XPlanRefresh();
         }
 
-        private bool AddNode(Sheets.Slot timeIn,Sheets.Lfz lfzIn,Sheets.Target tgtIn,bool auto = false)
+        private bool AddNode(Sheets.Slot timeIn,int lfzIn,Sheets.Target tgtIn)
         {
             int rowIndex = RData.GetSlotsTable().FindIndex(fts => fts.Id.Equals(timeIn.Id));
             System.Diagnostics.Debug.WriteLine($"Row Index: {rowIndex}");
-            int colIndex = RData.GetAircraftTable().FindIndex(lfz => lfz.Id.Equals(lfzIn.Id));
-            System.Diagnostics.Debug.WriteLine($"Col Index: {colIndex}");
-            System.Diagnostics.Debug.WriteLine($"LFZ Details:\nId: {lfzIn.Id}\nReg: {lfzIn.Reg}\nType: {lfzIn.Type}\nSeats: {lfzIn.Seats}\nInterval: {lfzIn.Interval}\nPriceCat: {lfzIn.PriceCat}\nAuto: {lfzIn.AutoAssign}\nAvail: {string.Join(", ",lfzIn.AvailTimes)}\n---------");
+            int colIndex = RData.GetAircraftTable().FindIndex(lfz => lfz.Id.Equals(lfzIn));
+            System.Diagnostics.Debug.WriteLine($"Col Index: {colIndex} of {lfzIn.ToString()}");
+            //System.Diagnostics.Debug.WriteLine($"LFZ Details:\nId: {lfzIn.Id}\nReg: {lfzIn.Reg}\nType: {lfzIn.Type}\nSeats: {lfzIn.Seats}\nInterval: {lfzIn.Interval}\nPriceCat: {lfzIn.PriceCat}\nAuto: {lfzIn.AutoAssign}\nAvail: {string.Join(", ",lfzIn.AvailTimes)}\n---------");
             if (rowIndex == -1 || colIndex == -1) return false; //No Cell found
 
-            Grid nodegrid = new()
-            {
-                ColumnDefinitions =
-                    {
-                        new ColumnDefinition { Width = GridLength.Auto },
-                        new ColumnDefinition {Width = GridLength.Star}
-                    },
-                RowDefinitions =
-                    {
-                        new RowDefinition(),
-                        new RowDefinition(),
-                        new RowDefinition(),
-                        new RowDefinition()
-                    }
-            };
+            XBlock NewNode = new(tgtIn,timeIn.Length);
 
-            Label nodeid = new()
-            {
-                Text = tgtIn.Id.ToString(),
-                TextColor = GSettings.NodeColour,
-                Padding = new Thickness(3),
-                FontAttributes = FontAttributes.Bold,
-                HorizontalTextAlignment = TextAlignment.Center,
-                FontSize = 18
-            };
-
-            nodegrid.Add(nodeid);
-            nodegrid.SetColumnSpan(nodeid,2);
-
-            Label nodename = new()
-            {
-                Text = tgtIn.Name,
-                TextColor = GSettings.NodeColour,
-                Padding = new Thickness(3),
-                HorizontalTextAlignment = TextAlignment.Center,
-                FontSize = 16
-            };
-
-            nodegrid.Add(nodename,0,1);
-            nodegrid.SetColumnSpan(nodename,2);
-
-            Label nodelength = new()
-            {
-                Text = timeIn.Length.ToString() + " min",
-                TextColor = GSettings.NodeColour,
-                VerticalOptions = LayoutOptions.Center,
-                HorizontalOptions = LayoutOptions.Center,
-                Padding = new Thickness(20,0),
-                FontSize = 16
-            };
-            nodegrid.Add(nodelength,0,2);
-
-            HorizontalStackLayout hzslicon = new()
-            {
-                HorizontalOptions = LayoutOptions.End,
-                Padding = new Thickness(0,0,20,0),
-            };
-            bool[] props = [tgtIn.QuickTicket,tgtIn.Persistent,false,false];
-            ImageSource[] sources = ["quick.png","pin.png","notify.png","flag.png"];
-            string[] xname = ["QuickBtn","PinBtn","NotifyBtn","FlagBtn"];
-
-            for (int i = 0; i < props.Length; i++)
-            {
-                ImageButton imgbtn = new()
-                {
-                    BackgroundColor = Colors.Transparent,
-                    Source = sources[i],
-                    Aspect = Aspect.AspectFit,
-                    Behaviors =
-                    {
-                        new IconTintColorBehavior { TintColor = props[i] ? GSettings.PrimaryColour : GSettings.InactiveIcon }
-                    },
-                };
-                imgbtn.Clicked += NodeInteractionHandler;
-                hzslicon.Add(imgbtn);
-            }
-            nodegrid.Add(hzslicon,1,2);
-
-            Label nodeoid = new()
-            {
-                Text = tgtIn.Id.ToString(),
-                TextColor = GSettings.NodeColour,
-                Padding = new Thickness(3),
-                HorizontalTextAlignment = TextAlignment.Center,
-                FontSize = 16
-            };
-
-            nodegrid.Add(nodeoid,0,3);
-            nodegrid.SetColumnSpan(nodeoid,2);
-
-            XBorder node = new()
-            {
-                BackgroundColor = GSettings.DarkMode ? GSettings.GetColour("Gray950") : GSettings.GetColour("Gray100"),
-                Stroke = GSettings.NodeColour,
-                StrokeThickness = 0,
-                Content = nodegrid,
-                Tgt = tgtIn,
-                Lfz = lfzIn,
-                Fts = timeIn,
-                Attrib = props
-            };
-
-            // Gesture Control
             var Drag = new DragGestureRecognizer();
             Drag.DragStarting += NodeDragStartHandler;
-            node.GestureRecognizers.Add(Drag);
+            NewNode.GestureRecognizers.Add(Drag);
 
             TapGestureRecognizer LClick = new()
             {
                 Buttons = ButtonsMask.Primary,
             };
             LClick.Tapped += NodeSelectionHandler;
-            node.GestureRecognizers.Add(LClick);
+            NewNode.GestureRecognizers.Add(LClick);
 
-            containers.ElementAt(rowIndex).ElementAt(colIndex).Children.Add(node);
-            NodeLibrary.Add(node.Id,node);
+            StackContainers.ElementAt(rowIndex).ElementAt(colIndex).Children.Add(NewNode);
+            NodeLibrary.Add(NewNode.Id,NewNode);
             return true;
-        }
-
-        private void NodeInteractionHandler(object? sender,EventArgs e)
-        {
-            if (sender is ImageButton interaction)
-            {
-                if (interaction.Parent.Parent.Parent is XBorder invokerCell)
-                {
-                    System.Diagnostics.Debug.WriteLine("Invoked by " + invokerCell.Tgt.Id);
-                    if (interaction.Parent is HorizontalStackLayout hzsl && invokerCell.Content is Grid)
-                    {
-                        int buttonIndex = hzsl.Children.IndexOf(interaction);
-                        var btn = hzsl.Children.OfType<ImageButton>().ToList().ElementAt(buttonIndex);
-                        if (btn.Behaviors.OfType<IconTintColorBehavior>().FirstOrDefault() != null) btn.Behaviors.Clear();
-                        //Invoke button specific action here
-                        invokerCell.Attrib[buttonIndex] = !invokerCell.Attrib[buttonIndex];
-                        btn.Behaviors.Add(new IconTintColorBehavior { TintColor = invokerCell.Attrib[buttonIndex] ? GSettings.PrimaryColour : GSettings.InactiveIcon });
-                    }
-                }
-            }
         }
 
         private void NodeSelectionHandler(object? sender,EventArgs e)
         {
-            if (sender is XBorder selectedNode && selectedNode.Id != focusedID)
+            if (sender is XBlock selectedNode && selectedNode.Id != focusedID)
             {
                 NodeDeselectionHandler(sender,e);
                 focusedID = selectedNode.Id;
                 selectedNode.Focus();
-                selectedNode.StrokeThickness = 3;
-                System.Diagnostics.Debug.WriteLine($"Selected node: {selectedNode.Tgt.Id}");
+                if (selectedNode.Content is Border b) b.StrokeThickness = 3;
+                //selectedNode.StrokeThickness = 3;
+                System.Diagnostics.Debug.WriteLine($"Selected node: {selectedNode.TargetID}");
             }
         }
 
         private void NodeDeselectionHandler(object? sender,EventArgs e)
         {
-            if (!focusedID.ToByteArray().All(x => x == 0) && NodeLibrary.TryGetValue(focusedID,out XBorder? old))
+            if (!focusedID.ToByteArray().All(x => x == 0) && NodeLibrary.TryGetValue(focusedID,out XBlock? old))
             {
                 if (old is not null)
                 {
-                    old.StrokeThickness = 0;
+                    if (old.Content is Border b) b.StrokeThickness = 0;
                     old.Unfocus();
                 }
                 focusedID = new(new byte[16]);
@@ -354,7 +281,7 @@ namespace fltstd26
 
         private void NodeDragStartHandler(object? sender,DragStartingEventArgs e)
         {
-            if (sender is DragGestureRecognizer dragRecognizer && dragRecognizer.Parent is XBorder draggedNode)
+            if (sender is DragGestureRecognizer dragRecognizer && dragRecognizer.Parent is XBlock draggedNode)
             {
                 e.Data.Properties["DraggedNode"] = draggedNode;
                 e.Data.Text = string.Empty;
@@ -364,13 +291,20 @@ namespace fltstd26
 
         private void OnHoverNode(object? sender,DragEventArgs e,bool avail)
         {
-            e.AcceptedOperation = avail ? e.AcceptedOperation = DataPackageOperation.Copy : DataPackageOperation.None;
+            /* TO IMPLEMENT - Farbwiederherstellung nicht funktionstüchtig
+            DropGestureRecognizer? d = (DropGestureRecognizer?)sender;
+            if(d != null && d.Parent is Border b)
+            {
+                Brush? prev = b.Stroke;
+                b.Stroke = avail ? Colors.Green : Colors.Red;
+                _ = new Scheduler(TimeSpan.FromSeconds(3),(s,e) => b.Stroke = prev,false);  
+            }*/
         }
         private static void OnDropNode(Border targetCell,DropEventArgs e)
         {
             e.Data.Properties.TryGetValue("DraggedNode",out var draggedNodeObj);
             System.Diagnostics.Debug.WriteLine($"Drop event - Target: {targetCell}, Node: " + draggedNodeObj);
-            if (draggedNodeObj is XBorder draggedNode)
+            if (draggedNodeObj is XBlock draggedNode)
             {
                 if (draggedNode.Parent is VerticalStackLayout sourceContainer)
                 {
@@ -419,11 +353,11 @@ namespace fltstd26
             };
             if (RData.GetSlotsTable().Count > 0 && RData.GetAircraftTable().Count > 0)
             {
-                AddNode(RData.GetSlotsTable()[1],RData.GetAircraftTable()[0],demoTGT);
+                AddNode(RData.GetSlotsTable()[1],RData.GetAircraftTable()[0].Id,demoTGT);
             }
         }
 
-        private void OpenSelectorModal_Click(object sender, EventArgs e)
+        private void OpenSelectorModal_Click(object sender,EventArgs e)
         {
             List<(string, string, string)> content = new()
             {
@@ -435,7 +369,7 @@ namespace fltstd26
             {
                 System.Diagnostics.Debug.WriteLine($"Selected Index: {t.Result}");
             });
-            
+
 
 
             /*system.modals.Selector selector = new("Test", content);
@@ -461,8 +395,8 @@ namespace fltstd26
         private void OGNFetcher_Click(object sender,EventArgs e) => Application.Current?.OpenWindow(new OnlineFetch());
 
         ////////////////////////////////////////////CREATOR BAR HANDLING////////////////////////////////////////////
-        ///private void SelectedPriceCatChanged(object sender, )
-
+        private void SelectedPriceCatChanged(object sender,EventArgs e) => TGT_Price_Entry.IsVisible = TGT_Price_Dropdown.SelectedIndex == 0;
+        private void PriceCatAutoChanged(object sender,EventArgs e) => TGT_Price_Entry.IsVisible = !TGT_PriceCat_Dropdown_Enable.IsChecked && TGT_Price_Dropdown.SelectedIndex == 0;
 
 
 
@@ -471,14 +405,14 @@ namespace fltstd26
         private void RedoInterClick(object sender,EventArgs e) => System.Diagnostics.Debug.WriteLine("Redo Click");
         private void CopyInterClick(object sender,EventArgs e)
         {
-            if(!focusedID.ToByteArray().All(x => x == 0))
+            if (!focusedID.ToByteArray().All(x => x == 0))
             {
                 copyBuffer = focusedID;
             }
         }
         private void PasteInterClick(object sender,EventArgs e)
         {
-            if(focusedID != copyBuffer && NodeLibrary.TryGetValue(focusedID,out XBorder? target) && NodeLibrary.TryGetValue(copyBuffer,out XBorder? source))
+            if (focusedID != copyBuffer && NodeLibrary.TryGetValue(focusedID,out XBlock? target) && NodeLibrary.TryGetValue(copyBuffer,out XBlock? source))
             {
                 if (source.Parent is VerticalStackLayout vsl1 && target.Parent is VerticalStackLayout vsl2)
                 {
@@ -523,7 +457,7 @@ namespace fltstd26
         private void CloseClick(object sender,EventArgs e) => System.Diagnostics.Debug.WriteLine("Not implemented");
     }
 
-    internal partial class XBorder : Border
+    /*internal partial class XBorder : Border
     {
         internal Sheets.Target Tgt { get; set; }
         internal Sheets.Lfz Lfz { get; set; }
@@ -531,5 +465,10 @@ namespace fltstd26
 
         ///<summary>quick, pin, notify, flag</summary>
         internal bool[] Attrib = new bool[4];
+    }*/
+
+    internal partial class FBorder : Border
+    {
+        internal int FltId { get; set; }
     }
 }

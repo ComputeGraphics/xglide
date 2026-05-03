@@ -22,10 +22,10 @@ namespace fltstd26.etc
             allPriceCat.Add(new Sheets.PriceCat { Name = "VIP",Price = 45000 });
 
             //LFZ
-            allLFZ.Add(new Sheets.Lfz { Reg = "D-ABCD",Type = "Cessna 172",Seats = 4,AutoAssign = true,Interval = 15,PriceCat = 0,AvailTimes = [1,2,3,4,5,6] });
-            allLFZ.Add(new Sheets.Lfz { Reg = "D-EFGH",Type = "Piper PA-28",Seats = 4,AutoAssign = true,Interval = 15,PriceCat = 0,AvailTimes = [2,4,6] });
-            allLFZ.Add(new Sheets.Lfz { Reg = "D-IJKL",Type = "P-17 Stearman",Seats = 2,AutoAssign = false,Interval = 15,PriceCat = 1,AvailTimes = [1,3,5] });
-            allLFZ.Add(new Sheets.Lfz { Reg = "D-MNOP",Type = "WT9 Dynamic",Seats = 2,AutoAssign = true,Interval = 15,PriceCat = 0,AvailTimes = [1,2,3,4,5,6] });
+            allLFZ.Add(new Sheets.Lfz { Reg = "D-ABCD",Type = "Cessna 172",Seats = 3,AutoAssign = true,Interval = 15,PriceCat = 0,AvailTimes = [1,2,3,4,5,6] });
+            allLFZ.Add(new Sheets.Lfz { Reg = "D-EFGH",Type = "Piper PA-28",Seats = 3,AutoAssign = true,Interval = 15,PriceCat = 0,AvailTimes = [2,4,6] });
+            allLFZ.Add(new Sheets.Lfz { Reg = "D-IJKL",Type = "P-17 Stearman",Seats = 1,AutoAssign = false,Interval = 15,PriceCat = 1,AvailTimes = [1,3,5] });
+            allLFZ.Add(new Sheets.Lfz { Reg = "D-MNOP",Type = "WT9 Dynamic",Seats = 1,AutoAssign = true,Interval = 15,PriceCat = 0,AvailTimes = [1,2,3,4,5,6] });
 
             //FTS
             allFTS.Add(new Sheets.Slot { STime = DateTime.Today.AddHours(8),FTime = DateTime.Today.AddHours(9),Length = 15 });

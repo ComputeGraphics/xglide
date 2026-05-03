@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:fltstd_etc="clr-namespace:fltstd26.etc"
+             x:Class="fltstd26.XFly.XBlock">
+    <Border BackgroundColor="{AppThemeBinding Dark={StaticResource Gray950}, Light={StaticResource Gray100}}"
+            x:Name="NodeFrame"
+            Stroke="{x:Static fltstd_etc:GSettings.NodeColour}"
+            StrokeThickness="0">
+        <Grid ColumnDefinitions="Auto,*"
+              RowDefinitions="*,*,*,*">
+            <Label TextColor="{x:Static fltstd_etc:GSettings.NodeColour}"
+                   x:Name="NodeName"
+                   Padding="3"
+                   FontAttributes="Bold"
+                   HorizontalOptions="Center"
+                   FontSize="18"
+                   Grid.ColumnSpan="2"/>
+            <Label x:Name="NodeWeight"
+                   TextColor="{x:Static fltstd_etc:GSettings.NodeColour}"
+                   Padding="3"
+                   HorizontalOptions="Center"
+                   FontSize="16"
+                   Grid.Column="0"
+                   Grid.Row="1"
+                   Grid.ColumnSpan="2"/>
+            <Label x:Name="NodeLength"
+                   TextColor="{x:Static fltstd_etc:GSettings.NodeColour}"
+                   VerticalOptions="Center"
+                   HorizontalOptions="Center"
+                   Padding="20,0"
+                   FontSize="16"
+                   Grid.Row="2"/>
+            <HorizontalStackLayout x:Name="NodeIconStack"
+                                   Padding="0,0,20,0"
+                                   HorizontalOptions="End"
+                                   Grid.Row="2"
+                                   Grid.Column="1"/>
+            <Label x:Name="NodeID"
+                   TextColor="{x:Static fltstd_etc:GSettings.NodeColour}"
+                   Padding="3"
+                   HorizontalOptions="Center"
+                   FontSize="8"
+                   Grid.Column="0"
+                   Grid.Row="3"
+                   Grid.ColumnSpan="2"/>
+        </Grid>
+        
+    </Border>
+</ContentView>
