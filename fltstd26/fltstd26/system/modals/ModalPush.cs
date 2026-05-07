@@ -12,18 +12,25 @@ namespace fltstd26.system.modals
 
         internal async static Task<int> Selector(string title, List<(string, string, string)> content)
         {
-            if (USettings.nav == null) return -1;
+            if (GSettings.nav == null) return -1;
             Selector selector = new(title,content);
-            await USettings.nav!.PushModalAsync(selector);
+            await GSettings.nav!.PushModalAsync(selector);
             return await selector.ShowAndSelect();
         }
 
         internal async static Task<bool> Question(string Title, string Subtitle)
         {
-            if (USettings.nav == null) return false;
+            if (GSettings.nav == null) return false;
             YesNo question = new(Title, Subtitle);
-            await USettings.nav!.PushModalAsync(question);
+            await GSettings.nav!.PushModalAsync(question);
             return await question.ShowAndSelect();
+        }
+
+        internal async static void Message(string Title, string Subtitle)
+        {
+            if(GSettings.nav == null) return;
+            await GSettings.nav!.PushModalAsync(new Notification(Title,Subtitle));
+            return;
         }
     }
 }

@@ -13,5 +13,22 @@ namespace fltstd26.debug
         {
             RData.Init();
         }
+
+        public static List<(string, string, string)> content = new()
+            {
+                ("plane.png","Option 1","Description for option 1"),
+                ("control.png","Option 2","Description for option 2"),
+                ("copy.png","Option 3","Description for option 3"),
+                ("slot.png","Option 4","Description for option 4"),
+                ("target.png","Option 5","Description for option 5"),
+                ("add.png","Option 6","Description for option 6"),
+                ("plane.png","Option 1","Description for option 1"),
+                ("control.png","Option 2","Description for option 2"),
+                ("copy.png","Option 3","Description for option 3"),
+                ("slot.png","Option 4","Description for option 4"),
+                ("target.png","Option 5","Description for option 5"),
+                ("add.png","Option 6","Description for option 6"),
+            };
+
     }
 }

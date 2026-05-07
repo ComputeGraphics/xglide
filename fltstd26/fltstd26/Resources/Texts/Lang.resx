@@ -337,4 +337,13 @@
   <data name="custom" xml:space="preserve">
     <value>Benutzerdefiniert</value>
   </data>
+  <data name="builder_selectSlot" xml:space="preserve">
+    <value>Slot auswählen</value>
+  </data>
+  <data name="builder_selectLfz" xml:space="preserve">
+    <value>Luftfahrzeug wählen</value>
+  </data>
+  <data name="unallowed_chars_removed" xml:space="preserve">
+    <value>Nicht erlaubte Zeichen wurden aus der Anfrage entfernt</value>
+  </data>
 </root>

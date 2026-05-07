@@ -91,7 +91,10 @@
                 <MenuFlyoutSubItem Text="Modals">
                     <MenuFlyoutItem Text="Selector Modal"
                                     Clicked="OpenSelectorModal_Click"/>
-                    <MenuFlyoutItem Text="Input Modal"/>
+                    <MenuFlyoutItem Text="Decision"
+                                    Clicked="OpenYesNoModal_Click"/>
+                    <MenuFlyoutItem Text="Message"
+                                    Clicked="OpenMessageModal_Click"/>
                 </MenuFlyoutSubItem>
             </MenuFlyoutSubItem>
         </MenuBarItem>
@@ -211,13 +214,12 @@
                             ImageSource="bin.png"/>
                 </Grid>
             </Border>
-            <ScrollView
-                    Grid.Row="1"
-                    VerticalScrollBarVisibility="Always">
+            <ScrollView Grid.Row="1"
+                        VerticalScrollBarVisibility="Always">
                 <Grid RowSpacing="0"
                       ColumnSpacing="0"
-                          Padding="10"
-                          x:Name="XPlan">
+                      Padding="10"
+                      x:Name="XPlan">
                 </Grid>
             </ScrollView>
         </Grid>
@@ -256,10 +258,12 @@
                         </Grid>
                         <Entry x:Name="TGT_Name_Entry"
                                Placeholder="{x:Static local:Lang.xplan_name}"
+                               MaxLength="25"
+                               IsSpellCheckEnabled="False"
+                               ClearButtonVisibility="WhileEditing"
                                Margin="0,10,0,10"/>
 
                         <Entry x:Name="TGT_Weight_Entry"
-                               Placeholder="{Binding Source={x:Static local:Lang.xplan_weight}, StringFormat='{0} (1)'}"
                                Margin="0,10,0,10"
                                Keyboard="Numeric">
                             <Entry.Behaviors>
@@ -286,7 +290,6 @@
                                         IsEnabled="{Binding Path=IsChecked, Converter={toolkit:InvertedBoolConverter}}"/>
 
                         <Entry x:Name="FLT_Length_Entry"
-                               Placeholder="{x:Static local:Lang.xplan_length}"
                                Margin="0,10,0,10"
                                Keyboard="Numeric">
                             <Entry.Behaviors>
@@ -299,7 +302,6 @@
                                     MaximumDecimalPlaces="1" />
                             </Entry.Behaviors>
                         </Entry>
-
 
                         <Grid ColumnDefinitions="Auto, *">
                             <HorizontalStackLayout>
@@ -354,7 +356,8 @@
                             </HorizontalStackLayout>
                         </Grid>
 
-                        <VerticalStackLayout x:Name="FLTAddsEntryContainer"></VerticalStackLayout>
+                        <VerticalStackLayout x:Name="FLTAddsEntryContainer"
+                                             Padding="0,10,0,0"/>
                     </VerticalStackLayout>
                 </ScrollView>
                 <Button Text="{x:Static local:Lang.xplan_add}"

@@ -6,13 +6,16 @@ using fltstd26.etc;
 using fltstd26.Resources.Texts;
 using fltstd26.system;
 using fltstd26.XFly;
+using Microsoft.Maui.Controls;
 using System.Xml.Linq;
 namespace fltstd26
 {
     public partial class XMain : ContentPage
     {
-        List<List<Border>> cells = [];
+        //List<List<Border>> cells = [];
         List<List<VerticalStackLayout>> StackContainers = [];
+        List<int> CurrentPriceCatIds = [];
+        List<int> CurrentAircraftIds = [];
 
         Dictionary<Guid,XBlock> NodeLibrary = [];
         Guid copyBuffer = new(new byte[16]);
@@ -21,7 +24,7 @@ namespace fltstd26
         public XMain()
         {
             InitializeComponent();
-            USettings.nav = Navigation;
+            GSettings.nav = Navigation;
             DskMan.Init();
             RData.Init();
             System.Diagnostics.Debug.WriteLine(Application.Current!.RequestedTheme.ToString());
@@ -35,10 +38,40 @@ namespace fltstd26
             //LFZ & PRICE Selector füllen
             TGT_LFZ_Dropdown.Items.Clear();
             TGT_Price_Dropdown.Items.Clear();
-            RData.GetAircraftTable().ForEach(x => TGT_LFZ_Dropdown.Items.Add(x.Reg));
+            CurrentPriceCatIds.Clear();
+            CurrentAircraftIds.Clear();
+            FLTAddsEntryContainer.Clear();
+            RData.GetAircraftTable().ForEach(x =>
+            {
+                CurrentAircraftIds.Add(x.Id);
+                TGT_LFZ_Dropdown.Items.Add(x.Reg);
+            });
             TGT_Price_Dropdown.Items.Add(Lang.custom);
-            RData.GetPriceTable().ForEach(x => TGT_Price_Dropdown.Items.Add($"{x.Name} ({GSettings.FormatPrice(x.Price)})"));
+            RData.GetPriceTable().ForEach(x =>
+            {
+                CurrentPriceCatIds.Add(x.Id);
+                TGT_Price_Dropdown.Items.Add($"{x.Name} ({GSettings.FormatPrice(x.Price)})");
+            });
+            FLT_Length_Entry.Placeholder = Lang.xplan_length.ToString() + $" ({USettings.DefaultFltLength} min)";
+            TGT_Weight_Entry.Placeholder = Lang.xplan_weight.ToString() + $" ({USettings.DefaultTgtWeight})";
+            USettings.Additionals.ForEach(x => FLTAddsEntryContainer.Add(new Entry() { Placeholder = x }));
         }
+
+        private void XPlanClear(bool ClearSheet)
+        {
+            NodeLibrary.Clear();
+            copyBuffer = new(new byte[16]);
+            focusedID = new(new byte[16]);
+            if (ClearSheet)
+            {
+                XPlan.GestureRecognizers.Clear();
+                XPlan.ColumnDefinitions.Clear();
+                XPlan.RowDefinitions.Clear();
+                XPlan.Children.Clear();
+                StackContainers.Clear();
+            }
+        }
+
 
         private void XPlanRefresh()
         {
@@ -46,10 +79,7 @@ namespace fltstd26
             List<Sheets.Target> allTGT = RData.GetTargetTable();
 
             //Alle Nodes löschen
-            StackContainers.ForEach(c => c.ForEach(x => x.Clear()));
-            NodeLibrary.Clear();
-            copyBuffer = new(new byte[16]);
-            focusedID = new(new byte[16]);
+            XPlanClear(false);
 
             //Datenbank Nodes einfügen
             if (allFLT.Count != 0 && allTGT.Count != 0)
@@ -62,13 +92,15 @@ namespace fltstd26
                     {
                         ConProc.Log("[XPLAN-SYNC] Target " + t.Id.ToString() + " konnte kein Flug zugeordnet werden",2);
                         continue;
-                    };
+                    }
+                    ;
                     Sheets.Slot? s = RData.Get<Sheets.Slot>(f.Slot);
                     if (s == null)
                     {
                         ConProc.Log("[XPLAN-SYNC] Target " + t.Id.ToString() + " konnte kein Slot zugeordnet werden",2);
                         continue;
-                    };
+                    }
+                    ;
                     AddNode(s,f.Lfz,t);
                 }
             }
@@ -95,135 +127,144 @@ namespace fltstd26
 
         internal void XPlan_Restart()
         {
-            Color stroke = GSettings.DarkMode ? Colors.DarkGray : Colors.LightGray;
-            List<Sheets.Lfz> allLFZ = RData.GetAircraftTable();
-            SidebarRefresh();
-            //XPLAN AUFBAUEN
-            TapGestureRecognizer Deselector = new();
-            Deselector.Tapped += NodeDeselectionHandler;
-            XPlan.GestureRecognizers.Add(Deselector);
+            try
+            {
+                XPlanClear(true);
+                Color stroke = GSettings.DarkMode ? Colors.DarkGray : Colors.LightGray;
+                List<Sheets.Lfz> allLFZ = RData.GetAircraftTable();
+                SidebarRefresh();
 
-            XPlan.ColumnDefinitions.Clear();
-            XPlan.RowDefinitions.Clear();
-            XPlan.Children.Clear();
-            XPlan.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
-            XPlan.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto,});
-            foreach (Sheets.Lfz lfz in allLFZ)
-            {
-                XPlan.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Star });
-                Label lbl = new()
+                //XPLAN AUFBAUEN
+                TapGestureRecognizer Deselector = new();
+                Deselector.Tapped += NodeDeselectionHandler;
+                XPlan.GestureRecognizers.Add(Deselector);
+                XPlan.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
+                XPlan.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto,});
+                foreach (Sheets.Lfz lfz in allLFZ)
                 {
-                    Text = lfz.Reg,
-                    VerticalOptions = LayoutOptions.Center,
-                    HorizontalOptions = LayoutOptions.Center,
-                    FontAttributes = FontAttributes.Bold,
-                    FontSize = 24,
-                };
-                XPlan.Add(lbl,XPlan.ColumnDefinitions.Count - 1,0);
-            }
-            foreach (Sheets.Slot fts in RData.GetSlotsTable())
-            {
-                List<Border> borders = [];
-                List<VerticalStackLayout> containersRow = [];
-                XPlan.RowDefinitions.Add(new RowDefinition { Height = GridLength.Star });
-                Grid slot = new()
+                    XPlan.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Star });
+                    Label lbl = new()
+                    {
+                        Text = lfz.Reg,
+                        VerticalOptions = LayoutOptions.Center,
+                        HorizontalOptions = LayoutOptions.Center,
+                        FontAttributes = FontAttributes.Bold,
+                        FontSize = 24,
+                    };
+                    XPlan.Add(lbl,XPlan.ColumnDefinitions.Count - 1,0);
+                }
+                foreach (Sheets.Slot fts in RData.GetSlotsTable())
                 {
-                    Margin = new Thickness(0,0,10,0),
-                    ColumnDefinitions =
+                    List<Border> borders = [];
+                    List<VerticalStackLayout> containersRow = [];
+                    XPlan.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
+                    Grid slot = new()
+                    {
+                        Margin = new Thickness(0,0,10,0),
+                        ColumnDefinitions =
                     {
                         new ColumnDefinition(),
                         new ColumnDefinition()
                     },
-                    RowDefinitions =
+                        RowDefinitions =
                     {
                         new RowDefinition(),
                         new RowDefinition()
                     }
-                };
-
-                Label lbl = new()
-                {
-                    Text = $"{fts.STime:HH:mm}\n{fts.FTime:HH:mm}",
-                    FontAttributes = FontAttributes.Bold,
-                    VerticalOptions = LayoutOptions.End,
-                    HorizontalOptions = LayoutOptions.Center,
-                    FontSize = 20,
-                };
-                slot.Add(lbl,0,0);
-                slot.SetColumnSpan(lbl,2);
-
-                Button min5 = new()
-                {
-                    Text = "+5",
-                    CornerRadius = 0,
-                    FontSize = 14,
-                    FontAttributes = FontAttributes.Bold,
-                    VerticalOptions = LayoutOptions.Start,
-                };
-                slot.Add(min5,0,1);
-                Button min15 = new()
-                {
-                    Text = "+15",
-                    CornerRadius = 0,
-                    FontSize = 14,
-                    FontAttributes = FontAttributes.Bold,
-                    VerticalOptions = LayoutOptions.Start,
-                };
-                slot.Add(min15,1,1);
-
-                XPlan.Add(slot,0,XPlan.RowDefinitions.Count - 1);
-                for (int i = 0; i < allLFZ.Count; i++)
-                {
-                    // Event Handlers
-
-                    Border cellBorder = new()
-                    {
-                        Stroke = stroke,
-                        StrokeThickness = 1,
                     };
 
-
-                    DropGestureRecognizer d = new();
-
-                    if (Manager.AvailableIn(allLFZ[i].Id,fts.Id))
+                    Label lbl = new()
                     {
-                        VerticalStackLayout cellContainer = [];
-                        cellBorder.Content = cellContainer;
-                        
-                        d.AllowDrop = true;
-                        d.DragOver += (s,e) => OnHoverNode(s,e,true);
-                        d.Drop += (s,e) => OnDropNode(cellBorder,e);
+                        Text = $"{fts.STime:HH:mm}\n{fts.FTime:HH:mm}",
+                        FontAttributes = FontAttributes.Bold,
+                        VerticalOptions = LayoutOptions.End,
+                        HorizontalOptions = LayoutOptions.Center,
+                        FontSize = 20,
+                    };
+                    slot.Add(lbl,0,0);
+                    slot.SetColumnSpan(lbl,2);
 
-                        containersRow.Add(cellContainer);
-                    }
-                    else
+                    Button min5 = new()
                     {
-                        Label x = new()
+                        Text = "+5",
+                        CornerRadius = 0,
+                        FontSize = 14,
+                        FontAttributes = FontAttributes.Bold,
+                        VerticalOptions = LayoutOptions.Start,
+                    };
+                    slot.Add(min5,0,1);
+                    Button min15 = new()
+                    {
+                        Text = "+15",
+                        CornerRadius = 0,
+                        FontSize = 14,
+                        FontAttributes = FontAttributes.Bold,
+                        VerticalOptions = LayoutOptions.Start,
+                    };
+                    slot.Add(min15,1,1);
+
+                    XPlan.Add(slot,0,XPlan.RowDefinitions.Count - 1);
+                    for (int i = 0; i < allLFZ.Count; i++)
+                    {
+                        // Event Handlers
+
+                        Border cellBorder = new()
                         {
-                            Text = "x",
-                            TextColor = GSettings.InactiveIcon,
-                            FontAttributes = FontAttributes.Bold,
-                            HorizontalTextAlignment = TextAlignment.Center,
-                            VerticalTextAlignment = TextAlignment.Center,
-                            FontSize = 24
+                            Stroke = stroke,
+                            StrokeThickness = 1,
                         };
 
-                        d.AllowDrop = false;
-                        d.DragOver += (s,e) => OnHoverNode(s,e,false);
 
-                        containersRow.Add([]); //Ghost-Element, damit die Indizes stimmen
-                        cellBorder.Content = x;
+                        DropGestureRecognizer d = new();
+
+                        if (Manager.AvailableIn(allLFZ[i].Id,fts.Id))
+                        {
+                            VerticalStackLayout cellContainer = [];
+                            cellBorder.Content = cellContainer;
+
+                            d.AllowDrop = true;
+                            d.DragOver += (s,e) => OnHoverNode(s,e,true);
+                            d.Drop += (s,e) => OnDropNode(cellBorder,e);
+
+                            containersRow.Add(cellContainer);
+                        }
+                        else
+                        {
+                            Label x = new()
+                            {
+                                Text = "x",
+                                TextColor = GSettings.InactiveIcon,
+                                FontAttributes = FontAttributes.Bold,
+                                HorizontalTextAlignment = TextAlignment.Center,
+                                VerticalTextAlignment = TextAlignment.Center,
+                                FontSize = 24
+                            };
+
+                            d.AllowDrop = false;
+                            d.DragOver += (s,e) => OnHoverNode(s,e,false);
+
+                            containersRow.Add([]); //Ghost-Element, damit die Indizes stimmen
+                            cellBorder.Content = x;
+                        }
+                        cellBorder.GestureRecognizers.Add(d);
+
+                        borders.Add(cellBorder);
+                        XPlan.Add(cellBorder,i + 1,XPlan.RowDefinitions.Count - 1);
                     }
-                    cellBorder.GestureRecognizers.Add(d);
+                    StackContainers.Add(containersRow);
 
-                    borders.Add(cellBorder);
-                    XPlan.Add(cellBorder,i + 1,XPlan.RowDefinitions.Count - 1);
+                    //cells.Add(borders);
                 }
-                StackContainers.Add(containersRow);
-
-                cells.Add(borders);
+                XPlanRefresh();
             }
-            XPlanRefresh();
+            catch (Exception e)
+            {
+                ConProc.Log("[XPLAN] XPlan restart failed" + e.Message.ToString(),2);
+            }
+            finally
+            {
+                ConProc.Log("[XPLAN] XPlan reset",0);
+            }
         }
 
         private bool AddNode(Sheets.Slot timeIn,int lfzIn,Sheets.Target tgtIn)
@@ -260,7 +301,7 @@ namespace fltstd26
                 NodeDeselectionHandler(sender,e);
                 focusedID = selectedNode.Id;
                 selectedNode.Focus();
-                if (selectedNode.Content is Border b) b.StrokeThickness = 3;
+                if (selectedNode.Content is Border b) b.Stroke = GSettings.NodeColour;
                 //selectedNode.StrokeThickness = 3;
                 System.Diagnostics.Debug.WriteLine($"Selected node: {selectedNode.TargetID}");
             }
@@ -272,7 +313,7 @@ namespace fltstd26
             {
                 if (old is not null)
                 {
-                    if (old.Content is Border b) b.StrokeThickness = 0;
+                    if (old.Content is Border b) b.Stroke = GSettings.DarkMode ? GSettings.GetColour("Gray950") : GSettings.GetColour("Gray200");
                     old.Unfocus();
                 }
                 focusedID = new(new byte[16]);
@@ -339,7 +380,20 @@ namespace fltstd26
 
         private void XPlan_Add_Click(object sender,EventArgs e)
         {
-            Builder.CreateTarget(TGT_Name_Entry.Text,TGT_Weight_Entry.Text,FLT_Length_Entry.Text,TGT_Price_Entry.Text,TGT_Quickticket_Enable.IsChecked,TGT_Persistent_Enable.IsChecked,0,"");
+            //STATUS INDEX 13, wenn AUTO
+            string Definition = TGT_Name_Entry.Text == null || TGT_Name_Entry.Text.Trim() == String.Empty ? "N/A" : TGT_Name_Entry.Text;
+            int TgtWeight = Int32.TryParse(TGT_Weight_Entry.Text,out int ParseWeight) ? ParseWeight : USettings.DefaultTgtWeight;
+            int FltLength = Int32.TryParse(FLT_Length_Entry.Text,out int ParseLength) ? ParseLength : USettings.DefaultFltLength;
+            int TgtPrice = TGT_PriceCat_Dropdown_Enable.IsChecked ? 0 : (TGT_Price_Dropdown.SelectedIndex > 0 ? -CurrentPriceCatIds[TGT_Price_Dropdown.SelectedIndex] : (Int32.TryParse(TGT_Price_Entry.Text,out int ParsePrice) ? ParsePrice : -USettings.FallbackPriceCat));
+            int FltStatus = FLT_Status_Dropdown_Enable.IsChecked ? 13 : FLT_Status_Dropdown.SelectedIndex;
+            int? LfzOverride = TGT_LFZ_Dropdown_Enable.IsChecked ? null : CurrentAircraftIds[TGT_LFZ_Dropdown.SelectedIndex];
+            string Adds = "";
+            foreach (IView AddEntry in FLTAddsEntryContainer)
+            {
+                if (AddEntry is Entry entry) Adds += entry.Text == null || entry.Text == String.Empty ? ';' : entry.Text.Trim().Replace(";",String.Empty) + ';';
+            }
+            Builder.CreateTarget(Definition,TgtWeight,FltLength,TgtPrice,TGT_Quickticket_Enable.IsChecked,TGT_Persistent_Enable.IsChecked,(byte)FltStatus,"",LfzOverride,TGT_Autotime_Enable.IsChecked ? null : TGT_Time_Picker.Time);
+            XPlanRefresh();
         }
 
         private void CreateDemoNode_Click(object sender,EventArgs e)
@@ -359,26 +413,23 @@ namespace fltstd26
 
         private void OpenSelectorModal_Click(object sender,EventArgs e)
         {
-            List<(string, string, string)> content = new()
+            system.modals.ModalPush.Selector("Test",Simulator.content).ContinueWith(t =>
             {
-                ("plane.png","Option 1","Description for option 1"),
-                ("control.png","Option 2","Description for option 2"),
-                ("copy.png","Option 3","Description for option 3")
-            };
-            system.modals.ModalPush.Selector("Test",content).ContinueWith(t =>
-            {
+                ConProc.Log("[DEBUG] Selector-Modal test returned: " + t.Result);
                 System.Diagnostics.Debug.WriteLine($"Selected Index: {t.Result}");
             });
-
-
-
-            /*system.modals.Selector selector = new("Test", content);
-            await Navigation.PushModalAsync(selector);
-            await selector.ShowAndSelectAsync().ContinueWith(t =>
+        }
+        private void OpenYesNoModal_Click(object sender,EventArgs e)
+        {
+            system.modals.ModalPush.Question("Test","Select type shit please").ContinueWith(t =>
             {
-                int selectedIndex = t.Result;
-                
-            });*/
+                ConProc.Log("[DEBUG] Question-Modal test returned: " + t.Result);
+                System.Diagnostics.Debug.WriteLine($"Selected Option: {t.Result}");
+            });
+        }
+        private void OpenMessageModal_Click(object sender,EventArgs e)
+        {
+            system.modals.ModalPush.Message("Test","Lorem Ipsum type shit. Ladet meine Software runter ig und rest ist baba. Vertrau. Keine Viren, einfach beste wo gibt");
         }
 
         private void AddFLT_Sample_Click(object sender,EventArgs e)
@@ -424,8 +475,14 @@ namespace fltstd26
             }
         }
         private void EditInterClick(object sender,EventArgs e) => System.Diagnostics.Debug.WriteLine("Edit Click");
-        private void FlagInterClick(object sender,EventArgs e) => System.Diagnostics.Debug.WriteLine("Flag Click");
-        private void NotifyInterClick(object sender,EventArgs e) => System.Diagnostics.Debug.WriteLine("Notify Click");
+        private void FlagInterClick(object sender,EventArgs e)
+        {
+            if (NodeLibrary.TryGetValue(focusedID,out XBlock? target)) target.UpdateAttrib(3);
+        }
+        private void NotifyInterClick(object sender,EventArgs e)
+        {
+            if (NodeLibrary.TryGetValue(focusedID,out XBlock? target)) target.UpdateAttrib(2);
+        }
         private void InfoInterClick(object sender,EventArgs e) => System.Diagnostics.Debug.WriteLine("Info Click");
         private void DeleteInterClick(object sender,EventArgs e) => System.Diagnostics.Debug.WriteLine("Delete Click");
 

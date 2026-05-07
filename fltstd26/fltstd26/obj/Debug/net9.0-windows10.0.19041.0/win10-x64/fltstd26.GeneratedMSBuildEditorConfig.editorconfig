@@ -84,6 +84,12 @@ build_metadata.AdditionalFiles.ManifestResourceName = fltstd26.Resources.Styles.
 build_metadata.AdditionalFiles.TargetPath = Resources\Styles\Styles.xaml
 build_metadata.AdditionalFiles.RelativePath = Resources\Styles\Styles.xaml
 
+[C:/Users/Arthur/Documents/GitHub/xglide/fltstd26/fltstd26/system/modals/Notification.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = fltstd26.system.modals.Notification.xaml
+build_metadata.AdditionalFiles.TargetPath = system\modals\Notification.xaml
+build_metadata.AdditionalFiles.RelativePath = system\modals\Notification.xaml
+
 [C:/Users/Arthur/Documents/GitHub/xglide/fltstd26/fltstd26/system/modals/Selector.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
 build_metadata.AdditionalFiles.ManifestResourceName = fltstd26.system.modals.Selector.xaml
@@ -108,11 +114,11 @@ build_metadata.AdditionalFiles.ManifestResourceName = fltstd26.system.XConsole.x
 build_metadata.AdditionalFiles.TargetPath = system\XConsole.xaml
 build_metadata.AdditionalFiles.RelativePath = system\XConsole.xaml
 
-[C:/Users/Arthur/Documents/GitHub/xglide/fltstd26/fltstd26/TargetCreator.xaml]
+[C:/Users/Arthur/Documents/GitHub/xglide/fltstd26/fltstd26/XFly/TargetCustomizer.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
-build_metadata.AdditionalFiles.ManifestResourceName = fltstd26.TargetCreator.xaml
-build_metadata.AdditionalFiles.TargetPath = TargetCreator.xaml
-build_metadata.AdditionalFiles.RelativePath = TargetCreator.xaml
+build_metadata.AdditionalFiles.ManifestResourceName = fltstd26.XFly.TargetCustomizer.xaml
+build_metadata.AdditionalFiles.TargetPath = XFly\TargetCustomizer.xaml
+build_metadata.AdditionalFiles.RelativePath = XFly\TargetCustomizer.xaml
 
 [C:/Users/Arthur/Documents/GitHub/xglide/fltstd26/fltstd26/XMain.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml

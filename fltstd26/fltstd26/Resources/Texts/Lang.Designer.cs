@@ -70,6 +70,24 @@ namespace fltstd26.Resources.Texts {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Luftfahrzeug wählen ähnelt.
+        /// </summary>
+        internal static string builder_selectLfz {
+            get {
+                return ResourceManager.GetString("builder_selectLfz", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Slot auswählen ähnelt.
+        /// </summary>
+        internal static string builder_selectSlot {
+            get {
+                return ResourceManager.GetString("builder_selectSlot", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Abbrechen ähnelt.
         /// </summary>
         internal static string cancel {
@@ -399,6 +417,15 @@ namespace fltstd26.Resources.Texts {
         internal static string startButton {
             get {
                 return ResourceManager.GetString("startButton", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Nicht erlaubte Zeichen wurden aus der Anfrage entfernt ähnelt.
+        /// </summary>
+        internal static string unallowed_chars_removed {
+            get {
+                return ResourceManager.GetString("unallowed_chars_removed", resourceCulture);
             }
         }
         

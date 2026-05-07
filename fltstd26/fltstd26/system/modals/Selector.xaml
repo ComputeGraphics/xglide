@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-        xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-        xmlns:local="clr-namespace:fltstd26.Resources.Texts"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:fltstd26.Resources.Texts"
              BackgroundColor="#88000000"
-        x:Class="fltstd26.system.modals.Selector">
+             x:Class="fltstd26.system.modals.Selector">
     <Border StrokeThickness="2"
             WidthRequest="600"
             BackgroundColor="{x:AppThemeBinding Dark={StaticResource Gray950}, Light={StaticResource Gray200}}"
             VerticalOptions="Center"
             HorizontalOptions="Center">
         <Grid RowDefinitions="Auto,*,Auto"
+              MaximumHeightRequest="800"
               Padding="20">
             <Label FontSize="Header"
                    x:Name="ItemTitle"

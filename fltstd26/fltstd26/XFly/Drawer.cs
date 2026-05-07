@@ -15,7 +15,7 @@ namespace fltstd26.XFly
             FBorder outer = new()
             {
                 FltId = ID,
-                StrokeThickness = 2,
+                StrokeThickness = 0,
                 Content = vsl
             };
             VerticalStackLayout inner = [];

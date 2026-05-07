@@ -25,6 +25,7 @@ namespace fltstd26.core
                 rdb.CreateTable<Sheets.Slot>();
                 rdb.CreateTable<Sheets.Target>();
                 rdb.CreateTable<Sheets.PriceCat>();
+                ConProc.Log($"[RDATA] The database has initialized",0);
             }
             catch (Exception ex)
             {
@@ -49,6 +50,7 @@ namespace fltstd26.core
                     rdb?.CreateTable<Sheets.Target>();
                     rdb?.CreateTable<Sheets.PriceCat>();
                     rdb?.Execute("VACUUM");
+                    ConProc.Log($"[RDATA] The database has been cleared",1);
                 }
             }
             catch (Exception ex)
@@ -64,6 +66,7 @@ namespace fltstd26.core
                 if (Active)
                 {
                     rdb?.Backup(Path.Combine(DatabasePath,name));
+                    ConProc.Log($"[RDATA] The database has been backed up",1);
                 }
             }
             catch (Exception ex)
@@ -80,6 +83,7 @@ namespace fltstd26.core
                 {
                     rdb?.Close();
                     rdb = null;
+                    ConProc.Log($"[RDATA] The database system was terminated",1);
                 }
             }
             catch (Exception ex)
@@ -100,7 +104,7 @@ namespace fltstd26.core
         {
             try
             {
-                return rdb?.Get<T>(pk) ?? null;
+                return rdb?.Get<T>(pk);
             }
             catch (Exception e)
             {
@@ -109,7 +113,6 @@ namespace fltstd26.core
             }
         }
 
-        //FUNKTIONIERT NICHT!!!
         internal static List<T>? GetWhere<T>(string Predicate) where T : class, new()
         {
             try
@@ -127,6 +130,7 @@ namespace fltstd26.core
         {
             try
             {
+                ConProc.Log($"[RDATA] A range of items has been added to the database",0);
                 rdb?.InsertAll(value,true);
                 return true;
             }
@@ -141,6 +145,7 @@ namespace fltstd26.core
         {
             try
             {
+                ConProc.Log($"[RDATA] An item has been added to the " + typeof(T).Name + " table",0);
                 rdb?.Insert(value);
                 return rdb!.ExecuteScalar<int>("SELECT last_insert_rowid()");
             }

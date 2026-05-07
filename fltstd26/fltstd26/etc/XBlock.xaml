@@ -3,10 +3,10 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:fltstd_etc="clr-namespace:fltstd26.etc"
              x:Class="fltstd26.XFly.XBlock">
-    <Border BackgroundColor="{AppThemeBinding Dark={StaticResource Gray950}, Light={StaticResource Gray100}}"
+    <Border BackgroundColor="{AppThemeBinding Dark={StaticResource Gray950}, Light={StaticResource Gray200}}"
             x:Name="NodeFrame"
-            Stroke="{x:Static fltstd_etc:GSettings.NodeColour}"
-            StrokeThickness="0">
+            Stroke="{AppThemeBinding Dark={StaticResource Gray950}, Light={StaticResource Gray200}}"
+            StrokeThickness="2">
         <Grid ColumnDefinitions="Auto,*"
               RowDefinitions="*,*,*,*">
             <Label TextColor="{x:Static fltstd_etc:GSettings.NodeColour}"

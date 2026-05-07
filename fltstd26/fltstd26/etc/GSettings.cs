@@ -9,28 +9,28 @@ namespace fltstd26.etc
 {
     class GSettings
     {
+        internal static INavigation? nav;
+        
+
         public static string[] Status = [
-            Lang.xplan_status_airborne,
-            Lang.xplan_status_app,
-            Lang.xplan_status_cancel,
+            Lang.xplan_status_ontime,
+            Lang.xplan_status_waiting,
+            Lang.xplan_status_ready,
             Lang.xplan_status_delayed,
             Lang.xplan_status_dpt,
+            Lang.xplan_status_airborne,
+            Lang.xplan_status_app,
             Lang.xplan_status_finished,
             Lang.xplan_status_fuel,
-            Lang.xplan_status_ontime,
-            Lang.xplan_status_outofservice,
-            Lang.xplan_status_ready,
+            Lang.xplan_status_outofservice, 
             Lang.xplan_status_unavail,
             Lang.xplan_status_unclear,
-            Lang.xplan_status_waiting
+            Lang.xplan_status_cancel,
+            "AUTO"
         ];
         public static ImageSource[] TargetAttribIcons = ["quick.png","pin.png","notify.png","flag.png"];
 
-
         public static bool XConsoleOpen = false;
-
-        public static bool AutoASAP = false; //Keine Fragen. Einfach machen
-        public static bool AutoTimeCheck = false;
 
         public static Dictionary<string,string> Paths = [];
 

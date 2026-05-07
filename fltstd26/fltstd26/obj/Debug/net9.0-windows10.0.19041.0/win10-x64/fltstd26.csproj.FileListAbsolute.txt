@@ -1863,3 +1863,13 @@ C:\Users\Arthur\Documents\GitHub\xglide\fltstd26\fltstd26\obj\Debug\net9.0-windo
 C:\Users\Arthur\Documents\GitHub\xglide\fltstd26\fltstd26\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\resizetizer\r\add.scale-150.png
 C:\Users\Arthur\Documents\GitHub\xglide\fltstd26\fltstd26\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\resizetizer\r\add.scale-125.png
 C:\Users\Arthur\Documents\GitHub\xglide\fltstd26\fltstd26\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\resizetizer\r\add.scale-100.png
+C:\Users\Arthur\Documents\GitHub\xglide\fltstd26\fltstd26\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\notification.scale-100.png
+C:\Users\Arthur\Documents\GitHub\xglide\fltstd26\fltstd26\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\notification.scale-125.png
+C:\Users\Arthur\Documents\GitHub\xglide\fltstd26\fltstd26\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\notification.scale-150.png
+C:\Users\Arthur\Documents\GitHub\xglide\fltstd26\fltstd26\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\notification.scale-200.png
+C:\Users\Arthur\Documents\GitHub\xglide\fltstd26\fltstd26\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\notification.scale-400.png
+C:\Users\Arthur\Documents\GitHub\xglide\fltstd26\fltstd26\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\resizetizer\r\notification.scale-100.png
+C:\Users\Arthur\Documents\GitHub\xglide\fltstd26\fltstd26\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\resizetizer\r\notification.scale-125.png
+C:\Users\Arthur\Documents\GitHub\xglide\fltstd26\fltstd26\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\resizetizer\r\notification.scale-150.png
+C:\Users\Arthur\Documents\GitHub\xglide\fltstd26\fltstd26\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\resizetizer\r\notification.scale-200.png
+C:\Users\Arthur\Documents\GitHub\xglide\fltstd26\fltstd26\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\resizetizer\r\notification.scale-400.png

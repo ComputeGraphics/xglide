@@ -84,6 +84,12 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Compile Remove="core\DBSys.cs" />
+	  <Compile Remove="core\GData.cs" />
+	  <Compile Remove="etc\Types.cs" />
+	</ItemGroup>
+
+	<ItemGroup>
 	  <None Remove="Resources\Icons\archive.svg" />
 	  <None Remove="Resources\Icons\audio_off.svg" />
 	  <None Remove="Resources\Icons\audio_on.svg" />
@@ -177,6 +183,9 @@
 	  <MauiXaml Update="debug\OnlineFetch.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="system\modals\Notification.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="system\modals\Selector.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
@@ -189,10 +198,10 @@
 	  <MauiXaml Update="system\XConsole.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="TargetCreator.xaml">
+	  <MauiXaml Update="etc\XBlock.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="etc\XBlock.xaml">
+	  <MauiXaml Update="XFly\TargetCustomizer.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	</ItemGroup>

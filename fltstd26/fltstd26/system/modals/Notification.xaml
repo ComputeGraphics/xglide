@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             x:Class="fltstd26.system.modals.Notification"
+             BackgroundColor="#88000000">
+    <Border StrokeThickness="2"
+            WidthRequest="600"
+            BackgroundColor="{x:AppThemeBinding Dark={StaticResource Gray950}, Light={StaticResource Gray200}}"
+            VerticalOptions="Center"
+            HorizontalOptions="Center">
+        <VerticalStackLayout>
+            <VerticalStackLayout Grid.Column="1"
+                                     Padding="10">
+                <Label FontSize="Header"
+                           x:Name="ItemTitle"
+                           FontAttributes="Bold"
+                           FontFamily="Archive"
+                           HorizontalOptions="Start"/>
+                <Label FontSize="24"
+                           x:Name="ItemSubtitle"
+                           Margin="0,5"
+                           HorizontalOptions="Start"/>
+            </VerticalStackLayout>
+            <Grid x:Name="ButtonGrid"
+              BackgroundColor="{x:AppThemeBinding Dark={StaticResource Gray900}, Light={StaticResource Gray300}}"
+              ColumnSpacing="10"
+              ColumnDefinitions="*,Auto">
+                <Button Text="OK"
+                        CornerRadius="0"
+                        WidthRequest="180"
+                    Grid.Column="1"
+                        Clicked="OnOK"/>
+            </Grid>
+        </VerticalStackLayout>
+    </Border>
+</ContentPage>

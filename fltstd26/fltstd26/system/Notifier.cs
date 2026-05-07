@@ -4,13 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace fltstd26.core
+namespace fltstd26.system
 {
-    public static class GData
+    class Notifier
     {
-        static GData()
-        {
-            
-        }
+
     }
 }

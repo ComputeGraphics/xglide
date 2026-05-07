@@ -78,7 +78,7 @@ namespace fltstd26.core
             [Column("quickticket")]
             public bool QuickTicket { get; set; }
             [Column("price")]
-            public int Price { get; set; } //Price Cat for negative or 0 - Price Absolute for positive  
+            public int Price { get; set; } //Price Cat for negative - Price Absolute for positive - Price 0 for auto
             [Column("persistent")]
             public bool Persistent { get; set; } //Flight will not be deleted by Software and cannot be moved by User.
         }

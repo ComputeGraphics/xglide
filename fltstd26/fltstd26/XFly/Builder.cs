@@ -11,34 +11,45 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
+using static SQLite.SQLite3;
 
 namespace fltstd26.XFly
 {
     internal static class Builder
     {
-        public async static void CreateTarget(string Definition,string Weight,string Length,string Price,bool Quick,bool Persistency,byte Status,string? Adds)
+        public async static void CreateTarget(string Definition,int TgtWeight,int FltLength,int TgtPrice,bool Quick,bool Persistency,byte Status,string? Adds,int? LfzOverride = null,TimeSpan? TimeOverride = null)
         {
             try
             {
                 if (!RData.Active) throw new Exception("Database not found");
-                if (Definition == "") Definition = "N/A";
-                int FltLength = Int32.TryParse(Length,out int ParseLength) ? ParseLength : USettings.DefaultFltLength;
-                int TgtWeight = Int32.TryParse(Weight,out int ParseWeight) ? ParseWeight : USettings.DefaultTgtWeight;
-                int TgtPrice = Int32.TryParse(Price,out int ParsePrice) ? ParseWeight : 0;
-
-                List<Sheets.Flt> FitFlightWeight = Manager.FindFitWeightLength(FltLength,TgtWeight,GSettings.AutoTimeCheck,Quick);
+                bool FlightCreate = false;
+                IEnumerable<int>? OverrideSlotID = null;
+                if (TimeOverride != null)
+                {
+                    DateTime? OverrideFormat = DateTime.Today + TimeOverride;
+                    //DateTime? OverrideDateTime = OverrideFormat < DateTime.Now ? OverrideFormat + new TimeSpan(1,0,0,0) : OverrideFormat;
+                    OverrideSlotID = RData.GetSlotsTable().Where(x => x.STime == OverrideFormat).Select(x => x.Id);
+                }
+                List<Sheets.Flt> FitFlightWeight = Manager.FindFitWeightLength(FltLength,TgtWeight,USettings.AutoTimeCheck,Quick);
                 if (FitFlightWeight.Count != 0)
                 {
                     // -> Genug Flüge. Nutzer muss sich einen aussuchen
+                    List<int> PriceList = [];
                     List<(string, string, string)> content = [("add.png", Lang.newflt, "")];
                     foreach (Sheets.Flt i in FitFlightWeight)
                     {
-                        Sheets.Lfz? lfz = RData.Get<Sheets.Lfz>(i.Lfz);
-                        if (lfz != null)
+                        if (LfzOverride == null || LfzOverride == i.Lfz)
                         {
-                            Sheets.PriceCat? pc = RData.Get<Sheets.PriceCat>(lfz.PriceCat);
-                            content.Add(("plane.png", $"{i.EId ?? i.Id.ToString()} ({RData.Get<Sheets.Slot>(i.Slot)?.STime.ToShortTimeString() ?? "N/A"})", $"REG: {lfz?.Reg ?? "N/A"} PC: {pc?.Price} STATUS: {GSettings.Status[i.Status]}"));
-
+                            if (OverrideSlotID == null || OverrideSlotID.Contains(i.Slot))
+                            {
+                                Sheets.Lfz? lfz = RData.Get<Sheets.Lfz>(i.Lfz);
+                                if (lfz != null)
+                                {
+                                    Sheets.PriceCat? pc = RData.Get<Sheets.PriceCat>(lfz.PriceCat);
+                                    PriceList.Add(pc?.Id ?? -1);
+                                    content.Add(("plane.png", $"{i.EId ?? i.Id.ToString()} ({RData.Get<Sheets.Slot>(i.Slot)?.STime.ToShortTimeString() ?? "N/A"})", $"REG: {lfz?.Reg ?? "N/A"} PC: {pc?.Price} STATUS: {GSettings.Status[i.Status]}"));
+                                }
+                            }
                         }
                     }
 
@@ -46,38 +57,35 @@ namespace fltstd26.XFly
                     await system.modals.ModalPush.Selector(Lang.select_flight,content).ContinueWith(t => TResult = t.Result);
                     if (TResult > 0)
                     {
-                        Manager.CreateLinkedTarget(FitFlightWeight[TResult - 1].Id,Definition,TgtWeight,TgtPrice,Quick,Persistency);
+                        int Price = TgtPrice == 0 ? (PriceList[TResult - 1] == -1 ? -USettings.FallbackPriceCat : -PriceList[TResult - 1]) : TgtPrice;
+                        Manager.CreateLinkedTarget(FitFlightWeight[TResult - 1].Id,Definition,TgtWeight,Price,Quick,Persistency);
                         //TRIGGER XPLAN REFRESH
                     }
                     else if (TResult == -1)
                     {
                         //VOLLSTÄNDIGER ABBRUCH
-                        return;
+                        throw new Exception("Target matching cancelled by user");
                     }
                     else if (TResult == 0)
                     {
-                        bool result = false;
-                        await system.modals.ModalPush.Question(Lang.warning,Lang.newflt_warning).ContinueWith(t => result = t.Result);
-                        if (result)
-                        {
-                            await CreateFlight(Adds,Status,FltLength,Quick).ContinueWith(x =>
-                            {
-                                if (x.Result != -1) Manager.CreateLinkedTarget(x.Result,Definition,TgtWeight,TgtPrice,Quick,Persistency);
-                            });
-                            //TRIGGER XPLAN REFRESH
-                        }
+                        FlightCreate = true;
                     }
                 }
                 else
                 {
-                    // -> Shit. Wir brauchen noch einen. Erstmal Nutzer fragen (<--- EINFÜGEN)
+                    // -> Shit. Wir brauchen noch einen.
+                    FlightCreate = true;
+                }
+                if (FlightCreate)
+                {
                     bool result = false;
                     await system.modals.ModalPush.Question(Lang.warning,Lang.newflt_warning).ContinueWith(t => result = t.Result);
                     if (result)
                     {
-                        await CreateFlight(Adds,Status,FltLength,Quick).ContinueWith(x =>
+                        await CreateFlight(TgtWeight, Adds,Status,FltLength,Quick,LfzOverride,OverrideSlotID).ContinueWith(x =>
                         {
-                            if (x.Result != -1) Manager.CreateLinkedTarget(x.Result,Definition,TgtWeight,TgtPrice,Quick,Persistency);
+                            int Price = TgtPrice == 0 ? (x.Result.Item2 == -1 ? -USettings.FallbackPriceCat : -x.Result.Item2) : TgtPrice;
+                            if (x.Result.Item1 != -1) Manager.CreateLinkedTarget(x.Result.Item1,Definition,TgtWeight,Price,Quick,Persistency);
                         });
                         //TRIGGER XPLAN REFRESH
                     }
@@ -89,35 +97,35 @@ namespace fltstd26.XFly
             }
         }
 
-        public async static Task<int> CreateFlight(string? InAdd,byte InStatus,int FltLength,bool Quick)
+        // Gibt Tupel aus der Flight ID und der Luftfahrzeug ID zurück --- WEIGHT CHECK MUSS IMPLEMENTIERT WERDEN!!!!!
+        public async static Task<(int, int)> CreateFlight(int Weight, string? InAdd,byte InStatus,int FltLength,bool Quick,int? LfzOverride, IEnumerable<int>? OverrideSlots)
         {
-            List<int> FitSlots = Manager.FindCompatibleSlots(FltLength,GSettings.AutoTimeCheck ? DateTime.Now.AddMinutes(Quick ? -USettings.QuickTolerance : 0) : null);
+            List<int> FitSlots = Manager.FindCompatibleSlots(FltLength,USettings.AutoTimeCheck ? DateTime.Now.AddMinutes(Quick ? -USettings.QuickTolerance : 0) : null);
+            if(OverrideSlots != null) FitSlots = [.. FitSlots.Intersect(OverrideSlots)];
             if (FitSlots.Count != 0)
             {
                 System.Diagnostics.Debug.WriteLine("Creating new flight");
                 //Alle Slots in denen Länge und Zeit passen
-                if (GSettings.AutoASAP)
+                if (USettings.AutoASAP)
                 {
                     for (int i = 0; i < FitSlots.Count; i++)
                     {
                         HashSet<int> SlotFlights = [.. (RData.GetWhere<Sheets.Flt>($"slot={FitSlots[i]}") ?? []).Select(flt => flt.Lfz)];
-                        List<int> FitAircraft = Manager.FindAvailableAircraft(FitSlots[i],true);
-                        if (FitAircraft.Count == 0) continue;
-
-                        IEnumerable<int> FreeAircraft = FitAircraft.Except(SlotFlights);
+                        IEnumerable<int> FitAircraft = Manager.FindAvailableAircraft(FitSlots[i],!LfzOverride.HasValue).Where(x => Manager.FitsWeight(x, Weight)).Except(SlotFlights);
+                        if (LfzOverride.HasValue) FitAircraft = [.. FitAircraft.Where(x => x == LfzOverride)];
                         //Kontingent geprüft
-                        foreach (int Aircraft in FreeAircraft)
+                        foreach (int Aircraft in FitAircraft)
                         {
                             int res = Manager.CreateFlight(Manager.CreateEID(),Aircraft,FitSlots[i],InStatus,InAdd);
                             if (res == -1) continue;
-                            return res;
+                            return (res, Aircraft);
                         }
                     }
-                    return -1;
+                    return (-1,-1);
                 }
                 else
                 {
-                    int ProcResult = -1;
+                    (int, int) ProcResult = (-1,-1);
                     List<(string, string, string)> content = [("add.png", Lang.newobj, "")];
                     List<int> SelSlots = [];
 
@@ -125,57 +133,57 @@ namespace fltstd26.XFly
                     for (int i = 0; i < FitSlots.Count; i++)
                     {
                         List<int> SlotFlightsT = [.. (RData.GetWhere<Sheets.Flt>($"slot={FitSlots[i]}") ?? []).Select(flt => flt.Lfz)];
-                        SlotFlightsT.ForEach(x => System.Diagnostics.Debug.WriteLine("Slot FLT: " + x));
-                        List<int> FitAircraftT = Manager.FindAvailableAircraft(FitSlots[i],true);
-                        FitAircraftT.ForEach(x => System.Diagnostics.Debug.WriteLine("Fit AC: " + x));
-                        if (FitAircraftT.Except(SlotFlightsT).Any())
+                        //SlotFlightsT.ForEach(x => System.Diagnostics.Debug.WriteLine("Slot FLT: " + x));
+                        IEnumerable<int> FitAircraftT = Manager.FindAvailableAircraft(FitSlots[i],!LfzOverride.HasValue).Where(x => Manager.FitsWeight(x,Weight)).Except(SlotFlightsT);
+                        //FitAircraftT.ForEach(x => System.Diagnostics.Debug.WriteLine("Fit AC: " + x));
+                        if (FitAircraftT.Any())
                         {
                             Sheets.Slot SelSlot = RData.Get<Sheets.Slot>(FitSlots[i]) ?? new() { Id = -1 };
                             SelSlots.Add(FitSlots[i]);
-                            content.Add(("slot.png", $"{SelSlot.STime.ToShortTimeString() ?? "N/A"} - {SelSlot.FTime.ToShortTimeString() ?? "N/A"}", $"({SelSlot.Length.ToString() ?? "N/A"}min)   {SelSlot.Id.ToString() ?? ""}"));
+                            content.Add(("slot.png", $"{SelSlot.STime.ToShortTimeString() ?? "N/A"} - {SelSlot.FTime.ToShortTimeString() ?? "N/A"}", $"({SelSlot.Length.ToString() ?? "N/A"}min)"));
                         }
                         System.Diagnostics.Debug.WriteLine($"{i}/{FitSlots.Count} processed");
                     }
                     content.ForEach(x => System.Diagnostics.Debug.WriteLine(x.Item1 + " " + x.Item2 + " " + x.Item3));
 
-                    await system.modals.ModalPush.Selector("TO FILL IN",content).ContinueWith(t =>
+                    await system.modals.ModalPush.Selector(Lang.builder_selectSlot,content).ContinueWith(t =>
                     {
                         //System.Diagnostics.Debug.WriteLine($"Selected Index: {t.Result}");
                         if (t.Result > 0)
                         {
-                            ProcResult = t.Result;
+                            ProcResult.Item1 = t.Result;
                             //Flugzeug Auswählen
                         }
                         else if (t.Result == -1)
                         {
-                            ProcResult = -1;
+                            ProcResult = (-1, -1);
                             //VOLLSTÄNDIGER ABBRUCH
                         }
-                        else if (t.Result == 0) ProcResult = -1;
+                        else if (t.Result == 0) ProcResult = (-1, -1);
                     });
 
-                    System.Diagnostics.Debug.WriteLine("STOP 1 " + ProcResult);
-                    int SelectedSlot = SelSlots[ProcResult - 1];
+                    //System.Diagnostics.Debug.WriteLine("STOP 1 " + ProcResult);
+                    int SelectedSlot = SelSlots[ProcResult.Item1 - 1];
                     List<(string, string, string)> accontent = [];
                     List<int> SelLfzs = [];
-                    System.Diagnostics.Debug.WriteLine("STOP 2");
-                    HashSet<int> SlotFlights = [.. (RData.GetWhere<Sheets.Flt>($"slot={SelSlots[ProcResult - 1]}") ?? []).Select(flt => flt.Lfz)];
-                    List<int> FitAircraft = Manager.FindAvailableAircraft(SelSlots[ProcResult - 1],true);
-                    IEnumerable<int> AvailableAircraft = FitAircraft.Except(SlotFlights);
-                    foreach (int ac in AvailableAircraft)
+                    //System.Diagnostics.Debug.WriteLine("STOP 2");
+                    HashSet<int> SlotFlights = [.. (RData.GetWhere<Sheets.Flt>($"slot={SelSlots[ProcResult.Item1 - 1]}") ?? []).Select(flt => flt.Lfz)];
+                    IEnumerable<int> FitAircraft = Manager.FindAvailableAircraft(SelSlots[ProcResult.Item1 - 1],!LfzOverride.HasValue).Where(x => Manager.FitsWeight(x,Weight)).Except(SlotFlights);
+                    if (LfzOverride.HasValue) FitAircraft = [.. FitAircraft.Where(x => x == LfzOverride)];
+                    foreach (int ac in FitAircraft)
                     {
                         Sheets.Lfz SelLfz = RData.Get<Sheets.Lfz>(ac) ?? new() { Id = -1 };
                         SelLfzs.Add(ac);
-                        accontent.Add(("plane.png", $"{SelLfz.Reg ?? "N/A"}", $"PC: {SelLfz.PriceCat} TYPE: {SelLfz.Type} SEATS: {SelLfz.Seats} AUTO: {SelLfz.AutoAssign}"));
+                        accontent.Add(("plane.png", $"{SelLfz.Reg ?? "N/A"}", $"PC: {SelLfz.PriceCat} TYPE: {SelLfz.Type ?? "N/A"} SEATS: {SelLfz.Seats}"));
                     }
-                    System.Diagnostics.Debug.WriteLine("STOP 3");
-                    await system.modals.ModalPush.Selector("TO FILL IN",accontent).ContinueWith(t =>
+                    //System.Diagnostics.Debug.WriteLine("STOP 3");
+                    await system.modals.ModalPush.Selector(Lang.builder_selectLfz,accontent).ContinueWith(t =>
                     {
                         if (t.Result >= 0)
                         {
-                            ProcResult = Manager.CreateFlight(Manager.CreateEID(),SelLfzs[t.Result],SelectedSlot,InStatus,InAdd);
+                            ProcResult = (Manager.CreateFlight(Manager.CreateEID(),SelLfzs[t.Result],SelectedSlot,InStatus,InAdd), SelLfzs[t.Result]);
                         }
-                        else ProcResult = -1;
+                        else ProcResult = (-1, -1);
                     });
 
                     return ProcResult;
@@ -185,7 +193,7 @@ namespace fltstd26.XFly
             {
                 //Keine passenden Slots. yikes. würd mir stinken
                 //Methode für Slot generierung todo
-                return -1;
+                return (-1, -1);
             }
         }
 

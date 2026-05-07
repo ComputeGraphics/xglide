@@ -3,8 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:local="clr-namespace:fltstd26.Resources.Texts"
              x:Class="fltstd26.system.modals.YesNo"
-             BackgroundColor="#88000000"
-             Title="YesNo">
+             BackgroundColor="#88000000">
     <Border StrokeThickness="2"
             WidthRequest="600"
             BackgroundColor="{x:AppThemeBinding Dark={StaticResource Gray950}, Light={StaticResource Gray200}}"

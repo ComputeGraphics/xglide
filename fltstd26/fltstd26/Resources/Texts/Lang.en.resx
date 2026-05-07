@@ -312,4 +312,13 @@
   <data name="custom" xml:space="preserve">
     <value>Custom</value>
   </data>
+  <data name="builder_selectSlot" xml:space="preserve">
+    <value>Select slot</value>
+  </data>
+  <data name="builder_selectLfz" xml:space="preserve">
+    <value>Select aircraft</value>
+  </data>
+  <data name="unallowed_chars_removed" xml:space="preserve">
+    <value>Some characters were removed from the input, due to being not allowed</value>
+  </data>
 </root>

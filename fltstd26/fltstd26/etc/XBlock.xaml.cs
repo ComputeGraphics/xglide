@@ -9,7 +9,7 @@ namespace fltstd26.XFly;
 public partial class XBlock : ContentView
 {
     public int TargetID = 0;
-    public bool[] Attribs = new bool[4];
+    public bool[] Attribs = new bool[GSettings.TargetAttribIcons.Length];
     public XBlock(Sheets.Target t,int Length)
     {
         InitializeComponent();
@@ -38,17 +38,26 @@ public partial class XBlock : ContentView
         }
     }
 
-    internal void NodeInteractionHandler(object? sender,EventArgs e)
+    private void NodeInteractionHandler(object? sender,EventArgs e)
     {
         if (sender is ImageButton interaction)
         {
             int AttribIndex = NodeIconStack.Children.IndexOf(interaction);
-            if (AttribIndex != -1)
+            if (AttribIndex != -1) UpdateAttrib(AttribIndex);
+        }
+    }
+
+
+    internal void UpdateAttrib(int id)
+    {
+        if (id >= 0 && id < Attribs.Length)
+        {
+            ConProc.Log("[XBLOCK] Attributes of target " + TargetID.ToString() + " updated");
+            Attribs[id] = !Attribs[id];
+            if (NodeIconStack.Children[id] is ImageButton interaction)
             {
-                ConProc.Log("[XBLOCK] Attributes of target" + TargetID.ToString() + " updated");
-                Attribs[AttribIndex] = !Attribs[AttribIndex];
                 interaction.Behaviors.Clear();
-                interaction.Behaviors.Add(new IconTintColorBehavior { TintColor = Attribs[AttribIndex] ? GSettings.PrimaryColour : GSettings.InactiveIcon });
+                interaction.Behaviors.Add(new IconTintColorBehavior { TintColor = Attribs[id] ? GSettings.PrimaryColour : GSettings.InactiveIcon });
             }
         }
     }

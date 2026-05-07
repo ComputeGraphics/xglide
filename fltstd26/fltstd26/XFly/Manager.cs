@@ -78,7 +78,21 @@ namespace fltstd26.XFly
             }
             catch (Exception e)
             {
-                ConProc.Log("[XFLY.GET] Can't test for Aircraft availability: " + e,2);
+                ConProc.Log("[XFLY-GET] Can't test for Aircraft availability: " + e,2);
+                return false;
+            }
+        }
+
+        public static bool FitsWeight(int LFZID, int Weight)
+        {
+            try
+            {
+                Sheets.Lfz? lfz = RData.Get<Sheets.Lfz>(LFZID);
+                return lfz is null ? throw new Exception("Lfz not found in database") : lfz.Seats >= Weight;
+            }
+            catch (Exception e)
+            {
+                ConProc.Log("[XFLY-GET] Can't test for Aircraft weight: " + e,2);
                 return false;
             }
         }
@@ -94,7 +108,7 @@ namespace fltstd26.XFly
             {
                 Name = name,
                 Weight = weight,
-                Price = price < 0 ? RData.Get<Sheets.PriceCat>(price * -1)?.Price ?? -1 : price,
+                Price = price < 0 ? RData.Get<Sheets.PriceCat>(price * -1)?.Price ?? RData.Get<Sheets.PriceCat>(USettings.FallbackPriceCat)?.Price ?? 0 : price,
                 QuickTicket = quick,
                 Persistent = persistent,
             };
@@ -110,7 +124,7 @@ namespace fltstd26.XFly
             {
                 Name = name,
                 Weight = weight,
-                Price = price < 0 ? RData.Get<Sheets.PriceCat>(price * -1)?.Price ?? -1 : price,
+                Price = price < 0 ? RData.Get<Sheets.PriceCat>(price * -1)?.Price ?? RData.Get<Sheets.PriceCat>(USettings.FallbackPriceCat)?.Price ?? 0: price,
                 LId = lid,
                 QuickTicket = quick,
                 Persistent = persistent,
