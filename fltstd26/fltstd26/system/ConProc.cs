@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -46,6 +47,45 @@ namespace fltstd26.system
                 output.Add($"{Stamp[i]:yyyy-MM-dd HH:mm:ss} {prefix} {_Log[i].Item2}");
             }
             return output;
+        }
+
+        public static void ReportActionStack(string Name,Stack<Stack<DatabaseAction>> ActionStack,bool Lock)
+        {
+            System.Diagnostics.Debug.WriteLine($"{Name} Report:\n   {ActionStack.Count} Actions on the stack\n   {(Lock ? "Locked" : "Unlocked")}\n   Elements:");
+            foreach (var item in ActionStack)
+            {
+                if (item.Count > 0)
+                {
+                    foreach (var action in item)
+                    {
+                        System.Diagnostics.Debug.WriteLine($"      -> Action {action.ActionID} performed - Data Type {action.DataType.Name}");
+
+                        System.Diagnostics.Debug.Write($"         Previous Value:\n           ");
+                        PropertyInfo[] props = action.DataType.GetProperties();
+                        if (action.PreviousValue != null)
+                        {
+                            foreach (PropertyInfo propInfo in props)
+                            {
+                                System.Diagnostics.Debug.Write(propInfo.Name + ": " + propInfo.GetValue(action.PreviousValue) + ", ");
+                            }
+                            System.Diagnostics.Debug.WriteLine("");
+                        }
+                        System.Diagnostics.Debug.WriteLine("");
+
+                        System.Diagnostics.Debug.Write($"         Current Value:\n           ");
+                        if (action.CurrentValue != null)
+                        {
+                            foreach (PropertyInfo propInfo in props)
+                            {
+                                System.Diagnostics.Debug.Write(propInfo.Name + ": " + propInfo.GetValue(action.CurrentValue) + ", ");
+                            }
+                            System.Diagnostics.Debug.WriteLine("");
+                        }
+                        else System.Diagnostics.Debug.WriteLine("null");
+                    }
+                }
+                else System.Diagnostics.Debug.WriteLine($"    Action {item.Peek().ActionID} performed - Data Type {item.Peek().DataType.Name}");
+            }
         }
     }
 }

@@ -110,6 +110,11 @@ copy.scale-125.png
 copy.scale-150.png
 copy.scale-200.png
 copy.scale-400.png
+database.scale-100.png
+database.scale-125.png
+database.scale-150.png
+database.scale-200.png
+database.scale-400.png
 db.scale-100.png
 db.scale-125.png
 db.scale-150.png
@@ -260,6 +265,11 @@ undo.scale-125.png
 undo.scale-150.png
 undo.scale-200.png
 undo.scale-400.png
+view.scale-100.png
+view.scale-125.png
+view.scale-150.png
+view.scale-200.png
+view.scale-400.png
 x.scale-100.png
 x.scale-125.png
 x.scale-150.png

@@ -13,11 +13,21 @@
                     <Label Text="Online OGN Fetcher Preview"
                        FontSize="Medium"
                        FontAttributes="Bold"/>
-                    <CheckBox x:Name="ViewRaw"
-                              Grid.Column="1"/>
-                    <Label Text="View Raw Data"
+                    <HorizontalStackLayout
+                        Grid.Column="1">
+                        <CheckBox x:Name="ViewRaw"
+                              />
+                        <Label Text="View Raw Data"
                            VerticalOptions="Center"
-                           Grid.Column="2"/>
+                           />
+                    </HorizontalStackLayout>
+                    <HorizontalStackLayout
+                        Grid.Column="2">
+                        <CheckBox x:Name="ViewFromSync"/>
+                        <Label Text="View Sync"
+                           VerticalOptions="Center"/>
+                    </HorizontalStackLayout>
+
                     <Entry x:Name="AP"
                            Placeholder="ICAO Code"
                            WidthRequest="360"

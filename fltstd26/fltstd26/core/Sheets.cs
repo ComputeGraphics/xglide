@@ -1,5 +1,10 @@
-﻿using SQLite;
-using fltstd26.etc;
+﻿using fltstd26.etc;
+using fltstd26.system;
+using SQLite;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.Text.Json;
+using System.Text.Json.Serialization;
+using System.Xml.Linq;
 
 namespace fltstd26.core
 {
@@ -65,6 +70,7 @@ namespace fltstd26.core
         [Table("Target")]
         public class Target
         {
+
             [PrimaryKey, AutoIncrement]
             [Column("id")]
             public int Id { get; set; }
@@ -75,10 +81,10 @@ namespace fltstd26.core
             public string? Name { get; set; }
             [Column("weight")]
             public int Weight { get; set; }
-            [Column("quickticket")]
-            public bool QuickTicket { get; set; }
             [Column("price")]
             public int Price { get; set; } //Price Cat for negative - Price Absolute for positive - Price 0 for auto
+            [Column("quickticket")]
+            public bool QuickTicket { get; set; }         
             [Column("persistent")]
             public bool Persistent { get; set; } //Flight will not be deleted by Software and cannot be moved by User.
         }
@@ -94,6 +100,22 @@ namespace fltstd26.core
 
             [Column("price")]
             public int Price { get; set; }
+        }
+
+        public static T? Clone<T>(T obj) where T : class, new()
+        {
+            /*var serialized = JsonSerializer.Serialize(obj);
+            return JsonSerializer.Deserialize<T>(serialized);*/
+            try
+            {
+                var serialized = JsonSerializer.Serialize(obj);
+                return JsonSerializer.Deserialize<T>(serialized);
+            }
+            catch (Exception ex)
+            {
+                ConProc.Log("[SHEETS] Deep Copy failed: " +  ex.Message);
+                return null;
+            }
         }
     }
 }

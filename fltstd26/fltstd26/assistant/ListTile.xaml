@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             x:Class="fltstd26.assistant.ListTile">
+    <Border StrokeThickness="2"
+            x:Name="ElementBorder"
+            HorizontalOptions="Fill">
+        <Grid Margin="5,15"
+              ColumnDefinitions="Auto,Auto,*,Auto">
+            <CheckBox x:Name="Check"/>
+            <Image WidthRequest="36"
+                   HeightRequest="36"
+                   Margin="0,10"
+                   VerticalOptions="Start"
+                   x:Name="Icon"
+                   Grid.Column="1">
+                <Image.Behaviors>
+                    <toolkit:IconTintColorBehavior TintColor="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}"/>
+                </Image.Behaviors>
+            </Image>
+            <Grid Grid.Column="2"
+                  Margin="15,0"
+                  RowDefinitions="*,*">
+                <Label x:Name="Title"
+                       VerticalOptions="End"
+                       HorizontalOptions="Start"
+                       FontAttributes="Bold"
+                       FontSize="Title"/>
+                <Label x:Name="Description"
+                       Grid.Row="1"
+                       VerticalOptions="Start"
+                       HorizontalOptions="Start"
+                       FontSize="Subtitle"/>
+            </Grid>
+            <HorizontalStackLayout Grid.Column="3"
+                                   HorizontalOptions="End"
+                                   VerticalOptions="Center">
+                <ImageButton BackgroundColor="Transparent"
+                             Source="view.png"
+                             Aspect="AspectFit">
+                    <ImageButton.Behaviors>
+                        <toolkit:IconTintColorBehavior TintColor="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}"/>
+                    </ImageButton.Behaviors>
+                </ImageButton>
+            </HorizontalStackLayout>
+        </Grid>
+    </Border>
+</ContentView>

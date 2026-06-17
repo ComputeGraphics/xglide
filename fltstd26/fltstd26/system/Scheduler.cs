@@ -2,6 +2,7 @@
 {
     internal class Scheduler
     {
+        public bool IsRunning => timer?.IsRunning ?? false;
         private readonly IDispatcherTimer? timer;
         public Scheduler(TimeSpan? iv,EventHandler ev,bool repeat,TimeSpan? synchronize = null)
         {

@@ -11,13 +11,13 @@
             HorizontalOptions="Center">
         <Grid RowDefinitions="Auto,Auto,Auto"
               Padding="20">
-            <Label FontSize="Header"
+            <Label FontSize="28"
                    x:Name="ItemTitle"
                    FontAttributes="Bold"
                    FontFamily="Archive"
                    HorizontalOptions="Center"
                    Grid.Row="0"/>
-            <Label FontSize="24"
+            <Label FontSize="16"
                    x:Name="ItemSubtitle"
                    Margin="0,5"
                    HorizontalOptions="Start"

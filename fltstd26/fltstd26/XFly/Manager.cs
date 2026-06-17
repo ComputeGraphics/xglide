@@ -1,12 +1,17 @@
-﻿using fltstd26.core;
+﻿using CommunityToolkit.Maui.Converters;
+using fltstd26.core;
 using fltstd26.etc;
+using fltstd26.Resources.Texts;
 using fltstd26.system;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using static SQLite.SQLite3;
 
 namespace fltstd26.XFly
 {
@@ -18,7 +23,7 @@ namespace fltstd26.XFly
         /// <summary>
         /// Find all existing flights, that can take the required weight
         /// </summary>
-        public static List<Sheets.Flt> FindFitWeightLength(int Length, int Weight,bool Now,bool Quick)
+        public static List<Sheets.Flt> FindFitWeightLength(int Length,int Weight,bool Now,bool Quick)
         {
             List<Sheets.Flt> flts = [];
             foreach (Sheets.Flt flt in RData.GetFlightTable())
@@ -27,14 +32,7 @@ namespace fltstd26.XFly
                 if (slot is null || slot.Length != Length) continue;
                 if (!Now || slot.STime > (Quick ? DateTime.Now.AddMinutes(Quick ? -USettings.QuickTolerance : 0) : DateTime.Now))
                 {
-                    Sheets.Lfz? lfz = RData.Get<Sheets.Lfz>(flt.Lfz);
-                    List<Sheets.Target>? tgt = RData.GetWhere<Sheets.Target>($"lid = {flt.Id}");
-                    if (lfz is not null && tgt is not null)
-                    {
-                        int curWeight = 0;
-                        tgt.ForEach(x => curWeight += x.Weight);
-                        if (curWeight + Weight <= lfz.Seats) flts.Add(flt);
-                    }
+                    if (FlightFitsWeight(flt.Id,flt.Lfz,Weight)) flts.Add(flt);
                 }
             }
             return flts;
@@ -56,7 +54,7 @@ namespace fltstd26.XFly
             return CompatibleSlots;
         }
 
-        public static List<int> FindAvailableAircraft(int SlotID, bool Auto)
+        public static List<int> FindAvailableAircraft(int SlotID,bool Auto)
         {
             List<int> AvailableAircraft = [];
             foreach (Sheets.Lfz lfz in RData.GetAircraftTable())
@@ -78,12 +76,11 @@ namespace fltstd26.XFly
             }
             catch (Exception e)
             {
-                ConProc.Log("[XFLY-GET] Can't test for Aircraft availability: " + e,2);
+                ConProc.Log("[XFLY-GET] Can't test for aircraft availability: " + e,2);
                 return false;
             }
         }
-
-        public static bool FitsWeight(int LFZID, int Weight)
+        public static bool AircraftFitsWeight(int LFZID,int Weight)
         {
             try
             {
@@ -92,52 +89,172 @@ namespace fltstd26.XFly
             }
             catch (Exception e)
             {
-                ConProc.Log("[XFLY-GET] Can't test for Aircraft weight: " + e,2);
+                ConProc.Log("[XFLY-GET] Can't test for aircraft weight: " + e,2);
+                return false;
+            }
+        }
+
+        public static bool FlightFitsWeight(int LID,int LFZID,int Weight)
+        {
+            try
+            {
+                Sheets.Lfz? lfz = RData.Get<Sheets.Lfz>(LFZID);
+                List<Sheets.Target?>? tgt = RData.GetWhere<Sheets.Target>($"lid = {LID}");
+                if (lfz is not null && tgt is not null)
+                {
+                    int curWeight = 0;
+                    tgt.ForEach(x => curWeight += x?.Weight ?? 0);
+                    if (curWeight + Weight <= lfz.Seats) return true;
+                }
+                return false;
+            }
+            catch (Exception e)
+            {
+                ConProc.Log("[XFLY-GET] Can't test for remaining flight weight: " + e,2);
                 return false;
             }
         }
         #endregion
-
-
-        /// <summary>
-        /// Initializes a new Target (Not saved to database)
-        /// </summary>
-        public static Sheets.Target CreateTarget(string name,int weight,int price,bool quick = false,bool persistent = false)
+        internal static async Task<(Func<Task>, (Sheets.Target, Sheets.Target))?> DatabaseNodeMove(XBlock Node,TargetStack Stack,int FreeingWeight,bool SuppressPopup)
         {
-            Sheets.Target t = new()
+            //Persistency Check
+            Sheets.Target? TargetNode = RData.Get<Sheets.Target>(Node.TargetID);
+            if (((!TargetNode?.Persistent) ?? false) && Node.Parent is TargetStack sourceContainer && !Stack.Id.Equals(sourceContainer.Id))
             {
-                Name = name,
-                Weight = weight,
-                Price = price < 0 ? RData.Get<Sheets.PriceCat>(price * -1)?.Price ?? RData.Get<Sheets.PriceCat>(USettings.FallbackPriceCat)?.Price ?? 0 : price,
-                QuickTicket = quick,
-                Persistent = persistent,
-            };
-            return t;
+                bool transact = true;
+                int lid = -1;
+                Sheets.Lfz? TargetLFZ = RData.Get<Sheets.Lfz>(Stack.LFZID);
+                Sheets.Slot? TargetSlot = RData.Get<Sheets.Slot>(Stack.SLTID);
+                //Avail Check
+                if (TargetSlot != null && TargetLFZ?.AvailTimes != null && TargetLFZ.AvailTimes.Contains(Stack.SLTID))
+                {
+                    if (USettings.IgnoreTransactionLength || TargetSlot.Length == Node.Length)
+                    {
+                        Sheets.Flt? flt = RData.GetWhere<Sheets.Flt>($"slot = {Stack.SLTID}")?.Where(x => x?.Lfz == Stack.LFZID).FirstOrDefault();
+                        if (flt != null)
+                        {
+                            //Flug vorhanden
+
+                            if (USettings.IgnoreTransactionWeight || Manager.FlightFitsWeight(flt.Id,flt.Lfz,TargetNode?.Weight - FreeingWeight ?? USettings.DefaultTgtWeight)) lid = flt.Id;
+                            else
+                            {
+                                if (!SuppressPopup) system.modals.ModalPush.Message(Lang.warning,Lang.message_too_much_weight);
+                                transact = false;
+                            }
+                        }
+                        else
+                        {
+                            //Kein Flug vorhanden
+                            if (!(USettings.IgnoreTransactionWeight || Manager.AircraftFitsWeight(Stack.LFZID,TargetNode?.Weight ?? USettings.DefaultTgtWeight)))
+                            {
+                                if (!SuppressPopup) system.modals.ModalPush.Message(Lang.warning,Lang.message_too_much_weight);
+                                transact = false;
+                            }
+                        }
+
+                        if (!SuppressPopup && USettings.AskForNodeMove)
+                        {
+                            await system.modals.ModalPush.Question(Lang.security,Lang.nodemove_question_sub).ContinueWith(x =>
+                            {
+                                if (!x.Result) transact = false;
+                            });
+                        }
+                    }
+                    else
+                    {
+                        if (!SuppressPopup) system.modals.ModalPush.Message(Lang.warning,Lang.message_length_mismatch);
+                        transact = false;
+                    }
+                }
+
+                if (transact && TargetNode != null && GSettings.nav != null)
+                {
+                    int newpc = await Drawer.AskForPriceUpdate(TargetNode.Price,TargetLFZ?.PriceCat,TargetNode.Name ?? "N/A");
+                    if (newpc == 0) return null;
+
+                    if (lid != -1)
+                    {
+                        //Datenbankaktion
+                        ConProc.Log($"[XFLY-MANAGER] Target {Node.TargetID} will be transacted from flight {TargetNode.LId} to {lid}");
+
+                        return (() =>
+                        {
+                            if (RData.UpdateProperty<Sheets.Target,int>(Node.TargetID,lid,"LId"))
+                                RData.UpdateProperty<Sheets.Target,int>(Node.TargetID,newpc,"Price");
+                            return Task.CompletedTask;
+                        }, (TargetNode, new Sheets.Target() { Id = Node.TargetID,LId = lid,Name = TargetNode.Name,Persistent = TargetNode.Persistent,Price = newpc,QuickTicket = TargetNode.QuickTicket,Weight = TargetNode.Weight }));
+                    }
+                    else
+                    {
+                        bool result = false;
+                        await system.modals.ModalPush.Question(Lang.warning,Lang.newflt_warning).ContinueWith(t => result = t.Result);
+                        if (result)
+                        {
+                            string? Adds = "";
+                            byte Status = (byte)(GSettings.Status.Length - 1);
+                            TargetCustomizer tc = new(null,new(),true);
+                            await GSettings.nav.PushModalAsync(tc);
+                            await tc.ShowAndSelect().ContinueWith(r =>
+                            {
+                                if (r.Result.Item2 == null)
+                                {
+                                    result = false;
+                                    return;
+                                }
+                                Adds = r.Result.Item2.Add;
+                                Status = r.Result.Item2.Status;
+                            });
+                            if (result)
+                            {
+
+                                //Datenbankaktion awaitable machen. Xplan refresh und cleanup passieren vor oder gleichzeitig mit aktion
+                                return ( async () =>
+                                {
+                                    await Builder.CreateFlight(TargetNode.Weight,Adds,Status,TargetSlot?.Length,TargetNode.QuickTicket,Stack.LFZID,[Stack.SLTID]).ContinueWith(r => {
+                                        if (RData.UpdateProperty<Sheets.Target,int>(Node.TargetID,r.Result.Item1.Id,"LId"))
+                                            RData.UpdateProperty<Sheets.Target,int>(Node.TargetID,newpc,"Price");
+                                        ConProc.Log($"[XFLY-MANAGER] Flight {r.Result.Item1.Id} was created and Target {Node.TargetID} will be transacted there from flight {TargetNode.LId}");
+                                    });
+                                    //FLIGHT CLEANUP DB ACTION 
+                                }, (TargetNode, new Sheets.Target() { Id = Node.TargetID,LId = lid,Name = TargetNode.Name,Persistent = TargetNode.Persistent,Price = newpc,QuickTicket = TargetNode.QuickTicket,Weight = TargetNode.Weight })); ;
+                            }
+                        }
+                    }
+                }
+            }
+            return null;
         }
+
+
+
 
         /// <summary>
         /// Initializes a new Linked Target. Returns Id=-1 on failure.
         /// </summary>
-        public static int CreateLinkedTarget(int lid,string name,int weight,int price,bool quick = false,bool persistent = false)
+        internal static Sheets.Target CreateLinkedTarget(int lid,string name,int weight,int price,bool quick = false,bool persistent = false)
         {
             Sheets.Target t = new()
             {
                 Name = name,
                 Weight = weight,
-                Price = price < 0 ? RData.Get<Sheets.PriceCat>(price * -1)?.Price ?? RData.Get<Sheets.PriceCat>(USettings.FallbackPriceCat)?.Price ?? 0: price,
+                Price = FormatPrice(price),
                 LId = lid,
                 QuickTicket = quick,
                 Persistent = persistent,
             };
-            int resp = RData.Insert(t);
-            if (resp != -1) return resp;
-            return -1;
+            int resp = RData.Insert(t,typeof(Sheets.Target));
+            if (resp != -1)
+            {
+                t.Id = resp;
+                return t;
+            }
+            return new() { Id = -1 };
         }
 
         /// <summary>
         /// Initializes a new Flight. Returns Id=-1 on failure.
         /// </summary>
-        public static int CreateFlight(string? eId,int lfz,int slot,byte status,string? Add)
+        internal static Sheets.Flt CreateFlight(string? eId,int lfz,int slot,byte status,string? Add)
         {
             Sheets.Flt f = new()
             {
@@ -147,14 +264,20 @@ namespace fltstd26.XFly
                 Lfz = lfz,
                 Add = Add,
             };
-            int resp = RData.Insert(f);
-            if (resp != -1) return resp;
-            return -1;
+            int resp = RData.Insert(f,typeof(Sheets.Flt));
+            if (resp != -1)
+            {
+                f.Id = resp;
+                return f;
+            }
+            return new() { Id = -1 };
         }
 
         public static string? CreateEID()
         {
             return null;
         }
+
+        public static int FormatPrice(int price) => price < 0 ? RData.Get<Sheets.PriceCat>(price * -1)?.Price ?? RData.Get<Sheets.PriceCat>(USettings.FallbackPriceCat)?.Price ?? 0 : price;
     }
 }

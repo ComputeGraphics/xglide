@@ -1,3 +1,4 @@
+using fltstd26.etc;
 using fltstd26.etc.online;
 using System.Security.Cryptography.X509Certificates;
 
@@ -8,6 +9,7 @@ public partial class OnlineFetch : Window
     public OnlineFetch()
     {
         InitializeComponent();
+        AP.Text = USettings.Homebase;
     }
 
     public async void Refresh_Click(object sender,EventArgs e)
@@ -23,7 +25,7 @@ public partial class OnlineFetch : Window
         }
         else
         {
-            OGN.OGNLogbook? logbook = await OGN.Get(AP.Text);
+            OGN.OGNLogbook? logbook = ViewFromSync.IsChecked ? OGN.CurrentOGN : await OGN.Get(AP.Text);
 
             if (logbook == null)
             {
@@ -32,8 +34,8 @@ public partial class OnlineFetch : Window
             }
 
             var prop = new OGN.Flight().GetType().GetProperties();
-            Label ap_label = new() { Text = $"Airfield: {logbook.airfield.name} ({logbook.airfield.code}), Country: {logbook.airfield.country}" };
-            Label date_label = new() { Text = $"Date: {logbook.date:d}, Dawn: {logbook.airfield.time_info.dawn}, Dusk: {logbook.airfield.time_info.twilight}" };
+            Label ap_label = new() { Text = $"Airfield: {logbook?.airfield?.name} ({logbook?.airfield?.code}), Country: {logbook?.airfield?.country}" };
+            Label date_label = new() { Text = $"Date: {logbook?.date:d}, Dawn: {logbook?.airfield?.time_info?.dawn}, Dusk: {logbook?.airfield?.time_info?.twilight}" };
             FetcherGrid.Add(ap_label);
             FetcherGrid.SetColumnSpan(ap_label, prop.Length);
             FetcherGrid.Add(date_label,0,1);
@@ -43,7 +45,7 @@ public partial class OnlineFetch : Window
                 FetcherGrid.ColumnDefinitions.Add(new ColumnDefinition() { Width = GridLength.Star });
                 FetcherGrid.Add(new Label() { Text = $"{prop[i].Name}" },i,2);
             }
-            if (logbook.flights != null && logbook.devices != null)
+            if (logbook?.flights != null && logbook.devices != null)
             {
                 for (int i = 0; i < logbook.flights.Count; i++)
                 {

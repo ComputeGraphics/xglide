@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             xmlns:local="clr-namespace:fltstd26.Resources.Texts"
+             BackgroundColor="#88000000"
+             x:Class="fltstd26.XFly.PriceCustomizer"
+             Title="PriceCustomizer">
+    <Border StrokeThickness="2"
+            WidthRequest="600"
+            BackgroundColor="{x:AppThemeBinding Dark={StaticResource Gray950}, Light={StaticResource Gray200}}"
+            VerticalOptions="Center"
+            HorizontalOptions="Center">
+        <VerticalStackLayout Padding="20">
+            <Label FontSize="28"
+                   Text="{x:Static local:Lang.pricecustomizer}"
+                   FontAttributes="Bold"
+                   FontFamily="Archive"
+                   HorizontalOptions="Center"/>
+            <Label FontSize="16"
+                   x:Name="TGT_Title"
+                   HorizontalOptions="Center"/>
+            <VerticalStackLayout HorizontalOptions="Fill"
+                                 Padding="10">
+                <Grid ColumnDefinitions="Auto, *">
+                    <HorizontalStackLayout>
+                        <CheckBox x:Name="TGT_Price_Dropdown_Enable"
+                                          IsChecked="True"/>
+                        <Label Text="{x:Static local:Lang.unchanged}" 
+                                    VerticalOptions="Center"/>
+                    </HorizontalStackLayout>
+                    <Entry x:Name="TGT_Price_Entry"
+                       Placeholder="{x:Static local:Lang.xplan_price}"
+                       Grid.Column="1"
+                       Margin="45,10,0,10"
+                       Keyboard="Numeric"
+                       BindingContext="{x:Reference TGT_Price_Dropdown_Enable}"
+                       IsEnabled="{Binding Path=IsChecked, Converter={toolkit:InvertedBoolConverter}}"/>
+                </Grid>
+            </VerticalStackLayout>
+            <Grid
+                  x:Name="ButtonGrid"
+                  Padding="0,10,0,0"
+              ColumnSpacing="10"
+              ColumnDefinitions="*,*">
+                <Button Text="{x:Static local:Lang.cancel}"
+                    CornerRadius="0"
+                        Clicked="OnCancel"/>
+                <Button Text="{x:Static local:Lang.confirm}"
+                    CornerRadius="0"
+                    Grid.Column="1"
+                        Clicked="OnConfirm"/>
+            </Grid>
+        </VerticalStackLayout>
+    </Border>
+</ContentPage>

@@ -153,11 +153,11 @@
   <data name="info" xml:space="preserve">
     <value>Informationen</value>
   </data>
-  <data name="menubar_cachefolder" xml:space="preserve">
+  <data name="menubar_file_cachefolder" xml:space="preserve">
     <value>Cache Ordner öffnen...</value>
     <comment>Filesystem Items</comment>
   </data>
-  <data name="menubar_datafolder" xml:space="preserve">
+  <data name="menubar_file_datafolder" xml:space="preserve">
     <value>Daten Ordner öffnen...</value>
     <comment>Filesystem Items</comment>
   </data>
@@ -165,7 +165,7 @@
     <value>Datei</value>
     <comment>Menubar Items</comment>
   </data>
-  <data name="menubar_filesystem" xml:space="preserve">
+  <data name="menubar_file_filesystem" xml:space="preserve">
     <value>Dateisystem</value>
     <comment>Filesystem Items</comment>
   </data>
@@ -177,7 +177,7 @@
     <value>Verwalten</value>
     <comment>Menubar Items</comment>
   </data>
-  <data name="menubar_profiles" xml:space="preserve">
+  <data name="menubar_file_profiles" xml:space="preserve">
     <value>Profile</value>
     <comment>Menubar Items</comment>
   </data>
@@ -228,13 +228,13 @@
     <value>Fixiert</value>
   </data>
   <data name="xplan_price" xml:space="preserve">
-    <value>Preis in Eurocent (Standardwert)</value>
+    <value>Preis in €</value>
   </data>
   <data name="xplan_quickticket" xml:space="preserve">
     <value>A.S.A.P.</value>
   </data>
   <data name="xplan_select_lfz" xml:space="preserve">
-    <value>Luftfahrzeug wählen</value>
+    <value>Luftfahrzeug</value>
   </data>
   <data name="xplan_status_airborne" xml:space="preserve">
     <value>Unterwegs</value>
@@ -304,8 +304,9 @@
   <data name="saveas" xml:space="preserve">
     <value>Speichern unter...</value>
   </data>
-  <data name="menubar_config" xml:space="preserve">
+  <data name="menubar_file_config" xml:space="preserve">
     <value>Konfiguration</value>
+    <comment>Filesystem Items</comment>
   </data>
   <data name="config_editor" xml:space="preserve">
     <value>Konfigurationseditor öffnen...</value>
@@ -332,18 +333,92 @@
     <value>Warnung</value>
   </data>
   <data name="newflt_warning" xml:space="preserve">
-    <value>Soll ein neuer automatisch ein neuer Flug für das angegebene Ziel angelegt werden?</value>
+    <value>Soll automatisch ein neuer Flug für das angegebene Ziel angelegt werden?</value>
   </data>
   <data name="custom" xml:space="preserve">
     <value>Benutzerdefiniert</value>
   </data>
   <data name="builder_selectSlot" xml:space="preserve">
-    <value>Slot auswählen</value>
+    <value>Slot</value>
   </data>
   <data name="builder_selectLfz" xml:space="preserve">
-    <value>Luftfahrzeug wählen</value>
+    <value>Luftfahrzeug</value>
   </data>
   <data name="unallowed_chars_removed" xml:space="preserve">
     <value>Nicht erlaubte Zeichen wurden aus der Anfrage entfernt</value>
+  </data>
+  <data name="fltno" xml:space="preserve">
+    <value>Flug ID</value>
+  </data>
+  <data name="time" xml:space="preserve">
+    <value>Zeit</value>
+  </data>
+  <data name="status" xml:space="preserve">
+    <value>Status</value>
+  </data>
+  <data name="menubar_network" xml:space="preserve">
+    <value>Netzwerk</value>
+    <comment>Menubar Items</comment>
+  </data>
+  <data name="menubar_tools" xml:space="preserve">
+    <value>Werkzeuge</value>
+    <comment>Menubar Items</comment>
+  </data>
+  <data name="refresh" xml:space="preserve">
+    <value>Aktualisieren</value>
+  </data>
+  <data name="restart" xml:space="preserve">
+    <value>Neu starten</value>
+  </data>
+  <data name="nodemove_question_sub" xml:space="preserve">
+    <value>Soll dieses Ticket/dieses Ziel wirklich verschoben werden?</value>
+  </data>
+  <data name="security" xml:space="preserve">
+    <value>Sicherheit</value>
+  </data>
+  <data name="unchanged" xml:space="preserve">
+    <value>Unverändert</value>
+  </data>
+  <data name="target_option" xml:space="preserve">
+    <value>Ticket/Ziel Optionen</value>
+  </data>
+  <data name="flight_option" xml:space="preserve">
+    <value>Flug Optionen</value>
+  </data>
+  <data name="targetcustomizer" xml:space="preserve">
+    <value>Block Konfig.</value>
+  </data>
+  <data name="pricecustomizer" xml:space="preserve">
+    <value>Preis Konfig.</value>
+  </data>
+  <data name="message_too_much_weight" xml:space="preserve">
+    <value>Das ausgewählte Feld kann die Kapazität dieses Blocks nicht tragen.</value>
+  </data>
+  <data name="delete_warning" xml:space="preserve">
+    <value>Soll der Block wirklich endgültig aus der Datenbank entfernt werden?</value>
+  </data>
+  <data name="message_length_mismatch" xml:space="preserve">
+    <value>Die Flugzeit des Tickets stimmt nicht mit der des Feldes überein.</value>
+  </data>
+  <data name="check_db" xml:space="preserve">
+    <value>Datenbank prüfen</value>
+  </data>
+  <data name="unlinked_tgts" xml:space="preserve">
+    <value>Es wurden nicht verknüpfte Tickets in der Datenbank gefunden. Sollen diese neu verknüpft werden?</value>
+  </data>
+  <data name="flt_overflow" xml:space="preserve">
+    <value>Der Flug ist überbesetzt. Löschen Sie mindestens ein Ticket oder verschieben Sie es aus dem Flug hinaus</value>
+  </data>
+  <data name="show" xml:space="preserve">
+    <value>Ansehen</value>
+  </data>
+  <data name="missing_slots_warning" xml:space="preserve">
+    <value>Es kann kein für die Flugeigenschaften passender Zeitabschnitt gefunden werden.</value>
+  </data>
+  <data name="too_late" xml:space="preserve">
+    <value> befindet sich außerhalb des Dämmerungsbereichs. Dieser Flug darf möglicherweise nicht legal stattfinden</value>
+  </data>
+  <data name="overlap_warning" xml:space="preserve">
+    <value>überlappen. Falls dies nicht gewollt ist, sollten die betroffenen Slots verschoben oder gelöscht werden.</value>
   </data>
 </root>

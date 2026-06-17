@@ -12,12 +12,12 @@
         <VerticalStackLayout>
             <VerticalStackLayout Grid.Column="1"
                                      Padding="10">
-                <Label FontSize="Header"
+                <Label FontSize="28"
                            x:Name="ItemTitle"
                            FontAttributes="Bold"
                            FontFamily="Archive"
                            HorizontalOptions="Start"/>
-                <Label FontSize="24"
+                <Label FontSize="16"
                            x:Name="ItemSubtitle"
                            Margin="0,5"
                            HorizontalOptions="Start"/>

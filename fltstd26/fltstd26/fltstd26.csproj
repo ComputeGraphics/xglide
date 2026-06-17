@@ -2,7 +2,6 @@
 
 	<PropertyGroup>
 		<TargetFrameworks>net9.0-maccatalyst</TargetFrameworks>
-		<TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);net9.0-windows10.0.19041.0</TargetFrameworks>
 		<!-- Uncomment to also build the tizen app. You will need to install tizen by following this: https://github.com/Samsung/Tizen.NET -->
 		<!-- <TargetFrameworks>$(TargetFrameworks);net9.0-tizen</TargetFrameworks> -->
 
@@ -35,11 +34,11 @@
 
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">15.0</SupportedOSPlatformVersion>
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'maccatalyst'">15.0</SupportedOSPlatformVersion>
-		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">21.0</SupportedOSPlatformVersion>
+		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">29.0</SupportedOSPlatformVersion>
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</SupportedOSPlatformVersion>
 		<TargetPlatformMinVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</TargetPlatformMinVersion>
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'tizen'">6.5</SupportedOSPlatformVersion>
-		<NeutralLanguage>de</NeutralLanguage>
+		<NeutralLanguage>en-DE</NeutralLanguage>
 		<DefaultLanguage>de</DefaultLanguage>
 		<SignAssembly>True</SignAssembly>
 	</PropertyGroup>
@@ -64,10 +63,15 @@
 	  <ApplicationTitle>Flight Management Studio 2026</ApplicationTitle>
 	</PropertyGroup>
 
+	<PropertyGroup>
+	  <TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);net9.0-windows10.0.19041.0</TargetFrameworks>
+	</PropertyGroup>
+
 	<ItemGroup>
 		<!-- App Icon -->
 		<MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg.svg" Color="#512BD4" />
 		<MauiImage Include="Resources\Icons\takeoff_large.svg" />
+		<MauiImage Include="Resources\Icons\view.svg" />
 
 		<!-- Splash Screen -->
 		<MauiSplashScreen Include="Resources\Splash\splash.svg" Color="#512BD4" BaseSize="128,128" />
@@ -127,6 +131,7 @@
 	  <None Remove="Resources\Icons\signal.svg" />
 	  <None Remove="Resources\Icons\takeoff_large.svg" />
 	  <None Remove="Resources\Icons\undo.svg" />
+	  <None Remove="Resources\Icons\view.svg" />
 	  <None Remove="Resources\Icons\x.svg" />
 	</ItemGroup>
 
@@ -140,6 +145,9 @@
 	<ItemGroup>
 	  <Compile Update="etc\XBlock.xaml.cs">
 	    <DependentUpon>XBlock.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="XFly\PriceCustomizer.xaml.cs">
+	    <DependentUpon>PriceCustomizer.xaml</DependentUpon>
 	  </Compile>
 	  <Compile Update="XMain.xaml.cs">
 	    <DependentUpon>XMain.xaml</DependentUpon>
@@ -174,6 +182,12 @@
 	  <MauiXaml Update="assistant\IABoard.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="assistant\ListTile.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="assistant\profiles\ProfileCreator.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="board\BoardPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
@@ -199,6 +213,9 @@
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="etc\XBlock.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="XFly\PriceCustomizer.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="XFly\TargetCustomizer.xaml">

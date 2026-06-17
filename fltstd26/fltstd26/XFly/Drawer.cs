@@ -1,15 +1,10 @@
 ﻿using fltstd26.etc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+using static SQLite.SQLite3;
 namespace fltstd26.XFly
 {
     internal class Drawer
     {
-        internal FBorder CreateFltCollector(int ID, string? EID)
+        internal static FBorder CreateFltCollector(int ID, string? EID)
         {
             VerticalStackLayout vsl = [];
             FBorder outer = new()
@@ -37,9 +32,25 @@ namespace fltstd26.XFly
             return outer;
         }
 
-        internal void CreateNode()
+        internal static async Task<int> AskForPriceUpdate(int Price,int? LFZ_PriceCat, string Name)
         {
-
+            int pcat = 0;
+            if (USettings.AskForNodePriceChange)
+            {
+                PriceCustomizer pc = new(Price, Name);
+                await GSettings.nav!.PushModalAsync(pc);
+                await pc.ShowAndSelect().ContinueWith(r =>
+                {
+                    pcat = r.Result switch
+                    {
+                        null => 0,
+                        0 => -(LFZ_PriceCat ?? USettings.FallbackPriceCat),
+                        _ => r.Result.Value,
+                    };
+                });
+            }
+            return pcat;
         }
+
     }
 }

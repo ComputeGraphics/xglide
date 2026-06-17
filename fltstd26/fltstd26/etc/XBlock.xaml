@@ -9,7 +9,7 @@
             StrokeThickness="2">
         <Grid ColumnDefinitions="Auto,*"
               RowDefinitions="*,*,*,*">
-            <Label TextColor="{x:Static fltstd_etc:GSettings.NodeColour}"
+            <Label TextColor="{x:Static fltstd_etc:GSettings.NodeForegroundColour}"
                    x:Name="NodeName"
                    Padding="3"
                    FontAttributes="Bold"
@@ -17,7 +17,7 @@
                    FontSize="18"
                    Grid.ColumnSpan="2"/>
             <Label x:Name="NodeWeight"
-                   TextColor="{x:Static fltstd_etc:GSettings.NodeColour}"
+                   TextColor="{x:Static fltstd_etc:GSettings.NodeForegroundColour}"
                    Padding="3"
                    HorizontalOptions="Center"
                    FontSize="16"
@@ -25,7 +25,7 @@
                    Grid.Row="1"
                    Grid.ColumnSpan="2"/>
             <Label x:Name="NodeLength"
-                   TextColor="{x:Static fltstd_etc:GSettings.NodeColour}"
+                   TextColor="{x:Static fltstd_etc:GSettings.NodeForegroundColour}"
                    VerticalOptions="Center"
                    HorizontalOptions="Center"
                    Padding="20,0"
@@ -37,7 +37,7 @@
                                    Grid.Row="2"
                                    Grid.Column="1"/>
             <Label x:Name="NodeID"
-                   TextColor="{x:Static fltstd_etc:GSettings.NodeColour}"
+                   TextColor="{x:Static fltstd_etc:GSettings.NodeForegroundColour}"
                    Padding="3"
                    HorizontalOptions="Center"
                    FontSize="8"

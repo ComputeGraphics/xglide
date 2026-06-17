@@ -19,7 +19,7 @@
     <ContentPage.MenuBarItems>
         <MenuBarItem Text="{x:Static local:Lang.menubar_file}">
 
-            <MenuFlyoutSubItem Text="{x:Static local:Lang.menubar_profiles}">
+            <MenuFlyoutSubItem Text="{x:Static local:Lang.menubar_file_profiles}">
                 <MenuFlyoutItem Text="{x:Static local:Lang.newobj}"
                                 Clicked="ProfileNewClick" />
                 <MenuFlyoutItem Text="{x:Static local:Lang.open}"
@@ -36,7 +36,7 @@
                                 Clicked="ProfileInfoClick"/>
             </MenuFlyoutSubItem>
 
-            <MenuFlyoutSubItem Text="{x:Static local:Lang.menubar_config}">
+            <MenuFlyoutSubItem Text="{x:Static local:Lang.menubar_file_config}">
                 <MenuFlyoutItem Text="{x:Static local:Lang.newobj}"
                                 Clicked="ConfigNewClick" />
                 <MenuFlyoutItem Text="{x:Static local:Lang.open}"
@@ -53,24 +53,15 @@
                                 Clicked="ConfigInfoClick"/>
             </MenuFlyoutSubItem>
 
-            <MenuFlyoutSubItem Text="{x:Static local:Lang.menubar_filesystem}">
-                <MenuFlyoutItem Text="{x:Static local:Lang.menubar_cachefolder}"
+            <MenuFlyoutSubItem Text="{x:Static local:Lang.menubar_file_filesystem}">
+                <MenuFlyoutItem Text="{x:Static local:Lang.menubar_file_cachefolder}"
                             Clicked="OpenCacheClick"/>
-                <MenuFlyoutItem Text="{x:Static local:Lang.menubar_datafolder}"
+                <MenuFlyoutItem Text="{x:Static local:Lang.menubar_file_datafolder}"
                             Clicked="OpenDataClick"/>
             </MenuFlyoutSubItem>
 
             <MenuFlyoutItem Text="{x:Static local:Lang.close}"
                             Clicked="CloseClick" />
-
-            <MenuFlyoutItem Text="Assitant"
-                            Clicked="OpenAssistant_Click" />
-            <MenuFlyoutItem Text="Create Sample FLT"
-                            Clicked="AddFLT_Sample_Click" />
-            <MenuFlyoutItem Text="Restart XPlan"
-                            Clicked="XPlan_Restart_Click" />
-            <MenuFlyoutItem Text="Add Test Node"
-                            Clicked="CreateDemoNode_Click" />
 
         </MenuBarItem>
         <MenuBarItem Text="{x:Static local:Lang.menubar_system}">
@@ -79,7 +70,7 @@
                 <MenuFlyoutItem Text="Open Assistant"
                                 Clicked="OpenAssistant_Click"/>
                 <MenuFlyoutItem Text="Auto OGN Fetcher"
-                                Clicked="OGNFetcher_Click"/>
+                                Clicked="OGN_FetcherClick"/>
                 <MenuFlyoutItem Text="Open DB Preview"
                                 Clicked="OpenDBPreview_Click"/>
                 <MenuFlyoutItem Text="Add Sample Flight"
@@ -95,16 +86,43 @@
                                     Clicked="OpenYesNoModal_Click"/>
                     <MenuFlyoutItem Text="Message"
                                     Clicked="OpenMessageModal_Click"/>
+                    <MenuFlyoutItem Text="PriceSelector"
+                                    Clicked="OpenPriceModal_Click"/>
                 </MenuFlyoutSubItem>
             </MenuFlyoutSubItem>
         </MenuBarItem>
+
         <MenuBarItem Text="{x:Static local:Lang.menubar_manage}">
-            <MenuFlyoutItem Text="Refresh"
+            <MenuFlyoutSubItem Text="{x:Static local:Lang.delete}">
+                <MenuFlyoutItem Text="Platzhalter"
                             Command="{Binding RefreshCommand}" />
-            <MenuFlyoutItem Text="Change Theme"
-                            Command="{Binding ChangeThemeCommand}" />
+            </MenuFlyoutSubItem>
+            <MenuFlyoutItem Text="{x:Static local:Lang.check_db}"
+                            Clicked="CheckDBClick" />
         </MenuBarItem>
+
+        <MenuBarItem Text="{x:Static local:Lang.menubar_network}">
+
+            <MenuFlyoutItem Text="Change Theme"
+                     Command="{Binding ChangeThemeCommand}" />
+        </MenuBarItem>
+
+        <MenuBarItem Text="{x:Static local:Lang.menubar_tools}">
+            <MenuFlyoutSubItem Text="OGN">
+                <MenuFlyoutItem Text="{x:Static local:Lang.refresh}"
+                                Clicked="OGN_RefreshClick"/>
+                <MenuFlyoutItem Text="{x:Static local:Lang.show}"
+                                Clicked="OGN_FetcherClick"/>
+            </MenuFlyoutSubItem>
+        </MenuBarItem>
+
         <MenuBarItem Text="{x:Static local:Lang.view}">
+            <MenuFlyoutSubItem Text="XPlan">
+                <MenuFlyoutItem Text="{x:Static local:Lang.refresh}"
+                            Clicked="XPlan_Refresh_Click" />
+                <MenuFlyoutItem Text="{x:Static local:Lang.restart}"
+                            Clicked="XPlan_Restart_Click" />
+            </MenuFlyoutSubItem>
             <MenuFlyoutItem Text="XConsole"
                             Clicked="XConsoleClick" />
             <MenuFlyoutItem Text="XBoard"
@@ -273,7 +291,7 @@
                                     Flags="ValidateOnValueChanged"
                                     MinimumValue="1.0"
                                     MaximumValue="255"
-                                    MaximumDecimalPlaces="1" />
+                                    MaximumDecimalPlaces="0" />
                             </Entry.Behaviors>
                         </Entry>
 
@@ -299,7 +317,7 @@
                                     Flags="ValidateOnValueChanged"
                                     MinimumValue="1.0"
                                     MaximumValue="255"
-                                    MaximumDecimalPlaces="1" />
+                                    MaximumDecimalPlaces="0" />
                             </Entry.Behaviors>
                         </Entry>
 

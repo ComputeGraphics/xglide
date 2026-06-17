@@ -70,7 +70,7 @@ namespace fltstd26.Resources.Texts {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Luftfahrzeug wählen ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Luftfahrzeug ähnelt.
         /// </summary>
         internal static string builder_selectLfz {
             get {
@@ -79,7 +79,7 @@ namespace fltstd26.Resources.Texts {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Slot auswählen ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Slot ähnelt.
         /// </summary>
         internal static string builder_selectSlot {
             get {
@@ -93,6 +93,15 @@ namespace fltstd26.Resources.Texts {
         internal static string cancel {
             get {
                 return ResourceManager.GetString("cancel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Datenbank prüfen ähnelt.
+        /// </summary>
+        internal static string check_db {
+            get {
+                return ResourceManager.GetString("check_db", resourceCulture);
             }
         }
         
@@ -151,6 +160,15 @@ namespace fltstd26.Resources.Texts {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Soll der Block wirklich endgültig aus der Datenbank entfernt werden? ähnelt.
+        /// </summary>
+        internal static string delete_warning {
+            get {
+                return ResourceManager.GetString("delete_warning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Bearbeiten ähnelt.
         /// </summary>
         internal static string edit {
@@ -165,6 +183,33 @@ namespace fltstd26.Resources.Texts {
         internal static string flag {
             get {
                 return ResourceManager.GetString("flag", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Flug Optionen ähnelt.
+        /// </summary>
+        internal static string flight_option {
+            get {
+                return ResourceManager.GetString("flight_option", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Der Flug ist überbesetzt. Löschen Sie mindestens ein Ticket oder verschieben Sie es aus dem Flug hinaus ähnelt.
+        /// </summary>
+        internal static string flt_overflow {
+            get {
+                return ResourceManager.GetString("flt_overflow", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Flug ID ähnelt.
+        /// </summary>
+        internal static string fltno {
+            get {
+                return ResourceManager.GetString("fltno", resourceCulture);
             }
         }
         
@@ -232,33 +277,6 @@ namespace fltstd26.Resources.Texts {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Cache Ordner öffnen... ähnelt.
-        /// </summary>
-        internal static string menubar_cachefolder {
-            get {
-                return ResourceManager.GetString("menubar_cachefolder", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Konfiguration ähnelt.
-        /// </summary>
-        internal static string menubar_config {
-            get {
-                return ResourceManager.GetString("menubar_config", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Daten Ordner öffnen... ähnelt.
-        /// </summary>
-        internal static string menubar_datafolder {
-            get {
-                return ResourceManager.GetString("menubar_datafolder", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Datei ähnelt.
         /// </summary>
         internal static string menubar_file {
@@ -268,11 +286,47 @@ namespace fltstd26.Resources.Texts {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Cache Ordner öffnen... ähnelt.
+        /// </summary>
+        internal static string menubar_file_cachefolder {
+            get {
+                return ResourceManager.GetString("menubar_file_cachefolder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Konfiguration ähnelt.
+        /// </summary>
+        internal static string menubar_file_config {
+            get {
+                return ResourceManager.GetString("menubar_file_config", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Daten Ordner öffnen... ähnelt.
+        /// </summary>
+        internal static string menubar_file_datafolder {
+            get {
+                return ResourceManager.GetString("menubar_file_datafolder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Dateisystem ähnelt.
         /// </summary>
-        internal static string menubar_filesystem {
+        internal static string menubar_file_filesystem {
             get {
-                return ResourceManager.GetString("menubar_filesystem", resourceCulture);
+                return ResourceManager.GetString("menubar_file_filesystem", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Profile ähnelt.
+        /// </summary>
+        internal static string menubar_file_profiles {
+            get {
+                return ResourceManager.GetString("menubar_file_profiles", resourceCulture);
             }
         }
         
@@ -295,11 +349,11 @@ namespace fltstd26.Resources.Texts {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Profile ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Netzwerk ähnelt.
         /// </summary>
-        internal static string menubar_profiles {
+        internal static string menubar_network {
             get {
-                return ResourceManager.GetString("menubar_profiles", resourceCulture);
+                return ResourceManager.GetString("menubar_network", resourceCulture);
             }
         }
         
@@ -313,6 +367,42 @@ namespace fltstd26.Resources.Texts {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Werkzeuge ähnelt.
+        /// </summary>
+        internal static string menubar_tools {
+            get {
+                return ResourceManager.GetString("menubar_tools", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Die Flugzeit des Tickets stimmt nicht mit der des Feldes überein. ähnelt.
+        /// </summary>
+        internal static string message_length_mismatch {
+            get {
+                return ResourceManager.GetString("message_length_mismatch", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Das ausgewählte Feld kann die Kapazität dieses Blocks nicht tragen. ähnelt.
+        /// </summary>
+        internal static string message_too_much_weight {
+            get {
+                return ResourceManager.GetString("message_too_much_weight", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Es kann kein für die Flugeigenschaften passender Zeitabschnitt gefunden werden. ähnelt.
+        /// </summary>
+        internal static string missing_slots_warning {
+            get {
+                return ResourceManager.GetString("missing_slots_warning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Neuen Flug erstellen... ähnelt.
         /// </summary>
         internal static string newflt {
@@ -322,7 +412,7 @@ namespace fltstd26.Resources.Texts {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Soll ein neuer automatisch ein neuer Flug für das angegebene Ziel angelegt werden? ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Soll automatisch ein neuer Flug für das angegebene Ziel angelegt werden? ähnelt.
         /// </summary>
         internal static string newflt_warning {
             get {
@@ -336,6 +426,15 @@ namespace fltstd26.Resources.Texts {
         internal static string newobj {
             get {
                 return ResourceManager.GetString("newobj", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Soll dieses Ticket/dieses Ziel wirklich verschoben werden? ähnelt.
+        /// </summary>
+        internal static string nodemove_question_sub {
+            get {
+                return ResourceManager.GetString("nodemove_question_sub", resourceCulture);
             }
         }
         
@@ -358,11 +457,29 @@ namespace fltstd26.Resources.Texts {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die überlappen. Falls dies nicht gewollt ist, sollten die betroffenen Slots verschoben oder gelöscht werden. ähnelt.
+        /// </summary>
+        internal static string overlap_warning {
+            get {
+                return ResourceManager.GetString("overlap_warning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Einfügen ähnelt.
         /// </summary>
         internal static string paste {
             get {
                 return ResourceManager.GetString("paste", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Preis Konfig. ähnelt.
+        /// </summary>
+        internal static string pricecustomizer {
+            get {
+                return ResourceManager.GetString("pricecustomizer", resourceCulture);
             }
         }
         
@@ -385,6 +502,24 @@ namespace fltstd26.Resources.Texts {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Aktualisieren ähnelt.
+        /// </summary>
+        internal static string refresh {
+            get {
+                return ResourceManager.GetString("refresh", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Neu starten ähnelt.
+        /// </summary>
+        internal static string restart {
+            get {
+                return ResourceManager.GetString("restart", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Speichern ähnelt.
         /// </summary>
         internal static string save {
@@ -403,11 +538,29 @@ namespace fltstd26.Resources.Texts {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Sicherheit ähnelt.
+        /// </summary>
+        internal static string security {
+            get {
+                return ResourceManager.GetString("security", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Flug auswählen ähnelt.
         /// </summary>
         internal static string select_flight {
             get {
                 return ResourceManager.GetString("select_flight", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Ansehen ähnelt.
+        /// </summary>
+        internal static string show {
+            get {
+                return ResourceManager.GetString("show", resourceCulture);
             }
         }
         
@@ -421,6 +574,51 @@ namespace fltstd26.Resources.Texts {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Status ähnelt.
+        /// </summary>
+        internal static string status {
+            get {
+                return ResourceManager.GetString("status", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Ticket/Ziel Optionen ähnelt.
+        /// </summary>
+        internal static string target_option {
+            get {
+                return ResourceManager.GetString("target_option", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Block Konfig. ähnelt.
+        /// </summary>
+        internal static string targetcustomizer {
+            get {
+                return ResourceManager.GetString("targetcustomizer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Zeit ähnelt.
+        /// </summary>
+        internal static string time {
+            get {
+                return ResourceManager.GetString("time", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die  befindet sich außerhalb des Dämmerungsbereichs. Dieser Flug darf möglicherweise nicht legal stattfinden ähnelt.
+        /// </summary>
+        internal static string too_late {
+            get {
+                return ResourceManager.GetString("too_late", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Nicht erlaubte Zeichen wurden aus der Anfrage entfernt ähnelt.
         /// </summary>
         internal static string unallowed_chars_removed {
@@ -430,11 +628,29 @@ namespace fltstd26.Resources.Texts {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Unverändert ähnelt.
+        /// </summary>
+        internal static string unchanged {
+            get {
+                return ResourceManager.GetString("unchanged", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Rückgängig ähnelt.
         /// </summary>
         internal static string undo {
             get {
                 return ResourceManager.GetString("undo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Es wurden nicht verknüpfte Tickets in der Datenbank gefunden. Sollen diese neu verknüpft werden? ähnelt.
+        /// </summary>
+        internal static string unlinked_tgts {
+            get {
+                return ResourceManager.GetString("unlinked_tgts", resourceCulture);
             }
         }
         
@@ -520,7 +736,7 @@ namespace fltstd26.Resources.Texts {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Preis in Eurocent (Standardwert) ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Preis in € ähnelt.
         /// </summary>
         internal static string xplan_price {
             get {
@@ -538,7 +754,7 @@ namespace fltstd26.Resources.Texts {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Luftfahrzeug wählen ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Luftfahrzeug ähnelt.
         /// </summary>
         internal static string xplan_select_lfz {
             get {

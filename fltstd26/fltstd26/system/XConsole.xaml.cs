@@ -16,6 +16,7 @@ public partial class XConsole : Window
 	public static void Update()
 	{
 		if (instance == null) return;
+        instance!.XConsoleContent.Text = string.Empty;
         foreach (string entry in ConProc.GetLog())
 		{
             instance!.XConsoleContent.Text += entry + Environment.NewLine;

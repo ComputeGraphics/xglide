@@ -1,6 +1,7 @@
-﻿using SQLite;
-using fltstd26.etc;
+﻿using fltstd26.etc;
 using fltstd26.system;
+using SQLite;
+using System;
 using System.Dynamic;
 using System.Reflection;
 
@@ -9,10 +10,11 @@ namespace fltstd26.core
     //Runtime Database Access
     internal static class RData
     {
-        public static bool Active => rdb != null;
+        internal static Stack<string> BackupStack = new();
+        public static Func<bool> Active = () => rdb != null;
 
         private static SQLiteConnection? rdb;
-        private static readonly string DatabaseFilename = "RData.db3";
+        private static readonly string DatabaseFilename = "RData.sqlite";
         private static readonly string DatabasePath = GSettings.Paths["Database"];
 
         internal static void Init()
@@ -37,7 +39,7 @@ namespace fltstd26.core
         {
             try
             {
-                if (Active)
+                if (Active())
                 {
                     rdb?.DropTable<Sheets.Flt>();
                     rdb?.DropTable<Sheets.Lfz>();
@@ -63,9 +65,10 @@ namespace fltstd26.core
         {
             try
             {
-                if (Active)
+                if (Active())
                 {
-                    rdb?.Backup(Path.Combine(DatabasePath,name));
+                    rdb?.Backup(Path.Combine(GSettings.Paths["Backup"],name));
+                    BackupStack.Push(name);
                     ConProc.Log($"[RDATA] The database has been backed up",1);
                 }
             }
@@ -75,11 +78,32 @@ namespace fltstd26.core
             }
         }
 
+        internal static void Restore(string name, bool backup = false)
+        {
+            try
+            {
+                if (Active()) Close();
+                string TargetBackup = Path.Combine(GSettings.Paths["Backup"], backup ? BackupStack.Peek() : name);
+                if (File.Exists(Path.Combine(DatabasePath,DatabaseFilename)) && File.Exists(TargetBackup))
+                {
+                    string PrevFile = "BeforeRestore-" + DateTime.Now.ToString("dd-MM-yy-HH-mm")+".sqlite";
+                    File.Move(Path.Combine(DatabasePath,DatabaseFilename),Path.Combine(GSettings.Paths["Temp"],PrevFile));
+                    File.Copy(TargetBackup,Path.Combine(DatabasePath,DatabaseFilename));
+                    BackupStack.Pop();
+                    Init();
+                }
+            }
+            catch (Exception ex)
+            {
+                ConProc.Log($"[RDATA] Restoration failed: {ex.Message}",2);
+            }
+        }
+
         internal static void Close()
         {
             try
             {
-                if (Active)
+                if (Active())
                 {
                     rdb?.Close();
                     rdb = null;
@@ -94,11 +118,11 @@ namespace fltstd26.core
 
         //////////////////////////////////////////////LANG REDIRECTION//////////////////////////////////////////////
 
-        internal static List<Sheets.Flt> GetFlightTable() => (Active ? rdb?.Table<Sheets.Flt>().ToList() : []) ?? [];
-        internal static List<Sheets.Slot> GetSlotsTable() => (Active ? rdb?.Table<Sheets.Slot>().ToList() : []) ?? [];
-        internal static List<Sheets.Lfz> GetAircraftTable() => (Active ? rdb?.Table<Sheets.Lfz>().ToList() : []) ?? [];
-        internal static List<Sheets.Target> GetTargetTable() => (Active ? rdb?.Table<Sheets.Target>().ToList() : []) ?? [];
-        internal static List<Sheets.PriceCat> GetPriceTable() => (Active ? rdb?.Table<Sheets.PriceCat>().ToList() : []) ?? [];
+        internal static List<Sheets.Flt> GetFlightTable() => (Active() ? rdb?.Table<Sheets.Flt>().ToList() : []) ?? [];
+        internal static List<Sheets.Slot> GetSlotsTable() => (Active() ? rdb?.Table<Sheets.Slot>().ToList() : []) ?? [];
+        internal static List<Sheets.Lfz> GetAircraftTable() => (Active() ? rdb?.Table<Sheets.Lfz>().ToList() : []) ?? [];
+        internal static List<Sheets.Target> GetTargetTable() => (Active() ? rdb?.Table<Sheets.Target>().ToList() : []) ?? [];
+        internal static List<Sheets.PriceCat> GetPriceTable() => (Active() ? rdb?.Table<Sheets.PriceCat>().ToList() : []) ?? [];
 
         internal static T? Get<T>(object pk) where T : class, new()
         {
@@ -113,11 +137,11 @@ namespace fltstd26.core
             }
         }
 
-        internal static List<T>? GetWhere<T>(string Predicate) where T : class, new()
+        internal static List<T?>? GetWhere<T>(string Predicate) where T : class, new()
         {
             try
             {
-                return rdb?.Query<T>($"SELECT * FROM {typeof(T).Name} WHERE {Predicate}") ?? null;
+                return rdb?.Query<T?>($"SELECT * FROM {typeof(T).Name} WHERE {Predicate}");
             }
             catch (Exception e)
             {
@@ -130,8 +154,8 @@ namespace fltstd26.core
         {
             try
             {
-                ConProc.Log($"[RDATA] A range of items has been added to the database",0);
                 rdb?.InsertAll(value,true);
+                ConProc.Log($"[RDATA] A range of items has been added to the database",0);
                 return true;
             }
             catch (Exception e)
@@ -141,19 +165,70 @@ namespace fltstd26.core
             }
         }
 
-        internal static int Insert<T>(T value) where T : class, new()
+        internal static int Insert(object value, Type type)
         {
             try
             {
-                ConProc.Log($"[RDATA] An item has been added to the " + typeof(T).Name + " table",0);
-                rdb?.Insert(value);
+                rdb?.Insert(value,"",type);
+                ConProc.Log($"[RDATA] An item has been added to the " + type.Name + " table",0);
                 return rdb!.ExecuteScalar<int>("SELECT last_insert_rowid()");
             }
             catch (Exception e)
             {   
                 ConProc.Log($"[RDATA] Insert Process failed: {e.Message}",2);
                 return -1;
+            }   
+        }
+
+        internal static bool UpdateProperty<T,X>(object pk, X val, string prop) where T : class, new() where X : struct
+        {
+            try
+            {
+                ConProc.Log($"[RDATA] A range of items has been modified in the " + typeof(T).Name + " table",0);
+                PropertyInfo? match = typeof(T).GetProperties().Where(p => p.Name == prop).FirstOrDefault();
+                if (match != null)
+                {
+                    T? prev = Get<T>(pk);
+                    match.SetValue(prev,val);
+                    rdb?.Update(prev);
+                    return true;
+                }
+                throw new Exception("Property not found");
+            }
+            catch (Exception e)
+            {
+                ConProc.Log($"[RDATA] Entity Property update failed: {e.Message}",2);
+                return false;
             }
         }
+
+        internal static int? Update(object obj, Type type)
+        {
+            try
+            {
+                ConProc.Log($"[RDATA] An item has been modified in the " + type?.Name+ " table",0);
+                return rdb?.Update(obj, type);
+            }
+            catch (Exception e)
+            {
+                ConProc.Log($"[RDATA] Entity Update failed: {e.Message}",2);
+                return null;
+            }
+        }
+
+        internal static int? Delete(object pk, Type type)
+        {
+            try
+            {
+                ConProc.Log($"[RDATA] An item has been deleted out of the " + type?.Name + " table",0);
+                return rdb?.Delete(pk,new(type));
+            }
+            catch (Exception e)
+            {
+                ConProc.Log($"[RDATA] Delete Process failed: {e.Message}",2);
+                return null;
+            }
+        }
+
     }
 }

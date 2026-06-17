@@ -8,16 +8,19 @@ namespace fltstd26.XFly;
 
 public partial class XBlock : ContentView
 {
-    public int TargetID = 0;
-    public bool[] Attribs = new bool[GSettings.TargetAttribIcons.Length];
-    public XBlock(Sheets.Target t,int Length)
+    public int TargetID;
+    public int Length;
+    public bool[] Attribs;
+    private Scheduler? notifier = null;
+    public XBlock(Sheets.Target t,int l)
     {
         InitializeComponent();
         TargetID = t.Id;
-        NodeID.Text = "TGTID: " + t.Id.ToString();
+        Length = l;
+        //NodeID.Text = "TGTID: " + t.Id.ToString();
         NodeName.Text = t.Name;
         NodeWeight.Text = t.Weight.ToString() + " " + Lang.xplan_weight;
-        NodeLength.Text = Length == -1 ? "N/A" : (Length.ToString() + " min");
+        NodeLength.Text = l == -1 ? "N/A" : (l.ToString() + " min");
         Attribs = [t.QuickTicket,t.Persistent,false,false];
 
         //Image Buttons populaten ig
@@ -47,18 +50,54 @@ public partial class XBlock : ContentView
         }
     }
 
-
     internal void UpdateAttrib(int id)
     {
-        if (id >= 0 && id < Attribs.Length)
+        if (id >= 0 && id < Attribs.Length && NodeIconStack.Children[id] is ImageButton interaction && interaction.Behaviors[0] is IconTintColorBehavior tint)
         {
             ConProc.Log("[XBLOCK] Attributes of target " + TargetID.ToString() + " updated");
-            Attribs[id] = !Attribs[id];
-            if (NodeIconStack.Children[id] is ImageButton interaction)
+            AttribAction(id);
+            tint.TintColor = Attribs[id] ? GSettings.PrimaryColour : GSettings.InactiveIcon;
+        }
+    }
+
+    internal void AttribAction(int id)
+    {
+        if (!RData.Active()) return;
+        try
+        {
+            switch (id)
             {
-                interaction.Behaviors.Clear();
-                interaction.Behaviors.Add(new IconTintColorBehavior { TintColor = Attribs[id] ? GSettings.PrimaryColour : GSettings.InactiveIcon });
+                case 0:
+                    RData.UpdateProperty<Sheets.Target,bool>(TargetID,!Attribs[id],"QuickTicket");
+                    break;
+                case 1:
+                    RData.UpdateProperty<Sheets.Target,bool>(TargetID,!Attribs[id],"Persistent");
+                    if(GestureRecognizers[0] is DragGestureRecognizer d) d.CanDrag = Attribs[id];
+                    break;
+                case 2:
+                    //Notify
+                    if(!notifier?.IsRunning ?? true)
+                    {
+                        notifier = new(TimeSpan.FromSeconds(5),(s,e) =>
+                        {
+                            system.modals.ModalPush.Message("Test","Notifier Test");
+                        },false);
+                    }
+                    else
+                    {
+                        notifier?.Terminate();
+                    }
+                    break;
+                case 3:
+                    //Flag
+                    NodeFrame.Stroke = Attribs[3] ? GSettings.NodeBackgroundColour : GSettings.PrimaryColour;
+                    break;
             }
+            Attribs[id] = !Attribs[id];
+        }
+        catch (Exception ex)
+        {
+            ConProc.Log("[XBLOCK] Attribute update of  " + TargetID.ToString() + " failed: " + ex.Message,2);
         }
     }
 }

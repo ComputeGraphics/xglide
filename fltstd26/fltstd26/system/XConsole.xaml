@@ -5,13 +5,13 @@
              Title="XConsole">
 
     <ContentPage>
-        <VerticalStackLayout>
+        <Grid RowDefinitions="Auto,*">
             <Label Text="XConsole" FontSize="24" HorizontalOptions="Center" Margin="0,20"/>
-            <ScrollView>
+            <ScrollView Grid.Row="1">
                 <Label HorizontalOptions="Start"
                        x:Name="XConsoleContent"
                        Padding="10"/>
             </ScrollView>
-        </VerticalStackLayout>
+        </Grid>
     </ContentPage>
 </Window>

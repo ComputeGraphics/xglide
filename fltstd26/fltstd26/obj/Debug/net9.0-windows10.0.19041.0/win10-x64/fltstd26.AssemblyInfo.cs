@@ -18,11 +18,11 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("fltstd26")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0+8a282f655835152d45f65448ca728cd93997bee3")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0+2f8f851d3a15167e9e0bf5e34be13d152818b220")]
 [assembly: System.Reflection.AssemblyProductAttribute("fltstd26")]
 [assembly: System.Reflection.AssemblyTitleAttribute("fltstd26")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
-[assembly: System.Resources.NeutralResourcesLanguageAttribute("de")]
+[assembly: System.Resources.NeutralResourcesLanguageAttribute("en-DE")]
 [assembly: System.Runtime.Versioning.TargetPlatformAttribute("Windows10.0.19041.0")]
 [assembly: System.Runtime.Versioning.SupportedOSPlatformAttribute("Windows10.0.17763.0")]
 

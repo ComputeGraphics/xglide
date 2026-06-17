@@ -7,3 +7,6 @@ Microsoft.Maui.Controls.aar
 maui.aar
 Microsoft.Maui.aar
 Microsoft.Maui.Essentials.aar
+CommunityToolkit.Maui.Core.dll
+CommunityToolkit.Maui.dll
+SQLitePCLRaw.batteries_v2.dll

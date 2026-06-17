@@ -153,16 +153,16 @@
   <data name="info" xml:space="preserve">
     <value>Info</value>
   </data>
-  <data name="menubar_cachefolder" xml:space="preserve">
+  <data name="menubar_file_cachefolder" xml:space="preserve">
     <value>Open Cache-Folder...</value>
   </data>
-  <data name="menubar_datafolder" xml:space="preserve">
+  <data name="menubar_file_datafolder" xml:space="preserve">
     <value>Open Data-Folder...</value>
   </data>
   <data name="menubar_file" xml:space="preserve">
     <value>File</value>
   </data>
-  <data name="menubar_filesystem" xml:space="preserve">
+  <data name="menubar_file_filesystem" xml:space="preserve">
     <value>Filesystem</value>
   </data>
   <data name="menubar_help" xml:space="preserve">
@@ -171,7 +171,7 @@
   <data name="menubar_manage" xml:space="preserve">
     <value>Manage</value>
   </data>
-  <data name="menubar_profiles" xml:space="preserve">
+  <data name="menubar_file_profiles" xml:space="preserve">
     <value>Profiles</value>
   </data>
   <data name="menubar_system" xml:space="preserve">
@@ -217,7 +217,7 @@
     <value>Fixed</value>
   </data>
   <data name="xplan_price" xml:space="preserve">
-    <value>Price in Cents (Default)</value>
+    <value>Price in €</value>
   </data>
   <data name="xplan_quickticket" xml:space="preserve">
     <value>A.S.A.P.</value>
@@ -279,7 +279,7 @@
   <data name="saveas" xml:space="preserve">
     <value>Save as...</value>
   </data>
-  <data name="menubar_config" xml:space="preserve">
+  <data name="menubar_file_config" xml:space="preserve">
     <value>Configuration</value>
   </data>
   <data name="config_editor" xml:space="preserve">
@@ -320,5 +320,77 @@
   </data>
   <data name="unallowed_chars_removed" xml:space="preserve">
     <value>Some characters were removed from the input, due to being not allowed</value>
+  </data>
+  <data name="fltno" xml:space="preserve">
+    <value>Flight ID</value>
+  </data>
+  <data name="time" xml:space="preserve">
+    <value>Time</value>
+  </data>
+  <data name="status" xml:space="preserve">
+    <value>Status</value>
+  </data>
+  <data name="menubar_network" xml:space="preserve">
+    <value>Network</value>
+  </data>
+  <data name="menubar_tools" xml:space="preserve">
+    <value>Tools</value>
+  </data>
+  <data name="refresh" xml:space="preserve">
+    <value>Refresh</value>
+  </data>
+  <data name="restart" xml:space="preserve">
+    <value>Restart</value>
+  </data>
+  <data name="nodemove_question_sub" xml:space="preserve">
+    <value>Do you really want this ticket/this target to be moved?</value>
+  </data>
+  <data name="security" xml:space="preserve">
+    <value>Safety</value>
+  </data>
+  <data name="unchanged" xml:space="preserve">
+    <value>Unchanged</value>
+  </data>
+  <data name="target_option" xml:space="preserve">
+    <value>Ticket/Target Options</value>
+  </data>
+  <data name="flight_option" xml:space="preserve">
+    <value>Flight Options</value>
+  </data>
+  <data name="targetcustomizer" xml:space="preserve">
+    <value>Node Options</value>
+  </data>
+  <data name="pricecustomizer" xml:space="preserve">
+    <value>Price Options</value>
+  </data>
+  <data name="message_too_much_weight" xml:space="preserve">
+    <value>The selected fields capacity is too low for the selected node.</value>
+  </data>
+  <data name="delete_warning" xml:space="preserve">
+    <value>Are you sure this node shall be forever removed from the database?</value>
+  </data>
+  <data name="message_length_mismatch" xml:space="preserve">
+    <value>The airborne time of ticket and field mismatches.</value>
+  </data>
+  <data name="check_db" xml:space="preserve">
+    <value>Check Database</value>
+  </data>
+  <data name="unlinked_tgts" xml:space="preserve">
+    <value>There were unlinked targets in the database. Shall they be relinked?</value>
+  </data>
+  <data name="flt_overflow" xml:space="preserve">
+    <value>The flight is overloaded. Remove at least one target from the flight or reposition it</value>
+  </data>
+  <data name="show" xml:space="preserve">
+    <value>Show</value>
+  </data>
+  <data name="missing_slots_warning" xml:space="preserve">
+    <value>There was no slot matching the given attributes found.</value>
+  </data>
+  <data name="too_late" xml:space="preserve">
+    <value> does not lie within dawn/dusk boundaries at your location. Flights outside these boundaries might not be legal</value>
+  </data>
+  <data name="overlap_warning" xml:space="preserve">
+    <value>overlap. If this is not intentional you should either move the slot to a different time or remove it entirely.</value>
   </data>
 </root>

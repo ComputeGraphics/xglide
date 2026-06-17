@@ -12,7 +12,7 @@
         <Grid RowDefinitions="Auto,*,Auto"
               MaximumHeightRequest="800"
               Padding="20">
-            <Label FontSize="Header"
+            <Label FontSize="28"
                    x:Name="ItemTitle"
                    FontFamily="Archive"
                    FontAttributes="Bold"
