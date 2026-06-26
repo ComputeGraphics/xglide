@@ -143,6 +143,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Compile Update="board\BoardView.xaml.cs">
+	    <DependentUpon>BoardView.xaml</DependentUpon>
+	  </Compile>
 	  <Compile Update="etc\XBlock.xaml.cs">
 	    <DependentUpon>XBlock.xaml</DependentUpon>
 	  </Compile>
@@ -189,6 +192,9 @@
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="board\BoardPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="board\BoardView.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="debug\DBPreview.xaml">
@@ -261,10 +267,6 @@
 	  <MauiImage Include="Resources\Icons\signal.svg" />
 	  <MauiImage Include="Resources\Icons\undo.svg" />
 	  <MauiImage Include="Resources\Icons\x.svg" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <Folder Include="profile\" />
 	</ItemGroup>
 
 </Project>

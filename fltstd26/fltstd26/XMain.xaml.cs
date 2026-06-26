@@ -8,6 +8,7 @@ using fltstd26.Resources.Texts;
 using fltstd26.system;
 using fltstd26.XFly;
 using Microsoft.Maui.Platform;
+using System.Data.Common;
 using System.Text;
 namespace fltstd26
 {
@@ -117,9 +118,9 @@ namespace fltstd26
             foreach (Sheets.Flt flt in allFLT)
             {
                 short rowIndex = (short)RData.GetSlotsTable().FindIndex(fts => fts.Id.Equals(flt.Slot));
-                System.Diagnostics.Debug.WriteLine($"Row Index: {rowIndex}");
+                //System.Diagnostics.Debug.WriteLine($"Row Index: {rowIndex}");
                 short colIndex = (short)RData.GetAircraftTable().FindIndex(lfz => lfz.Id.Equals(flt.Lfz));
-                System.Diagnostics.Debug.WriteLine($"Col Index: {colIndex}");
+                //System.Diagnostics.Debug.WriteLine($"Col Index: {colIndex}");
                 if (rowIndex == -1 || colIndex == -1)
                 {
                     ConProc.Log($"[XPLAN-RENDERER] Dem Flug {flt.Id} konnte keine Zelle zugeordnet werden",2);
@@ -281,6 +282,12 @@ namespace fltstd26
                 ConProc.Log("[XPLAN] XPlan restart failed" + e.Message.ToString(),2);
             }
         }
+
+        private void SlotDelayInteraction(object sender, EventArgs e)
+        {
+
+        }
+
         private bool AddNode(Sheets.Slot timeIn,int lfzIn,Sheets.Target tgtIn)
         {
             try
@@ -368,17 +375,21 @@ namespace fltstd26
             System.Diagnostics.Debug.WriteLine($"Drop event - Target: {targetCell}, Node: " + draggedNodeObj);
             if (draggedNodeObj is XBlock draggedNode && draggedNode.Parent is TargetStack sourceContainer && targetCell.Content is TargetStack targetContainer)
             {
-                (Func<Task>, (Sheets.Target, Sheets.Target))? now = await Manager.DatabaseNodeMove(draggedNode,targetContainer,0,false);
+                (Func<Task<(int, DatabaseAction?)>>, (Sheets.Target, Sheets.Target))? now = await Manager.DatabaseNodeMove(draggedNode,targetContainer,0,false);
                 if (now.HasValue)
                 {
-                    await now.Value.Item1.Invoke();
-
-                    Stack<DatabaseAction> a = new();
-                    a.Push(new() { ActionID = 3,CurrentValue = now.Value.Item2.Item2,PreviousValue = now.Value.Item2.Item1,DataType = typeof(Sheets.Target),ObjectID = now.Value.Item2.Item1.Id });
-
-                    List<Sheets.Flt> rmv = Patcher.CleanupFlights();
-                    rmv.ForEach(x => a.Push(new() { ActionID = 2,CurrentValue = null,PreviousValue = x,DataType = typeof(Sheets.Flt),ObjectID = x.Id }));
-                    AutoAct.PushAction(null,a);
+                    (int, DatabaseAction?) result = await now.Value.Item1.Invoke();
+                    now.Value.Item2.Item2.LId = result.Item1;
+                    if(result.Item1 != -1)
+                    {
+                        List<DatabaseAction> a = [];
+                        DatabaseAction da = new() { ActionID = 3,CurrentValue = now.Value.Item2.Item2,PreviousValue = now.Value.Item2.Item1,DataType = typeof(Sheets.Target),ObjectID = now.Value.Item2.Item1.Id };
+                        List<Sheets.Flt> rmv = Patcher.CleanupFlights();
+                        a.Add(da);
+                        if(result.Item2 != null) a.Add(result.Item2 with { LinkAction = da.ID });
+                        rmv.ForEach(x => a.Add(new() { ActionID = 2,CurrentValue = null,PreviousValue = x,DataType = typeof(Sheets.Flt),ObjectID = x.Id,ForeignKeyName = now.Value.Item2.Item1.LId == x.Id ? "LId" : null,LinkAction = now.Value.Item2.Item1.LId == x.Id ? da.ID : 0 }));
+                        AutoAct.PushAction(null,a);
+                    }
                     XPlanRefresh();
                 }
             }
@@ -638,17 +649,25 @@ namespace fltstd26
                 if (source != null && target != null && source.Parent is TargetStack vsl1 && target.Parent is TargetStack vsl2)
                 {
                     System.Diagnostics.Debug.WriteLine($"Node switching - 1: {source.TargetID}, 2: {target.TargetID}");
-                    (Func<Task>, (Sheets.Target, Sheets.Target))? move12 = await Manager.DatabaseNodeMove(source,vsl2,RData.Get<Sheets.Target>(target.TargetID)?.Weight ?? 0,false);
-                    (Func<Task>, (Sheets.Target, Sheets.Target))? move21 = await Manager.DatabaseNodeMove(target,vsl1,RData.Get<Sheets.Target>(source.TargetID)?.Weight ?? 0,true);
+                    (Func<Task<(int, DatabaseAction?)>>, (Sheets.Target, Sheets.Target))? move12 = await Manager.DatabaseNodeMove(source,vsl2,RData.Get<Sheets.Target>(target.TargetID)?.Weight ?? 0,false);
+                    (Func<Task<(int, DatabaseAction ?) >>, (Sheets.Target, Sheets.Target))? move21 = await Manager.DatabaseNodeMove(target,vsl1,RData.Get<Sheets.Target>(source.TargetID)?.Weight ?? 0,true);
                     if (move12.HasValue && move21.HasValue)
                     {
-                        await move12.Value.Item1.Invoke();
-                        await move21.Value.Item1.Invoke();
-                        Stack<DatabaseAction> a = new();
-                        a.Push(new() { ActionID = 3,CurrentValue = move12.Value.Item2.Item2,PreviousValue = move12.Value.Item2.Item1,DataType = typeof(Sheets.Target),ObjectID = move12.Value.Item2.Item1.Id });
-                        a.Push(new() { ActionID = 3,CurrentValue = move21.Value.Item2.Item2,PreviousValue = move21.Value.Item2.Item1,DataType = typeof(Sheets.Target),ObjectID = move21.Value.Item2.Item1.Id });
-                        AutoAct.PushAction(null,a);
-                        XPlanRefresh();
+                        (int, DatabaseAction?) ra12 = await move12.Value.Item1.Invoke();
+                        (int, DatabaseAction?) ra21 = await move21.Value.Item1.Invoke();
+
+                        move12.Value.Item2.Item2.LId = ra12.Item1;
+                        move21.Value.Item2.Item2.LId = ra21.Item1;
+                        if (move12.Value.Item2.Item2.LId != -1 && move21.Value.Item2.Item2.LId != -1)
+                        {
+                            List<DatabaseAction> a =
+                            [
+                                new() { ActionID = 3,CurrentValue = move12.Value.Item2.Item2,PreviousValue = move12.Value.Item2.Item1,DataType = typeof(Sheets.Target),ObjectID = move12.Value.Item2.Item1.Id },
+                                new() { ActionID = 3,CurrentValue = move21.Value.Item2.Item2,PreviousValue = move21.Value.Item2.Item1,DataType = typeof(Sheets.Target),ObjectID = move21.Value.Item2.Item1.Id },
+                            ];
+                            AutoAct.PushAction(null,a);
+                            XPlanRefresh();
+                        }
                     }
                 }
             }
@@ -687,10 +706,12 @@ namespace fltstd26
                     RData.Update(r.Result.Item1,typeof(Sheets.Target));
                     RData.Update(r.Result.Item2,typeof(Sheets.Flt));
                     //CURRENT VALUE UND PREVIOUS VALUE SIND IDENTISCH -> REFERENCE PROBLEM -> SHALLOW COPY NICHT VERWENDEN
-                    Stack<DatabaseAction> a = new();
+                    List<DatabaseAction> a =
+                    [
+                        new() { ActionID = 3,CurrentValue = r.Result.Item1,PreviousValue = t,DataType = typeof(Sheets.Target),ObjectID = target.TargetID },
+                        new() { ActionID = 3,CurrentValue = r.Result.Item2,PreviousValue = f,DataType = typeof(Sheets.Flt),ObjectID = t.LId },
+                    ];
                     System.Diagnostics.Debug.WriteLine("Prev: " + t.Name + " After:" + r.Result.Item1.Name);
-                    a.Push(new() { ActionID = 3,CurrentValue = r.Result.Item1,PreviousValue = t,DataType = typeof(Sheets.Target),ObjectID = target.TargetID });
-                    a.Push(new() { ActionID = 3,CurrentValue = r.Result.Item2,PreviousValue = f,DataType = typeof(Sheets.Flt),ObjectID = t.LId });
                     AutoAct.PushAction(null,a);
                     //else ConProc.Log("[AUTOACT] Action couldn't be stacked onto the ActionStack",2);
                 });
@@ -739,13 +760,15 @@ namespace fltstd26
                 {
                     if (t.Result)
                     {
-                        Stack<DatabaseAction> a = new();
-                        a.Push(new() { ActionID = 2,CurrentValue = null,PreviousValue = RData.Get<Sheets.Target>(target.TargetID),DataType = typeof(Sheets.Target),ObjectID = target.TargetID });
+                        Sheets.Target? dbtarget = RData.Get<Sheets.Target>(target.TargetID);
+                        List<DatabaseAction> a = [];
+                        DatabaseAction da = new() { ActionID = 2,CurrentValue = null,PreviousValue = dbtarget,DataType = typeof(Sheets.Target),ObjectID = target.TargetID };
                         //PRE FLIGHT CLEANUP
 
                         RData.Delete(target.TargetID,typeof(Sheets.Target));
+                        a.Add(da);
                         List<Sheets.Flt> rmv = Patcher.CleanupFlights();
-                        rmv.ForEach(x => a.Push(new() { ActionID = 2,CurrentValue = null,PreviousValue = x,DataType = typeof(Sheets.Flt),ObjectID = x.Id }));
+                        rmv.ForEach(x => a.Add(new() { ActionID = 2,CurrentValue = null,PreviousValue = x,DataType = typeof(Sheets.Flt),ObjectID = x.Id,ForeignKeyName = dbtarget?.LId == x.Id ? "LId" : null,LinkAction = dbtarget?.LId == x.Id ? da.ID : 0 }));
                         AutoAct.PushAction(null,a);
                     }
                 });

@@ -3,15 +3,8 @@ using fltstd26.core;
 using fltstd26.etc;
 using fltstd26.Resources.Texts;
 using fltstd26.system;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using static SQLite.SQLite3;
+using System.ComponentModel.DataAnnotations;
+using System.Runtime.Serialization;
 
 namespace fltstd26.XFly
 {
@@ -115,7 +108,7 @@ namespace fltstd26.XFly
             }
         }
         #endregion
-        internal static async Task<(Func<Task>, (Sheets.Target, Sheets.Target))?> DatabaseNodeMove(XBlock Node,TargetStack Stack,int FreeingWeight,bool SuppressPopup)
+        internal static async Task<(Func<Task<(int, DatabaseAction?)>>, (Sheets.Target, Sheets.Target))?> DatabaseNodeMove(XBlock Node,TargetStack Stack,int FreeingWeight,bool SuppressPopup)
         {
             //Persistency Check
             Sheets.Target? TargetNode = RData.Get<Sheets.Target>(Node.TargetID);
@@ -177,11 +170,12 @@ namespace fltstd26.XFly
                         //Datenbankaktion
                         ConProc.Log($"[XFLY-MANAGER] Target {Node.TargetID} will be transacted from flight {TargetNode.LId} to {lid}");
 
+                        Tuple<int, DatabaseAction?> t = new(lid, null);
                         return (() =>
                         {
-                            if (RData.UpdateProperty<Sheets.Target,int>(Node.TargetID,lid,"LId"))
-                                RData.UpdateProperty<Sheets.Target,int>(Node.TargetID,newpc,"Price");
-                            return Task.CompletedTask;
+                            if (RData.UpdateProperty<int>(Node.TargetID,lid,"LId",typeof(Sheets.Target)))
+                                RData.UpdateProperty<int>(Node.TargetID,newpc,"Price",typeof(Sheets.Target));
+                            return Task.FromResult<(int, DatabaseAction?)>(new(lid,null));
                         }, (TargetNode, new Sheets.Target() { Id = Node.TargetID,LId = lid,Name = TargetNode.Name,Persistent = TargetNode.Persistent,Price = newpc,QuickTicket = TargetNode.QuickTicket,Weight = TargetNode.Weight }));
                     }
                     else
@@ -208,15 +202,17 @@ namespace fltstd26.XFly
                             {
 
                                 //Datenbankaktion awaitable machen. Xplan refresh und cleanup passieren vor oder gleichzeitig mit aktion
-                                return ( async () =>
+                                return (async () =>
                                 {
-                                    await Builder.CreateFlight(TargetNode.Weight,Adds,Status,TargetSlot?.Length,TargetNode.QuickTicket,Stack.LFZID,[Stack.SLTID]).ContinueWith(r => {
-                                        if (RData.UpdateProperty<Sheets.Target,int>(Node.TargetID,r.Result.Item1.Id,"LId"))
-                                            RData.UpdateProperty<Sheets.Target,int>(Node.TargetID,newpc,"Price");
-                                        ConProc.Log($"[XFLY-MANAGER] Flight {r.Result.Item1.Id} was created and Target {Node.TargetID} will be transacted there from flight {TargetNode.LId}");
-                                    });
+                                    (Sheets.Flt, int) r = await Builder.CreateFlight(TargetNode.Weight,Adds,Status,TargetSlot?.Length,TargetNode.QuickTicket,Stack.LFZID,[Stack.SLTID]);
+                                    if (r.Item1.Id != -1 && RData.UpdateProperty<int>(Node.TargetID,r.Item1.Id,"LId",typeof(Sheets.Target)))
+                                    {
+                                        RData.UpdateProperty<int>(Node.TargetID,newpc,"Price",typeof(Sheets.Target));
+                                        ConProc.Log($"[XFLY-MANAGER] Flight {r.Item1.Id} was created and Target {Node.TargetID} will be transacted there from flight {TargetNode.LId}");
+                                    }
+                                    return (r.Item1.Id, new() { ActionID = 1,PreviousValue = r.Item1,DataType = typeof(Sheets.Flt),ObjectID = r.Item1.Id,ForeignKeyName = "LId" });
                                     //FLIGHT CLEANUP DB ACTION 
-                                }, (TargetNode, new Sheets.Target() { Id = Node.TargetID,LId = lid,Name = TargetNode.Name,Persistent = TargetNode.Persistent,Price = newpc,QuickTicket = TargetNode.QuickTicket,Weight = TargetNode.Weight })); ;
+                                }, (TargetNode, new Sheets.Target() { Id = Node.TargetID,LId = lid,Name = TargetNode.Name,Persistent = TargetNode.Persistent,Price = newpc,QuickTicket = TargetNode.QuickTicket,Weight = TargetNode.Weight }));
                             }
                         }
                     }
@@ -224,9 +220,6 @@ namespace fltstd26.XFly
             }
             return null;
         }
-
-
-
 
         /// <summary>
         /// Initializes a new Linked Target. Returns Id=-1 on failure.

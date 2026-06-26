@@ -65,14 +65,13 @@
 
         </MenuBarItem>
         <MenuBarItem Text="{x:Static local:Lang.menubar_system}">
+
+
             <MenuFlyoutSeparator/>
+            
             <MenuFlyoutSubItem Text="Debug">
                 <MenuFlyoutItem Text="Open Assistant"
                                 Clicked="OpenAssistant_Click"/>
-                <MenuFlyoutItem Text="Auto OGN Fetcher"
-                                Clicked="OGN_FetcherClick"/>
-                <MenuFlyoutItem Text="Open DB Preview"
-                                Clicked="OpenDBPreview_Click"/>
                 <MenuFlyoutItem Text="Add Sample Flight"
                                 Clicked="AddFLT_Sample_Click"/>
                 <MenuFlyoutItem Text="Restart XPlan"
@@ -97,8 +96,16 @@
                 <MenuFlyoutItem Text="Platzhalter"
                             Command="{Binding RefreshCommand}" />
             </MenuFlyoutSubItem>
-            <MenuFlyoutItem Text="{x:Static local:Lang.check_db}"
+            <MenuFlyoutSeparator/>
+            <MenuFlyoutItem Text="{x:Static local:Lang.view_db}"
+                    Clicked="OpenDBPreview_Click"/>
+
+            <MenuFlyoutSubItem Text="{x:Static local:Lang.check_db}">
+                <MenuFlyoutItem Text="{x:Static local:Lang.full}"
                             Clicked="CheckDBClick" />
+            </MenuFlyoutSubItem>
+
+            
         </MenuBarItem>
 
         <MenuBarItem Text="{x:Static local:Lang.menubar_network}">

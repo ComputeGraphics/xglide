@@ -151,6 +151,15 @@ namespace fltstd26.Resources.Texts {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Datenbank ähnelt.
+        /// </summary>
+        internal static string db {
+            get {
+                return ResourceManager.GetString("db", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Entfernen ähnelt.
         /// </summary>
         internal static string delete {
@@ -210,6 +219,15 @@ namespace fltstd26.Resources.Texts {
         internal static string fltno {
             get {
                 return ResourceManager.GetString("fltno", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Vollständig ähnelt.
+        /// </summary>
+        internal static string full {
+            get {
+                return ResourceManager.GetString("full", resourceCulture);
             }
         }
         
@@ -660,6 +678,15 @@ namespace fltstd26.Resources.Texts {
         internal static string view {
             get {
                 return ResourceManager.GetString("view", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Datenbank ansehen ähnelt.
+        /// </summary>
+        internal static string view_db {
+            get {
+                return ResourceManager.GetString("view_db", resourceCulture);
             }
         }
         

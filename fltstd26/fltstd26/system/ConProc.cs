@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Collections.Specialized.BitVector32;
 
 namespace fltstd26.system
 {
@@ -49,16 +50,16 @@ namespace fltstd26.system
             return output;
         }
 
-        public static void ReportActionStack(string Name,Stack<Stack<DatabaseAction>> ActionStack,bool Lock)
+        public static void ReportActionStack(string Name,Stack<List<DatabaseAction>> ActionStack,bool Lock)
         {
-            System.Diagnostics.Debug.WriteLine($"{Name} Report:\n   {ActionStack.Count} Actions on the stack\n   {(Lock ? "Locked" : "Unlocked")}\n   Elements:");
+            System.Diagnostics.Debug.WriteLine($"{Name} Report:\n   {ActionStack.Count} Actions on the stack\n   {Lock}\n   Elements:");
             foreach (var item in ActionStack)
             {
                 if (item.Count > 0)
                 {
                     foreach (var action in item)
                     {
-                        System.Diagnostics.Debug.WriteLine($"      -> Action {action.ActionID} performed - Data Type {action.DataType.Name}");
+                        System.Diagnostics.Debug.WriteLine($"      -> {action.ID} Action {action.ActionID} performed - Data Type {action.DataType.Name} - Foreign Key Link {action.ForeignKeyName} - Linked Action {action.LinkAction} - Object ID {action.ObjectID}");
 
                         System.Diagnostics.Debug.Write($"         Previous Value:\n           ");
                         PropertyInfo[] props = action.DataType.GetProperties();
@@ -70,7 +71,6 @@ namespace fltstd26.system
                             }
                             System.Diagnostics.Debug.WriteLine("");
                         }
-                        System.Diagnostics.Debug.WriteLine("");
 
                         System.Diagnostics.Debug.Write($"         Current Value:\n           ");
                         if (action.CurrentValue != null)
@@ -84,7 +84,8 @@ namespace fltstd26.system
                         else System.Diagnostics.Debug.WriteLine("null");
                     }
                 }
-                else System.Diagnostics.Debug.WriteLine($"    Action {item.Peek().ActionID} performed - Data Type {item.Peek().DataType.Name}");
+                else System.Diagnostics.Debug.WriteLine($"   {item.LastOrDefault()?.ID} Action {item.LastOrDefault()?.ActionID} performed - Data Type {item.LastOrDefault()?.DataType.Name} - Object ID {item.LastOrDefault()?.ObjectID}");
+                System.Diagnostics.Debug.WriteLine("");
             }
         }
     }

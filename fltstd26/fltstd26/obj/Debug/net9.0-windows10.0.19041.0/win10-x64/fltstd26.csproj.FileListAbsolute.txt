@@ -1893,3 +1893,5 @@ C:\Users\Arthur\Documents\GitHub\xglide\fltstd26\fltstd26\obj\Debug\net9.0-windo
 C:\Users\Arthur\Documents\GitHub\xglide\fltstd26\fltstd26\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\resizetizer\r\view.scale-150.png
 C:\Users\Arthur\Documents\GitHub\xglide\fltstd26\fltstd26\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\resizetizer\r\view.scale-200.png
 C:\Users\Arthur\Documents\GitHub\xglide\fltstd26\fltstd26\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\resizetizer\r\view.scale-400.png
+C:\Users\Arthur\Documents\GitHub\xglide\fltstd26\fltstd26\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\square_sans_serif_7.ttf
+C:\Users\Arthur\Documents\GitHub\xglide\fltstd26\fltstd26\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\resizetizer\f\square_sans_serif_7.ttf

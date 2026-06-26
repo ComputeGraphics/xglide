@@ -55,7 +55,7 @@ namespace fltstd26.XFly
                         if (Relink != null)
                         {
                             System.Diagnostics.Debug.WriteLine("Relinking directly");
-                            RData.UpdateProperty<Sheets.Target,int>(Relink.Id,FitFlightWeight[TResult - 1].Id,"LId");
+                            RData.UpdateProperty<int>(Relink.Id,FitFlightWeight[TResult - 1].Id,"LId", typeof(Sheets.Target));
                             AutoAct.PushAction(new() { ActionID = 3,CurrentValue = new Sheets.Target() { Id = Relink.Id,LId = FitFlightWeight[TResult - 1].Id,Name = Relink.Name,Persistent = Relink.Persistent,Price = Relink.Price,QuickTicket = Relink.QuickTicket,Weight = Relink.Weight },PreviousValue = Relink,DataType = typeof(Sheets.Target),ObjectID = Relink.Id });
                         }
                         else
@@ -92,20 +92,21 @@ namespace fltstd26.XFly
                             int Price = TgtPrice == 0 ? (x.Result.Item2 == -1 ? -USettings.FallbackPriceCat : -RData.Get<Sheets.Lfz>(x.Result.Item2)?.PriceCat ?? -USettings.FallbackPriceCat) : TgtPrice;
                             if (x.Result.Item1.Id != -1)
                             {
-
-                                Stack<DatabaseAction> a = new();
+                                DatabaseAction da;
+                                List<DatabaseAction> a = new();
                                 if (Relink != null)
                                 {
                                     System.Diagnostics.Debug.WriteLine("Relinking after new flight");
-                                    RData.UpdateProperty<Sheets.Target,int>(Relink.Id,x.Result.Item1.Id,"LId");
-                                    a.Push(new() { ActionID = 3,CurrentValue = new Sheets.Target() { Id = Relink.Id,LId = x.Result.Item1.Id,Name = Relink.Name,Persistent = Relink.Persistent,Price = Relink.Price,QuickTicket = Relink.QuickTicket,Weight = Relink.Weight },PreviousValue = Relink,DataType = typeof(Sheets.Target),ObjectID = Relink.Id });
+                                    RData.UpdateProperty(Relink.Id,x.Result.Item1.Id,"LId",typeof(Sheets.Target));
+                                    da = new() { ActionID = 3,CurrentValue = new Sheets.Target() { Id = Relink.Id,LId = x.Result.Item1.Id,Name = Relink.Name,Persistent = Relink.Persistent,Price = Relink.Price,QuickTicket = Relink.QuickTicket,Weight = Relink.Weight },PreviousValue = Relink,DataType = typeof(Sheets.Target),ObjectID = Relink.Id };
                                 }
                                 else
                                 {
                                     Sheets.Target newtgt = Manager.CreateLinkedTarget(x.Result.Item1.Id,Definition,TgtWeight,Price,Quick,Persistency);
-                                    a.Push(new() { ActionID = 1,CurrentValue = null,PreviousValue = newtgt,DataType = typeof(Sheets.Target),ObjectID = newtgt.Id });
+                                    da = new() { ActionID = 1,CurrentValue = null,PreviousValue = newtgt,DataType = typeof(Sheets.Target),ObjectID = newtgt.Id };
                                 }
-                                a.Push(new() { ActionID = 1,CurrentValue = null,PreviousValue = x.Result.Item1,DataType = typeof(Sheets.Flt),ObjectID = x.Result.Item1.Id });
+                                a.Add(da);
+                                a.Add(new() { ActionID = 1,CurrentValue = null,PreviousValue = x.Result.Item1,DataType = typeof(Sheets.Flt),ObjectID = x.Result.Item1.Id,LinkAction=da.ID, ForeignKeyName="LId" });
                                 AutoAct.PushAction(null,a);
                             }
                             else throw new Exception("Flug konnte nicht erstellt werden");

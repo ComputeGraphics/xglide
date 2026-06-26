@@ -421,4 +421,13 @@
   <data name="overlap_warning" xml:space="preserve">
     <value>überlappen. Falls dies nicht gewollt ist, sollten die betroffenen Slots verschoben oder gelöscht werden.</value>
   </data>
+  <data name="db" xml:space="preserve">
+    <value>Datenbank</value>
+  </data>
+  <data name="view_db" xml:space="preserve">
+    <value>Datenbank ansehen</value>
+  </data>
+  <data name="full" xml:space="preserve">
+    <value>Vollständig</value>
+  </data>
 </root>

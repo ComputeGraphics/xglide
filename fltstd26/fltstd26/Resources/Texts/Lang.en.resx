@@ -393,4 +393,13 @@
   <data name="overlap_warning" xml:space="preserve">
     <value>overlap. If this is not intentional you should either move the slot to a different time or remove it entirely.</value>
   </data>
+  <data name="db" xml:space="preserve">
+    <value>Database</value>
+  </data>
+  <data name="view_db" xml:space="preserve">
+    <value>View Database</value>
+  </data>
+  <data name="full" xml:space="preserve">
+    <value>Complete</value>
+  </data>
 </root>

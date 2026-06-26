@@ -68,10 +68,10 @@ public partial class XBlock : ContentView
             switch (id)
             {
                 case 0:
-                    RData.UpdateProperty<Sheets.Target,bool>(TargetID,!Attribs[id],"QuickTicket");
+                    RData.UpdateProperty<bool>(TargetID,!Attribs[id],"QuickTicket",typeof(Sheets.Target));
                     break;
                 case 1:
-                    RData.UpdateProperty<Sheets.Target,bool>(TargetID,!Attribs[id],"Persistent");
+                    RData.UpdateProperty<bool>(TargetID,!Attribs[id],"Persistent",typeof(Sheets.Target));
                     if(GestureRecognizers[0] is DragGestureRecognizer d) d.CanDrag = Attribs[id];
                     break;
                 case 2:

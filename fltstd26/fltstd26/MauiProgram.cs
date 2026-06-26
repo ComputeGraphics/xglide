@@ -15,6 +15,7 @@ namespace fltstd26
                     fonts.AddFont("OpenSans-Regular.ttf","OpenSansRegular");
                     fonts.AddFont("OpenSans-Semibold.ttf","OpenSansSemibold");
                     fonts.AddFont("Archive.otf","Archive");
+                    fonts.AddFont("square_sans_serif_7.ttf","SquareSans");
                     fonts.AddFont("ZenDots-Regular.ttf","ZenDots");
                 })
                 .UseMauiCommunityToolkit();

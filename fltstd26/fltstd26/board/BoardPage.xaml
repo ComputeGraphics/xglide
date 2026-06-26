@@ -2,39 +2,48 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:sys="clr-namespace:System;assembly=netstandard"
+             xmlns:uset="clr-namespace:fltstd26.etc"
              x:Class="fltstd26.board.BoardPage"
-             x:DataType="sys:DateTime"
              Title="">
     <Grid RowDefinitions="Auto,*,Auto">
         <Grid ColumnDefinitions="Auto,*,Auto,Auto"
+              Padding="15,10"
+              ColumnSpacing="35"
               BackgroundColor="{AppThemeBinding Dark={StaticResource PrimaryDark}, Light={StaticResource Primary}}">
             <Image Aspect="AspectFit"
+                   WidthRequest="{Binding Source={x:Static uset:USettings.LogoSize_L}}"
                    x:Name="TopIconL"/>
             <Label HorizontalOptions="Start"
                    Grid.Column="1"
-                   FontSize="Header"
+                   VerticalOptions="Center"
+                   FontFamily="ZenDots"
+                   FontSize="{Binding Source={x:Static uset:USettings.TitleSize}}"
                    x:Name="BoardTitle"/>
             <Image Aspect="AspectFit"
+                   WidthRequest="{Binding Source={x:Static uset:USettings.LogoSize_R}}"
                    Grid.Column="2"
                    x:Name="TopIconR"/>
-            <Grid RowDefinitions="*, Auto"
-                  BindingContext="{x:Static sys:DateTime.Now}"
-                  Grid.Column="3">
+            <VerticalStackLayout Grid.Column="3"
+                                 VerticalOptions="Center">
                 <Label x:Name="BoardTime"
                        HorizontalOptions="Center"
-                       FontFamily="Archive"
+                       FontSize="{Binding Source={x:Static uset:USettings.ClockSize}}"
+                       FontFamily="SquareSans"
                        FontAttributes="Bold"/>
                 <Label x:Name="BoardDate"
-                       FontFamily="ZenDots"
-                       Grid.Row="1"/>
-            </Grid>
+                       HorizontalOptions="Center"
+                       FontSize="{Binding Source={x:Static uset:USettings.DateSize}}"
+                       FontFamily="ZenDots"/>
+            </VerticalStackLayout>
         </Grid>
         <Grid Grid.Row="1"
               RowDefinitions="Auto,*">
             <Grid x:Name="XTitles"/>
-            <Grid Grid.Row="1"
+            <ScrollView Grid.Row="1">
+                <VerticalStackLayout 
                   BackgroundColor="{AppThemeBinding Dark={StaticResource Gray800}, Light={StaticResource Gray200}}"
                   x:Name="XBoard"/>
+            </ScrollView>
         </Grid>
         <Grid Grid.Row="2">
             <Label Text="Message Center"/>

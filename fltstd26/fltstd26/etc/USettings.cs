@@ -3,6 +3,7 @@ using fltstd26.Resources.Texts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -47,13 +48,15 @@ namespace fltstd26.etc
         //General
         internal static bool AskForNodeMove = true;
         internal static bool AskForNodePriceChange = true;
-        internal static bool FlashingLights = true; //IS THIS A KANYE REFERENCE?
 
         //Properties
         internal static List<string> Additionals = ["Test"];
 
         //XBOARD
-        internal static List<string> Columns = ["eID","Aircraft","Target","Time","Status"];
+        // Name, Link, Width
+        internal static List<(string, string, int)> Columns = [("eID", "Flt.EId", 0), ("Aircraft", "Lfz.Reg", 0),("Target", "Ctr.TargetVSL", 0), ("Time", "Slot.STime" , 0),("Add", "Ctr.Adds",0), ("Status","Ctr.Status", 0)];
+        // \/ Moved here \/
+        internal static bool FlashingLights = true; //IS THIS A KANYE REFERENCE?
 
         //XFLY
         //Manager
@@ -74,6 +77,18 @@ namespace fltstd26.etc
         internal static bool IgnoreTransactionWeight = false;
         internal static bool IgnoreTransactionLength = false;
         internal static string Homebase = "EDFP";
- 
+        
+        
+        internal static bool TargetOriented = false;
+        internal static bool SortByTime = true;
+        //Optimiert für FHD
+        internal static int LogoSize_L = 144;
+        internal static int LogoSize_R = 144;
+        internal static int TitleSize = 54;
+        internal static int ClockSize = 48;
+        internal static int DateSize = 24;
+        internal static int FlashSize = 36;
+        internal static int ElementSize = 24;
+        internal static string BoardTitle = "Tag der offenen Tür 2026";
     }
 }

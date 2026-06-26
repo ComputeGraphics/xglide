@@ -91,9 +91,9 @@ namespace fltstd26.system
                     new XElement("Properties",
                         new XElement("Additionals",string.Join(';', USettings.Additionals))
                     ),
-                    new XElement("XBOARD",
+                    /*new XElement("XBOARD",
                         new XElement("Columns",string.Join(';', USettings.Columns))
-                    ),
+                    ),*/
                     new XElement("XFLY",
                         new XElement("Manager",
                             new XElement("AutoASAP",USettings.AutoASAP),
@@ -146,7 +146,7 @@ namespace fltstd26.system
                     USettings.Additionals = uconfig.Element("Additionals")?.Value.Split(';').ToList() ?? [];
 
                     //XBOARD
-                    USettings.Columns = uconfig.Element("Columns")?.Value.Split(';').ToList() ?? [];
+                    //USettings.Columns = uconfig.Element("Columns")?.Value.Split(';').ToList() ?? [];
 
                     //XFLY
                     //Manager
