@@ -22,8 +22,4 @@ public partial class XConsole : Window
             instance!.XConsoleContent.Text += entry + Environment.NewLine;
         }
     }
-	private void Window_Closed(object sender, EventArgs e)
-	{
-		GSettings.XConsoleOpen = false;
-    }
 }

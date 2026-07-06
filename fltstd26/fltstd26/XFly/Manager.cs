@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Maui.Converters;
 using fltstd26.core;
 using fltstd26.etc;
+using fltstd26.etc.online;
 using fltstd26.Resources.Texts;
 using fltstd26.system;
 using System.ComponentModel.DataAnnotations;
@@ -23,7 +24,7 @@ namespace fltstd26.XFly
             {
                 Sheets.Slot? slot = RData.Get<Sheets.Slot>(flt.Slot);
                 if (slot is null || slot.Length != Length) continue;
-                if (!Now || slot.STime > (Quick ? DateTime.Now.AddMinutes(Quick ? -USettings.QuickTolerance : 0) : DateTime.Now))
+                if (!Now || slot.STime.TimeOfDay > (Quick ? DateTime.Now.AddMinutes(Quick ? -USettings.QuickTolerance : 0).TimeOfDay : DateTime.Now.TimeOfDay))
                 {
                     if (FlightFitsWeight(flt.Id,flt.Lfz,Weight)) flts.Add(flt);
                 }
@@ -47,12 +48,12 @@ namespace fltstd26.XFly
             return CompatibleSlots;
         }
 
-        public static List<int> FindAvailableAircraft(int SlotID,bool Auto)
+        public static List<int> FindAvailableAircraft(int SlotID,bool Auto,int? PriceFilter)
         {
             List<int> AvailableAircraft = [];
             foreach (Sheets.Lfz lfz in RData.GetAircraftTable())
             {
-                if ((!Auto || lfz.AutoAssign == true) && lfz.AvailTimes is not null && lfz.AvailTimes.Where(x => x == SlotID).Any())
+                if ((!Auto || lfz.AutoAssign == true) && lfz.AvailTimes is not null && lfz.AvailTimes.Where(x => x == SlotID).Any() && (PriceFilter == null || lfz.PriceCat == PriceFilter))
                 {
                     AvailableAircraft.Add(lfz.Id);
                 }
@@ -170,7 +171,7 @@ namespace fltstd26.XFly
                         //Datenbankaktion
                         ConProc.Log($"[XFLY-MANAGER] Target {Node.TargetID} will be transacted from flight {TargetNode.LId} to {lid}");
 
-                        Tuple<int, DatabaseAction?> t = new(lid, null);
+                        Tuple<int,DatabaseAction?> t = new(lid,null);
                         return (() =>
                         {
                             if (RData.UpdateProperty<int>(Node.TargetID,lid,"LId",typeof(Sheets.Target)))
@@ -204,7 +205,7 @@ namespace fltstd26.XFly
                                 //Datenbankaktion awaitable machen. Xplan refresh und cleanup passieren vor oder gleichzeitig mit aktion
                                 return (async () =>
                                 {
-                                    (Sheets.Flt, int) r = await Builder.CreateFlight(TargetNode.Weight,Adds,Status,TargetSlot?.Length,TargetNode.QuickTicket,Stack.LFZID,[Stack.SLTID]);
+                                    (Sheets.Flt, int) r = await Builder.CreateFlight(TargetNode.Weight,Adds,Status,TargetSlot?.Length,TargetNode.QuickTicket,0,Stack.LFZID,[Stack.SLTID]);
                                     if (r.Item1.Id != -1 && RData.UpdateProperty<int>(Node.TargetID,r.Item1.Id,"LId",typeof(Sheets.Target)))
                                     {
                                         RData.UpdateProperty<int>(Node.TargetID,newpc,"Price",typeof(Sheets.Target));
@@ -270,6 +271,38 @@ namespace fltstd26.XFly
         {
             return null;
         }
+
+        //Determine für einen ganzen Slot statt einen Flug!!!
+        public static void DetermineStatus(Sheets.Slot slt,bool UseOGN)
+        {
+            List<byte> fltstatus = [];
+            List<Sheets.Flt?>? flts = RData.GetWhere<Sheets.Flt>($"slot={slt.Id}");
+            if (flts == null) return;
+            foreach (Sheets.Flt? flt in flts)
+            {
+                if (flt == null) continue;
+                byte status =(byte)(slt.Delay ? 3 : 0);
+                if (DateTime.Now.TimeOfDay >= slt.STime.TimeOfDay)
+                {
+                    status = 2;
+
+                    if (UseOGN)
+                    {
+                        (byte, int) online = OnlineManager.DetermineOnline(flt,slt);
+                        status = online.Item1;
+                    }
+                    else
+                    {
+                        if (DateTime.Now.TimeOfDay >= slt.FTime.TimeOfDay) status = 7;
+                        else if (DateTime.Now.TimeOfDay >= slt.STime.TimeOfDay.Add(new TimeSpan(0,(int)Double.Ceiling(((slt.FTime.TimeOfDay - slt.STime.TimeOfDay).TotalMinutes - slt.Length) / 2),0))) status = 5;
+                    }
+                    //dpt/airborne/app/finished - OGN
+                }
+                fltstatus.Add(status);
+
+            }
+        }
+
 
         public static int FormatPrice(int price) => price < 0 ? RData.Get<Sheets.PriceCat>(price * -1)?.Price ?? RData.Get<Sheets.PriceCat>(USettings.FallbackPriceCat)?.Price ?? 0 : price;
     }

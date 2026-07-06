@@ -495,3 +495,4 @@ C:\Users\Arthur\Documents\GitHub\xglide\fltstd26\fltstd26\obj\Debug\net9.0-macca
 C:\Users\Arthur\Documents\GitHub\xglide\fltstd26\fltstd26\obj\Debug\net9.0-maccatalyst\maccatalyst-x64\fltstd26.dll
 C:\Users\Arthur\Documents\GitHub\xglide\fltstd26\fltstd26\obj\Debug\net9.0-maccatalyst\maccatalyst-x64\refint\fltstd26.dll
 C:\Users\Arthur\Documents\GitHub\xglide\fltstd26\fltstd26\obj\Debug\net9.0-maccatalyst\maccatalyst-x64\fltstd26.pdb
+C:\Users\Arthur\Documents\GitHub\xglide\fltstd26\fltstd26\obj\Debug\net9.0-maccatalyst\maccatalyst-x64\resizetizer\f\square_sans_serif_7.ttf

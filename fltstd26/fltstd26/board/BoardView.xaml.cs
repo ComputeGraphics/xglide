@@ -1,10 +1,16 @@
+using fltstd26.etc;
+using fltstd26.system;
+
 namespace fltstd26.board;
 
 public partial class BoardView : ContentView
 {
+	//Scheduler? FlashClock = null;
+
 	//FL - Flash Light
-	// 0 - aus, 1 - grün, 2 - rot, 3 - beide
-	public BoardView(View[] contents, int[] widths, byte FL)
+	// 0 - aus, 1 - grün, 2 - rot
+	// 4 - grün blinken, 5 - rot blinken, 6 - switch blinken
+	public BoardView(View[] contents, double[] widths, byte FL)
 	{
 		InitializeComponent();
         if (contents.Length == widths.Length)
@@ -30,7 +36,37 @@ public partial class BoardView : ContentView
 
 	public void UpdateFlash(byte FL)
 	{
-        GreenLight.TextColor = FL == 1 || FL == 3 ? Colors.ForestGreen : Colors.DarkGray;
-        RedLight.TextColor = FL == 2 || FL == 3 ? Colors.IndianRed : Colors.DarkGray;
+		BoardTimeServ.Unload(this.Id);
+        switch (FL)
+		{
+			case 0:
+                RedLight.TextColor = Colors.DarkGray;
+                GreenLight.TextColor = Colors.DarkGray;
+				break;
+			case 1:
+                RedLight.TextColor = Colors.DarkGray;
+                GreenLight.TextColor = Colors.ForestGreen;
+				break;
+			case 2:
+                RedLight.TextColor = Colors.IndianRed;
+                GreenLight.TextColor = Colors.DarkGray;
+				break;
+			case 4:
+				BoardTimeServ.Clock(this.Id, () => GreenLight.TextColor = GreenLight.TextColor == Colors.DarkGray ? Colors.ForestGreen : Colors.DarkGray);
+				break;
+            case 5:
+				BoardTimeServ.Clock(this.Id,() => RedLight.TextColor = RedLight.TextColor == Colors.DarkGray ? Colors.IndianRed : Colors.DarkGray);      
+                break;
+			case 6:
+                RedLight.TextColor = Colors.IndianRed;
+                BoardTimeServ.Clock(this.Id,
+					() => {
+                        GreenLight.TextColor = GreenLight.TextColor == Colors.DarkGray ? Colors.ForestGreen : Colors.DarkGray;
+                        RedLight.TextColor = RedLight.TextColor == Colors.DarkGray ? Colors.IndianRed : Colors.DarkGray;
+						});
+                break;
+        }
     }
+
+	public void TerminateFlash() => BoardTimeServ.Unload(Id);
 }

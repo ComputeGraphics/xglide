@@ -19,13 +19,14 @@ namespace fltstd26.system
          *  if any other action after redo -> pop action stack
          *  if any other action after undo -> pop redo stack
         */
-        private static Dictionary<int,(string, int)> ForeignKeyBuffer = [];
+        private static readonly Dictionary<int,(string, int)> ForeignKeyBuffer = [];
         internal static int ActionIncrementor = 0;
 
         private static bool RedoLock = false;
         private static bool UndoLock = false;
         private static readonly Stack<List<DatabaseAction>> ActionStack = new();
         private static readonly Stack<List<DatabaseAction>> RedoStack = new();
+        internal static Tuple<Button,Button>? ActionButtons = null;
 
         /// <summary>
         /// Foreign Key Creation Actions before!
@@ -39,6 +40,11 @@ namespace fltstd26.system
         /// <param name="s">Aktionsstack - NULL oder nich angegeben, wenn nicht benötigt</param>
         public static void PushAction(DatabaseAction? a,List<DatabaseAction>? s = null)
         {
+            if (ActionButtons != null)
+            {
+                ActionButtons.Item1.IsEnabled = !RedoLock && ActionStack.Count != 0;
+                ActionButtons.Item2.IsEnabled = !UndoLock && RedoStack.Count != 0;
+            }
             if (RedoLock)
             {
                 //GSettings.main?.RefreshActionButtons(false,true);
@@ -125,7 +131,7 @@ namespace fltstd26.system
                             if (actions[i].ForeignKeyName != null)
                             {
                                 System.Diagnostics.Debug.WriteLine($"Action {actions[i].LinkAction}: {Id} for {actions[i].ForeignKeyName} added");
-                                ForeignKeyBuffer.Add(actions[i].LinkAction,(actions[i].ForeignKeyName!, Id));
+                                ForeignKeyBuffer.TryAdd(actions[i].LinkAction,(actions[i].ForeignKeyName!, Id));
                             }
                             //Object ID update
                             NewID = Id;

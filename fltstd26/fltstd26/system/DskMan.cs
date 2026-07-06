@@ -85,8 +85,7 @@ namespace fltstd26.system
                     ),
                     new XElement("General",
                         new XElement("AskForNodeMove",USettings.AskForNodeMove),
-                        new XElement("AskForNodePriceChange",USettings.AskForNodePriceChange),
-                        new XElement("FlashingLights",USettings.FlashingLights)
+                        new XElement("AskForNodePriceChange",USettings.AskForNodePriceChange)
                     ),
                     new XElement("Properties",
                         new XElement("Additionals",string.Join(';', USettings.Additionals))
@@ -140,7 +139,6 @@ namespace fltstd26.system
                     //General
                     USettings.AskForNodeMove = GSettings.GetBoolean(uconfig.Element("AskForNodeMove")?.Value, true);
                     USettings.AskForNodePriceChange = GSettings.GetBoolean(uconfig.Element("AskForNodePriceChange")?.Value, true);
-                    USettings.FlashingLights = GSettings.GetBoolean(uconfig.Element("FlashingLights")?.Value,true);
 
                     //Properties
                     USettings.Additionals = uconfig.Element("Additionals")?.Value.Split(';').ToList() ?? [];

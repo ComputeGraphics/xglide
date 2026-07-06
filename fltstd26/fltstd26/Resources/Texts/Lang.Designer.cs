@@ -106,6 +106,15 @@ namespace fltstd26.Resources.Texts {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Bereinigen ähnelt.
+        /// </summary>
+        internal static string cleanup {
+            get {
+                return ResourceManager.GetString("cleanup", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Schließen ähnelt.
         /// </summary>
         internal static string close {
@@ -142,6 +151,15 @@ namespace fltstd26.Resources.Texts {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Beschädigte Verknüpfung ähnelt.
+        /// </summary>
+        internal static string corrupted_links {
+            get {
+                return ResourceManager.GetString("corrupted_links", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Benutzerdefiniert ähnelt.
         /// </summary>
         internal static string custom {
@@ -160,6 +178,15 @@ namespace fltstd26.Resources.Texts {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Verspätung ähnelt.
+        /// </summary>
+        internal static string delay {
+            get {
+                return ResourceManager.GetString("delay", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Entfernen ähnelt.
         /// </summary>
         internal static string delete {
@@ -174,6 +201,15 @@ namespace fltstd26.Resources.Texts {
         internal static string delete_warning {
             get {
                 return ResourceManager.GetString("delete_warning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Nicht berücksichtigen ähnelt.
+        /// </summary>
+        internal static string dont_care {
+            get {
+                return ResourceManager.GetString("dont_care", resourceCulture);
             }
         }
         
@@ -291,6 +327,15 @@ namespace fltstd26.Resources.Texts {
         internal static string info {
             get {
                 return ResourceManager.GetString("info", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Verknüpfung ähnelt.
+        /// </summary>
+        internal static string link {
+            get {
+                return ResourceManager.GetString("link", resourceCulture);
             }
         }
         
@@ -448,11 +493,29 @@ namespace fltstd26.Resources.Texts {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Tageszeit ähnelt.
+        /// </summary>
+        internal static string night {
+            get {
+                return ResourceManager.GetString("night", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Soll dieses Ticket/dieses Ziel wirklich verschoben werden? ähnelt.
         /// </summary>
         internal static string nodemove_question_sub {
             get {
                 return ResourceManager.GetString("nodemove_question_sub", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Benachrichtigung ähnelt.
+        /// </summary>
+        internal static string notification {
+            get {
+                return ResourceManager.GetString("notification", resourceCulture);
             }
         }
         
@@ -466,6 +529,24 @@ namespace fltstd26.Resources.Texts {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Manuell ähnelt.
+        /// </summary>
+        internal static string ogn_linkmanual {
+            get {
+                return ResourceManager.GetString("ogn_linkmanual", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Verbleibende ähnelt.
+        /// </summary>
+        internal static string ogn_linkremain {
+            get {
+                return ResourceManager.GetString("ogn_linkremain", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Öffnen ähnelt.
         /// </summary>
         internal static string open {
@@ -475,11 +556,29 @@ namespace fltstd26.Resources.Texts {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Überlappung ähnelt.
+        /// </summary>
+        internal static string overlap {
+            get {
+                return ResourceManager.GetString("overlap", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die überlappen. Falls dies nicht gewollt ist, sollten die betroffenen Slots verschoben oder gelöscht werden. ähnelt.
         /// </summary>
         internal static string overlap_warning {
             get {
                 return ResourceManager.GetString("overlap_warning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Überladung ähnelt.
+        /// </summary>
+        internal static string overload {
+            get {
+                return ResourceManager.GetString("overload", resourceCulture);
             }
         }
         
@@ -615,6 +714,15 @@ namespace fltstd26.Resources.Texts {
         internal static string targetcustomizer {
             get {
                 return ResourceManager.GetString("targetcustomizer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Das Ziel/Das Ticket ist jetzt fällig. ähnelt.
+        /// </summary>
+        internal static string ticket_notification {
+            get {
+                return ResourceManager.GetString("ticket_notification", resourceCulture);
             }
         }
         
@@ -799,7 +907,7 @@ namespace fltstd26.Resources.Texts {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Anflug ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Gelandet ähnelt.
         /// </summary>
         internal static string xplan_status_app {
             get {
@@ -808,7 +916,7 @@ namespace fltstd26.Resources.Texts {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Abgesagt ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Gestrichen ähnelt.
         /// </summary>
         internal static string xplan_status_cancel {
             get {
@@ -817,7 +925,7 @@ namespace fltstd26.Resources.Texts {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Verzögert ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Verspätet ähnelt.
         /// </summary>
         internal static string xplan_status_delayed {
             get {
@@ -835,7 +943,7 @@ namespace fltstd26.Resources.Texts {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Abgeschlossen ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Angekommen ähnelt.
         /// </summary>
         internal static string xplan_status_finished {
             get {
@@ -889,7 +997,7 @@ namespace fltstd26.Resources.Texts {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Unklar ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Unbekannt ähnelt.
         /// </summary>
         internal static string xplan_status_unclear {
             get {

@@ -139,7 +139,7 @@ namespace fltstd26.core
         internal static List<Sheets.Target> GetTargetTable() => (Active() ? rdb?.Table<Sheets.Target>().ToList() : []) ?? [];
         internal static List<Sheets.PriceCat> GetPriceTable() => (Active() ? rdb?.Table<Sheets.PriceCat>().ToList() : []) ?? [];
 
-        internal static T? Get<T>(object pk, Type? type = null) where T : class, new()
+        internal static T? Get<T>(object pk) where T : class, new()
         {
             try
             {
@@ -208,13 +208,14 @@ namespace fltstd26.core
             }   
         }
 
-        internal static bool UpdateProperty<X>(object pk, X val, string prop, Type type) where X : struct
+        internal static bool UpdateProperty<X>(object pk, X? val, string prop, Type type, bool cannull = false)
         {
             try
             {
                 PropertyInfo? match = type.GetProperties().Where(p => p.Name == prop).FirstOrDefault();
                 if (match != null)
                 {
+                    if (val == null && !cannull) throw new Exception("Unzulässiger Nullwert");
                     object? prev = Get(pk, type);
                     match.SetValue(prev,val);
                     rdb?.Update(prev);

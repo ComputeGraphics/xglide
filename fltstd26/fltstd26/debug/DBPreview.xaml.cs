@@ -70,7 +70,7 @@ public partial class DBPreview : Window
                     object? value = props[colIndex].GetValue(flt);
                     Label cellLabel = new()
                     {
-                        Text = value is byte[] b ? string.Join(", ",b) : value?.ToString() ?? "",
+                        Text = value is byte[] b ? string.Join(", ",b) : value?.ToString() ?? "null",
                         Margin = new Thickness(0,5,0,5),
                         VerticalOptions = LayoutOptions.Center,
                         HorizontalOptions = LayoutOptions.Center

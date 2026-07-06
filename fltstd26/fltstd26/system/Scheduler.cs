@@ -4,7 +4,7 @@
     {
         public bool IsRunning => timer?.IsRunning ?? false;
         private readonly IDispatcherTimer? timer;
-        public Scheduler(TimeSpan? iv,EventHandler ev,bool repeat,TimeSpan? synchronize = null)
+        internal Scheduler(TimeSpan? iv,EventHandler ev,bool repeat,TimeSpan? synchronize = null)
         {
             timer = Dispatcher.GetForCurrentThread()?.CreateTimer();
             if (timer is null) return;
@@ -14,13 +14,12 @@
             if (synchronize != null)
             {
                 //Habe ich schon erwähnt, dass ich Rekursion liebe? ;-;
-                _ = new Scheduler(synchronize,Start,false);
+                _ = new Scheduler(synchronize,(s,e) => Start(),false);
             }
-            else Start(null,null);
+            else Start();
         }
 
-        private void Start(object? s, EventArgs? e) { timer?.Start(); System.Diagnostics.Debug.WriteLine("Synced"); }
-
-        public void Terminate() { if(timer is not null && timer.IsRunning) timer.Stop(); }
+        internal void Start() { timer?.Start(); System.Diagnostics.Debug.WriteLine("Synced"); }
+        internal void Pause() { if(timer is not null && timer.IsRunning) timer.Stop(); }
     }
 }

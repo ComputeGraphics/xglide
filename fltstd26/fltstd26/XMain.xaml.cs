@@ -29,6 +29,8 @@ namespace fltstd26
         {
             InitializeComponent();
             GSettings.nav = Navigation;
+            TimeServ.Init();
+            AutoAct.ActionButtons = new(XPlan_UndoButton,XPlan_RedoButton);
             DskMan.Init();
             RData.Init();
             OGN.Sync();
@@ -143,7 +145,7 @@ namespace fltstd26
                 Deselector.Tapped += NodeDeselectionHandler;
                 XPlan.GestureRecognizers.Add(Deselector);
                 XPlan.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
-                XPlan.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto,});
+                XPlan.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
                 ImageButton refreshButton = new()
                 {
                     BackgroundColor = Colors.Transparent,
@@ -159,15 +161,22 @@ namespace fltstd26
                 foreach (Sheets.Lfz lfz in allLFZ)
                 {
                     XPlan.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Star });
-                    Label lbl = new()
+                    VerticalStackLayout v = [ new Label()
                     {
                         Text = lfz.Reg,
                         VerticalOptions = LayoutOptions.Center,
                         HorizontalOptions = LayoutOptions.Center,
                         FontAttributes = FontAttributes.Bold,
                         FontSize = 24,
-                    };
-                    XPlan.Add(lbl,XPlan.ColumnDefinitions.Count - 1,0);
+                    }, new Label()
+                    {
+                        Text = lfz.Type,
+                        VerticalOptions = LayoutOptions.Center,
+                        HorizontalOptions = LayoutOptions.Center,
+                        FontSize = 16,
+                    },];
+                    v.Margin = new Thickness(0,10);
+                    XPlan.Add(v,XPlan.ColumnDefinitions.Count - 1,0);
                 }
                 foreach (Sheets.Slot fts in RData.GetSlotsTable())
                 {
@@ -176,11 +185,11 @@ namespace fltstd26
                     XPlan.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
                     Grid slot = new()
                     {
-                        Margin = new Thickness(0,0,10,0),
+                        Padding = new Thickness(4),
                         ColumnDefinitions =
                     {
-                        new ColumnDefinition(),
-                        new ColumnDefinition()
+                        new ColumnDefinition(GridLength.Star),
+                        new ColumnDefinition(GridLength.Auto)
                     },
                         RowDefinitions =
                     {
@@ -189,35 +198,58 @@ namespace fltstd26
                     }
                     };
 
-                    Label lbl = new()
+                    VerticalStackLayout v = [
+                    new Label()
                     {
-                        Text = $"{fts.STime:HH:mm}\n{fts.FTime:HH:mm}",
+                        Text = $"{fts.STime:HH:mm}",
                         FontAttributes = FontAttributes.Bold,
-                        VerticalOptions = LayoutOptions.End,
-                        HorizontalOptions = LayoutOptions.Center,
+                        VerticalOptions = LayoutOptions.Center,
+                        HorizontalOptions = LayoutOptions.End,
                         FontSize = 20,
-                    };
-                    slot.Add(lbl,0,0);
-                    slot.SetColumnSpan(lbl,2);
+                    },
+
+                    new Label()
+                    {
+                        Text = $"- {fts.FTime:HH:mm}",
+                        FontAttributes = FontAttributes.Bold,
+                        VerticalOptions = LayoutOptions.Center,
+                        HorizontalOptions = LayoutOptions.End,
+                        FontSize = 20,
+                    },
+
+                    new Label()
+                    {
+                        Text = $"({fts.Length} min)",
+                        VerticalOptions = LayoutOptions.Center,
+                        HorizontalOptions = LayoutOptions.Center,
+                        FontSize = 18,
+                    }
+                    ];
+                    v.Margin = new Thickness(5,10);
+                    v.VerticalOptions = LayoutOptions.Center;
+                    slot.Add(v,0,0);
+                    slot.SetRowSpan(v,2);
 
                     Button min5 = new()
                     {
                         Text = "+5",
                         CornerRadius = 0,
-                        FontSize = 14,
+                        Margin = new Thickness(0,0,2,4),
+                        FontSize = 12,
                         FontAttributes = FontAttributes.Bold,
-                        VerticalOptions = LayoutOptions.Start,
+                        VerticalOptions = LayoutOptions.End,
                     };
-                    slot.Add(min5,0,1);
-                    Button min15 = new()
+                    slot.Add(min5,1,0);
+                    Button min10 = new()
                     {
-                        Text = "+15",
+                        Text = "+10",
                         CornerRadius = 0,
-                        FontSize = 14,
+                        Margin = new Thickness(0,4,2,0),
+                        FontSize = 12,
                         FontAttributes = FontAttributes.Bold,
                         VerticalOptions = LayoutOptions.Start,
                     };
-                    slot.Add(min15,1,1);
+                    slot.Add(min10,1,1);
 
                     XPlan.Add(slot,0,XPlan.RowDefinitions.Count - 1);
                     for (int i = 0; i < allLFZ.Count; i++)
@@ -519,11 +551,27 @@ namespace fltstd26
         private void XConsoleClick(object sender,EventArgs e)
         {
             Window xConsoleWindow = new XConsole();
+            xConsoleWindow.Destroying += ConProc.Window_Closed;
             Application.Current?.OpenWindow(xConsoleWindow);
         }
         private void XBoardClick(object sender,EventArgs e)
         {
-            Application.Current?.OpenWindow(new Window(new BoardPage()));
+            Window w = new(new BoardPage());
+            w.Created += (s,e) =>
+            {
+                BoardController.WindowWidth = w.Width;
+                BoardPage.Refresh();
+            };
+
+            //RESIZE BUG
+            w.SizeChanged += (s,e) =>
+            {
+                BoardController.WindowWidth = w.Width;
+                BoardPage.Refresh();
+            };
+            w.Destroying += (s,e) => BoardController.Terminate();
+
+            Application.Current?.OpenWindow(w);
         }
 
 
@@ -539,7 +587,7 @@ namespace fltstd26
             {
                 if (TGT_Price_Dropdown.SelectedIndex > 0)
                 {
-                    TgtPrice = -CurrentPriceCatIds[TGT_Price_Dropdown.SelectedIndex];
+                    TgtPrice = -CurrentPriceCatIds[TGT_Price_Dropdown.SelectedIndex-1];
                 }
                 else
                 {
@@ -551,11 +599,11 @@ namespace fltstd26
             int FltStatus = FLT_Status_Dropdown_Enable.IsChecked ? GSettings.Status.Length - 1 : FLT_Status_Dropdown.SelectedIndex;
             int? LfzOverride = TGT_LFZ_Dropdown_Enable.IsChecked ? null : CurrentAircraftIds[TGT_LFZ_Dropdown.SelectedIndex];
             string Adds = "";
-            foreach (IView AddEntry in FLTAddsEntryContainer)
+            foreach (Entry entry in FLTAddsEntryContainer.OfType<Entry>())
             {
-                if (AddEntry is Entry entry) Adds += entry.Text == null || entry.Text.Trim() == String.Empty ? ';' : entry.Text.Trim().Replace(";",String.Empty) + ';';
+                Adds += entry.Text == null || entry.Text.Trim() == String.Empty ? ';' : (entry.Text.Trim().Replace(";",String.Empty) + ';');
             }
-            await Builder.CreateTarget(Definition,TgtWeight,FltLength,TgtPrice,TGT_Quickticket_Enable.IsChecked,TGT_Persistent_Enable.IsChecked,(byte)FltStatus,"",LfzOverride,TGT_Autotime_Enable.IsChecked ? null : TGT_Time_Picker.Time);
+            await Builder.CreateTarget(Definition,TgtWeight,FltLength,TgtPrice,TGT_Quickticket_Enable.IsChecked,TGT_Persistent_Enable.IsChecked,(byte)FltStatus,Adds,LfzOverride,TGT_Autotime_Enable.IsChecked ? null : TGT_Time_Picker.Time);
             XPlanRefresh();
         }
 
@@ -619,12 +667,6 @@ namespace fltstd26
         private void PriceCatAutoChanged(object sender,EventArgs e) => TGT_Price_Entry.IsVisible = !TGT_PriceCat_Dropdown_Enable.IsChecked && TGT_Price_Dropdown.SelectedIndex == 0;
 
         //////////////////////////////////////////INTERACTION BAR HANDLING//////////////////////////////////////////
-
-        internal void RefreshActionButtons(bool u,bool r)
-        {
-            //XPlan_UndoButton.IsEnabled = u;
-            //XPlan_RedoButton.IsEnabled = r;
-        }
         private void UndoInterClick(object sender,EventArgs e)
         {
             AutoAct.Undo();
@@ -807,11 +849,36 @@ namespace fltstd26
         ////////////////////////////////////////////MANAGE MENU HANDLING////////////////////////////////////////////
 
 
+
+        //Delay
+        private void CustomDelayClick(object sender, EventArgs e)
+        {
+
+        }
+
+        //Check DB
         private async void CheckDBClick(object sender,EventArgs e)
         {
             await Patcher.GeneralInspection();
-            XPlanRestart();
+            XPlanRefresh();
         }
+
+        private async void CheckDB_Unlink_Click(object sender,EventArgs e)
+        {
+            await Patcher.GeneralInspection();
+            XPlanRefresh();
+        }
+
+        private void CheckDB_Overload_Click(object sender,EventArgs e) => Patcher.TestOverload();
+        private void CheckDB_Overlap_Click(object sender,EventArgs e) => Patcher.TestOverlap();
+        private void CheckDB_Night_Click(object sender,EventArgs e) => Patcher.TestNight();
+        private void CheckDB_Cleanup_Click(object sender,EventArgs e)
+        {
+            Patcher.CleanupFlights();
+            XPlanRefresh();
+        }
+
+
 
 
         /////////////////////////////////////////////TOOLS MENU HANDLING////////////////////////////////////////////
@@ -819,6 +886,18 @@ namespace fltstd26
         private void OGN_RefreshClick(object sender,EventArgs e) => OGN.Sync();
 
         private void OGN_FetcherClick(object sender,EventArgs e) => Application.Current?.OpenWindow(new OnlineFetch());
+        private void OGN_LinkOverwriteClick(object sender,EventArgs e)
+        {
+            OGN.LinkAddress(false);
+            OGN.RelinkAddress(false,true);
+        }
+        private void OGN_LinkKeepClick(object sender,EventArgs e)
+        {
+            OGN.LinkAddress(false);
+            OGN.RelinkAddress(false,false);
+        }
+        private void OGN_LinkManualClick(object sender,EventArgs e) => OGN.RelinkAddress(true,true);
+        private void OGN_LinkRemainingManualClick(object sender,EventArgs e) => OGN.RelinkAddress(false,false);
 
         /////////////////////////////////////////////VIEW MENU HANDLING/////////////////////////////////////////////
 

@@ -1,17 +1,16 @@
-﻿using fltstd26.system;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
+﻿using fltstd26.core;
+using fltstd26.Resources.Texts;
+using fltstd26.system;
+using fltstd26.system.modals;
 using System.Text.Json;
-using System.Threading.Tasks;
+using System.Text.RegularExpressions;
 
 namespace fltstd26.etc.online
 {
     public static class OGN
     {
-        public static OGNLogbook CurrentOGN = new();
+        internal static OGNLogbook CurrentOGN = new();
+        internal static List<string> IgnoredAircraft = [];
 
         public static TimeSpan? FormatTime(string? time)
         {
@@ -23,11 +22,60 @@ namespace fltstd26.etc.online
 
         internal async static void Sync()
         {
-            ConProc.Log("[OGN] Synchronisieren...",1);
-            OGNLogbook? log = await Get(USettings.Homebase);
-            if (log != null) CurrentOGN = log;
+            try
+            {
+                ConProc.Log("[OGN] Synchronisieren...",0);
+                OGNLogbook log = await Get(USettings.Homebase) ?? throw new Exception("Keine Daten empfangen");
+                CurrentOGN = log;
+            }
+            catch (Exception ex)
+            {
+                ConProc.Log("[OGN] Fehler: " + ex.Message,2);
+                
+            }
         }
 
+        internal static void QeueSync(int min)
+        {
+
+        }
+
+        internal static void LinkAddress(bool Overwrite)
+        {
+            if (CurrentOGN.devices == null) return;
+            string nonASCII = @"[^\u0000-\u007F]+";
+            List<Sheets.Lfz> acs = RData.GetAircraftTable();
+            acs.ForEach(ac =>
+            {
+                if (Overwrite || (ac.OGN == null || ac.OGN == ""))
+                {
+                    RData.UpdateProperty<string>(ac.Id,
+                        CurrentOGN.devices.Find(x => x.registration != null && ac.Reg != null && 
+                        Regex.Replace(x.registration,nonASCII,string.Empty).Replace("-",string.Empty).Trim() == Regex.Replace(ac.Reg,nonASCII,string.Empty).Replace("-",string.Empty).Trim())?.address,
+                        "OGN",typeof(Sheets.Lfz),true);
+                }
+                
+            });
+        }
+        internal static async void RelinkAddress(bool allLfz, bool allAdr)
+        {
+            if (CurrentOGN.devices == null) return;
+            List<Sheets.Lfz> a = RData.GetAircraftTable();
+            List<Sheets.Lfz> acs = allLfz ? a : [..a.Where(x => x.OGN == null || x.OGN == "")];
+            IEnumerable<Device> dvs = allAdr ? CurrentOGN.devices : CurrentOGN.devices.Where(x => !a.Select(x => x.OGN).Contains(x.address));
+            List<(string, string, string)> elements = [("x.png", Lang.dont_care, ""),.. acs.Select(x => ("plane.png", x.Reg ?? x.Id.ToString(), x.Type))];
+            foreach(Device dv in dvs)
+            {
+                if(dv == null || dv.address == null) continue;
+                int index = -1;
+                await ModalPush.Selector(dv.registration + $"({dv.address})\r\n" + dv.aircraft_type,elements).ContinueWith(t => index = t.Result);
+                if (index > 0)
+                {
+                    RData.UpdateProperty<string>(acs[index - 1],dv.address,"OGN",typeof(Sheets.Lfz),true);
+                }
+                else if (index == -1) break;
+            }      
+        }
         public static async Task<string> GetRaw(string ap)
         {
             if (ap != "")

@@ -54,9 +54,7 @@ namespace fltstd26.etc
 
         //XBOARD
         // Name, Link, Width
-        internal static List<(string, string, int)> Columns = [("eID", "Flt.EId", 0), ("Aircraft", "Lfz.Reg", 0),("Target", "Ctr.TargetVSL", 0), ("Time", "Slot.STime" , 0),("Add", "Ctr.Adds",0), ("Status","Ctr.Status", 0)];
-        // \/ Moved here \/
-        internal static bool FlashingLights = true; //IS THIS A KANYE REFERENCE?
+        internal static List<(string, string, int)> Columns = [("eID", "Flt.EId", 10), ("Aircraft", "Lfz.Reg", 10),("Target", "Ctr.Target.VSL", 40), ("Time", "Slot.STime" , 10),("Add", "Ctr.Add",15), ("Status","Ctr.Status", 15)];
 
         //XFLY
         //Manager
@@ -77,18 +75,27 @@ namespace fltstd26.etc
         internal static bool IgnoreTransactionWeight = false;
         internal static bool IgnoreTransactionLength = false;
         internal static string Homebase = "EDFP";
-        
-        
+
+        //Angesetzte Minutenanzahl durch SyncLevel
+        internal static int OGNSyncLevel = 1;
+        internal static int OGNTolerance = 7;
+        internal static int TakeoffDuration = 2; // in min
+
         internal static bool TargetOriented = false;
         internal static bool SortByTime = true;
-        //Optimiert für FHD
-        internal static int LogoSize_L = 144;
-        internal static int LogoSize_R = 144;
-        internal static int TitleSize = 54;
-        internal static int ClockSize = 48;
-        internal static int DateSize = 24;
-        internal static int FlashSize = 36;
-        internal static int ElementSize = 24;
+        internal static bool UseTargetSquareFont = true;
         internal static string BoardTitle = "Tag der offenen Tür 2026";
+        //Optimiert für FHD
+
+        internal static short LogoSize_L = 144;
+        internal static short LogoSize_R = 144;
+        internal static short TitleSize = 54;
+        internal static short ClockSize = 48;
+        internal static short DateSize = 24;
+        internal static short FlashSize = 36;
+        internal static short ElementSize = 24;
+        internal static short TargetBorderThickness = 2;
+        
+        internal static short FlashInterval = 500;
     }
 }

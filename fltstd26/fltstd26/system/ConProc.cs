@@ -5,7 +5,6 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
-using static System.Collections.Specialized.BitVector32;
 
 namespace fltstd26.system
 {
@@ -87,6 +86,11 @@ namespace fltstd26.system
                 else System.Diagnostics.Debug.WriteLine($"   {item.LastOrDefault()?.ID} Action {item.LastOrDefault()?.ActionID} performed - Data Type {item.LastOrDefault()?.DataType.Name} - Object ID {item.LastOrDefault()?.ObjectID}");
                 System.Diagnostics.Debug.WriteLine("");
             }
+        }
+
+        internal static void Window_Closed(object? sender,EventArgs e)
+        {
+            GSettings.XConsoleOpen = false;
         }
     }
 }

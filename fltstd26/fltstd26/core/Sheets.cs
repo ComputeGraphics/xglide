@@ -31,6 +31,8 @@ namespace fltstd26.core
             public byte[]? AvailTimes { get; set; }
             [Column("autoassign")]
             public bool AutoAssign { get; set; }
+            [Column("ogn")]
+            public string? OGN { get; set; }
         }
 
         [Table("Slot")]
@@ -46,7 +48,9 @@ namespace fltstd26.core
             public DateTime FTime { get; set; }
             [Column("length")]
             public int Length { get; set; }
-        }
+            [Column("delay")]
+            public bool Delay { get; set; }
+    }
 
         [Table("Flt")]
         public class Flt

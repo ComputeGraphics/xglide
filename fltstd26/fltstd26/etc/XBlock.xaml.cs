@@ -11,7 +11,7 @@ public partial class XBlock : ContentView
     public int TargetID;
     public int Length;
     public bool[] Attribs;
-    private Scheduler? notifier = null;
+    private int NotifierID;
     public XBlock(Sheets.Target t,int l)
     {
         InitializeComponent();
@@ -54,9 +54,20 @@ public partial class XBlock : ContentView
     {
         if (id >= 0 && id < Attribs.Length && NodeIconStack.Children[id] is ImageButton interaction && interaction.Behaviors[0] is IconTintColorBehavior tint)
         {
-            ConProc.Log("[XBLOCK] Attributes of target " + TargetID.ToString() + " updated");
+            ConProc.Log($"[XBLOCK] Attribute {id} of target {TargetID} updated");
             AttribAction(id);
             tint.TintColor = Attribs[id] ? GSettings.PrimaryColour : GSettings.InactiveIcon;
+        }
+    }
+
+    //Wenn eine Slot STime erreicht wird werden alle Targets bei Attrib 2 disabled!!
+    internal void DisableAttrib(int id)
+    {
+        if (id >= 0 && id < Attribs.Length && NodeIconStack.Children[id] is ImageButton interaction && interaction.Behaviors[0] is IconTintColorBehavior tint)
+        {
+            ConProc.Log($"[XBLOCK] Attribute {id} of target {TargetID} disabled");
+            interaction.IsEnabled = false;
+            tint.TintColor = Colors.Transparent;
         }
     }
 
@@ -72,21 +83,16 @@ public partial class XBlock : ContentView
                     break;
                 case 1:
                     RData.UpdateProperty<bool>(TargetID,!Attribs[id],"Persistent",typeof(Sheets.Target));
-                    if(GestureRecognizers[0] is DragGestureRecognizer d) d.CanDrag = Attribs[id];
+                    if (GestureRecognizers[0] is DragGestureRecognizer d) d.CanDrag = Attribs[id];
                     break;
                 case 2:
                     //Notify
-                    if(!notifier?.IsRunning ?? true)
+                    if (Attribs[id]) TimeServ.Unschedule(NotifierID);
+                    else TimeServ.Schedule(DateTime.Now.TimeOfDay.Add(TimeSpan.FromSeconds(5)),() =>
                     {
-                        notifier = new(TimeSpan.FromSeconds(5),(s,e) =>
-                        {
-                            system.modals.ModalPush.Message("Test","Notifier Test");
-                        },false);
-                    }
-                    else
-                    {
-                        notifier?.Terminate();
-                    }
+                        system.modals.ModalPush.Message(Lang.notification,$"- {NodeName.Text} ({TargetID}) -\r\n{Lang.ticket_notification}");
+                        DisableAttrib(2);
+                    });
                     break;
                 case 3:
                     //Flag

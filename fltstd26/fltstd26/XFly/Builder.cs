@@ -40,6 +40,11 @@ namespace fltstd26.XFly
                                 if (lfz != null)
                                 {
                                     Sheets.PriceCat? pc = RData.Get<Sheets.PriceCat>(lfz.PriceCat);
+                                    if (TgtPrice < 0 && pc?.Id != -TgtPrice)
+                                    {
+                                        FitFlightWeight.Remove(i);
+                                        continue;
+                                    }
                                     PriceList.Add(pc?.Id ?? -1);
                                     content.Add(("plane.png", $"{i.EId ?? i.Id.ToString()} ({RData.Get<Sheets.Slot>(i.Slot)?.STime.ToShortTimeString() ?? "N/A"})", $"REG: {lfz?.Reg ?? "N/A"} PC: {pc?.Price} STATUS: {GSettings.Status[i.Status]}"));
                                 }
@@ -87,13 +92,13 @@ namespace fltstd26.XFly
                     await system.modals.ModalPush.Question(Lang.warning,Lang.newflt_warning).ContinueWith(t => result = t.Result);
                     if (result)
                     {
-                        await CreateFlight(TgtWeight,Adds,Status,FltLength,Quick,LfzOverride,OverrideSlotID).ContinueWith(x =>
+                        await CreateFlight(TgtWeight,Adds,Status,FltLength,Quick,TgtPrice,LfzOverride,OverrideSlotID).ContinueWith(x =>
                         {
                             int Price = TgtPrice == 0 ? (x.Result.Item2 == -1 ? -USettings.FallbackPriceCat : -RData.Get<Sheets.Lfz>(x.Result.Item2)?.PriceCat ?? -USettings.FallbackPriceCat) : TgtPrice;
                             if (x.Result.Item1.Id != -1)
                             {
                                 DatabaseAction da;
-                                List<DatabaseAction> a = new();
+                                List<DatabaseAction> a = [];
                                 if (Relink != null)
                                 {
                                     System.Diagnostics.Debug.WriteLine("Relinking after new flight");
@@ -109,7 +114,7 @@ namespace fltstd26.XFly
                                 a.Add(new() { ActionID = 1,CurrentValue = null,PreviousValue = x.Result.Item1,DataType = typeof(Sheets.Flt),ObjectID = x.Result.Item1.Id,LinkAction=da.ID, ForeignKeyName="LId" });
                                 AutoAct.PushAction(null,a);
                             }
-                            else throw new Exception("Flug konnte nicht erstellt werden");
+                            //else throw new Exception("Flug konnte nicht erstellt werden");
                         });
                     }
                     else throw new Exception("Erstellung des Fluges durch den Nutzer abgebrochen");
@@ -124,12 +129,12 @@ namespace fltstd26.XFly
         }
 
         // Gibt Tupel aus der Flight ID und der Luftfahrzeug ID zurück
-        public async static Task<(Sheets.Flt, int)> CreateFlight(int Weight,string? InAdd,byte InStatus,int? Length,bool Quick,int? LfzOverride,IEnumerable<int>? OverrideSlots)
+        public async static Task<(Sheets.Flt, int)> CreateFlight(int Weight,string? InAdd,byte InStatus,int? Length,bool Quick,int PriceFilter,int? LfzOverride,IEnumerable<int>? OverrideSlots)
         {
             try
             {
 
-                System.Diagnostics.Debug.WriteLine("Creating new flight. Length: " + Length.ToString());
+                System.Diagnostics.Debug.WriteLine("Creating new flight. Length: " + Length.ToString() + ", Price: " + PriceFilter.ToString());
                 int FltLength = Length is null ? USettings.DefaultFltLength : Length.Value;
                 List<int> FitSlots = Manager.FindCompatibleSlots(FltLength,USettings.AutoTimeCheck ? DateTime.Now.AddMinutes(Quick ? -USettings.QuickTolerance : 0) : null);
                 if (OverrideSlots != null) FitSlots = [.. FitSlots.Intersect(OverrideSlots)];
@@ -142,7 +147,7 @@ namespace fltstd26.XFly
                         for (int i = 0; i < FitSlots.Count; i++)
                         {
                             HashSet<int> SlotFlights = [.. (RData.GetWhere<Sheets.Flt>($"slot={FitSlots[i]}") ?? []).Select(flt => flt?.Lfz ?? -1)];
-                            IEnumerable<int> FitAircraft = Manager.FindAvailableAircraft(FitSlots[i],!LfzOverride.HasValue).Where(x => Manager.AircraftFitsWeight(x,Weight)).Except(SlotFlights);
+                            IEnumerable<int> FitAircraft = Manager.FindAvailableAircraft(FitSlots[i],!LfzOverride.HasValue,PriceFilter < 0 ? -PriceFilter : null).Where(x => Manager.AircraftFitsWeight(x,Weight)).Except(SlotFlights);
                             if (LfzOverride.HasValue) FitAircraft = [.. FitAircraft.Where(x => x == LfzOverride)];
                             //Kontingent geprüft
                             foreach (int Aircraft in FitAircraft)
@@ -165,7 +170,7 @@ namespace fltstd26.XFly
                         {
                             List<int> SlotFlightsT = [.. (RData.GetWhere<Sheets.Flt>($"slot={FitSlots[i]}") ?? []).Select(flt => flt?.Lfz ?? -1)];
                             //SlotFlightsT.ForEach(x => System.Diagnostics.Debug.WriteLine("Slot FLT: " + x));
-                            IEnumerable<int> FitAircraftT = Manager.FindAvailableAircraft(FitSlots[i],!LfzOverride.HasValue).Where(x => Manager.AircraftFitsWeight(x,Weight)).Except(SlotFlightsT);
+                            IEnumerable<int> FitAircraftT = Manager.FindAvailableAircraft(FitSlots[i],!LfzOverride.HasValue,PriceFilter < 0 ? -PriceFilter : null).Where(x => Manager.AircraftFitsWeight(x,Weight)).Except(SlotFlightsT);
                             //FitAircraftT.ForEach(x => System.Diagnostics.Debug.WriteLine("Fit AC: " + x));
                             if (FitAircraftT.Any())
                             {
@@ -199,7 +204,7 @@ namespace fltstd26.XFly
                         List<int> SelLfzs = [];
                         //System.Diagnostics.Debug.WriteLine("STOP 2");
                         HashSet<int> SlotFlights = [.. (RData.GetWhere<Sheets.Flt>($"slot={SelSlots[ProcResult.Item1.Id - 1]}") ?? []).Select(flt => flt?.Lfz ?? -1)];
-                        IEnumerable<int> FitAircraft = Manager.FindAvailableAircraft(SelSlots[ProcResult.Item1.Id - 1],!LfzOverride.HasValue).Where(x => Manager.AircraftFitsWeight(x,Weight)).Except(SlotFlights);
+                        IEnumerable<int> FitAircraft = Manager.FindAvailableAircraft(SelSlots[ProcResult.Item1.Id - 1],!LfzOverride.HasValue,PriceFilter < 0 ? -PriceFilter : null).Where(x => Manager.AircraftFitsWeight(x,Weight)).Except(SlotFlights);
                         if (LfzOverride.HasValue) FitAircraft = [.. FitAircraft.Where(x => x == LfzOverride)];
                         foreach (int ac in FitAircraft)
                         {

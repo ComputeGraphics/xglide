@@ -12,10 +12,12 @@
               ColumnSpacing="5">
             <Label Text="●"
                x:Name="GreenLight"
+               TextColor="DarkGray"
                FontSize="{Binding Source={x:Static uset:USettings.FlashSize}}"/>
             <Label Text="●"
                x:Name="RedLight"
                Grid.Column="1"
+               TextColor="DarkGray"
                FontSize="{Binding Source={x:Static uset:USettings.FlashSize}}"/>
         </Grid>
         <Grid x:Name="ColumnContainer"

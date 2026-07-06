@@ -68,7 +68,7 @@
 
 
             <MenuFlyoutSeparator/>
-            
+
             <MenuFlyoutSubItem Text="Debug">
                 <MenuFlyoutItem Text="Open Assistant"
                                 Clicked="OpenAssistant_Click"/>
@@ -96,16 +96,28 @@
                 <MenuFlyoutItem Text="Platzhalter"
                             Command="{Binding RefreshCommand}" />
             </MenuFlyoutSubItem>
+            <MenuFlyoutItem Text="{x:Static local:Lang.delay}"
+                            Clicked="CustomDelayClick" />
             <MenuFlyoutSeparator/>
             <MenuFlyoutItem Text="{x:Static local:Lang.view_db}"
                     Clicked="OpenDBPreview_Click"/>
 
             <MenuFlyoutSubItem Text="{x:Static local:Lang.check_db}">
                 <MenuFlyoutItem Text="{x:Static local:Lang.full}"
-                            Clicked="CheckDBClick" />
+                                Clicked="CheckDBClick" />
+                <MenuFlyoutItem Text="{x:Static local:Lang.corrupted_links}"
+                                Clicked="CheckDB_Unlink_Click" />
+                <MenuFlyoutItem Text="{x:Static local:Lang.overload}"
+                                Clicked="CheckDB_Overload_Click" />
+                <MenuFlyoutItem Text="{x:Static local:Lang.cleanup}"
+                                Clicked="CheckDB_Cleanup_Click" />
+                <MenuFlyoutItem Text="{x:Static local:Lang.night}"
+                                Clicked="CheckDB_Night_Click" />
+                <MenuFlyoutItem Text="{x:Static local:Lang.overlap}"
+                                Clicked="CheckDB_Overlap_Click" />
             </MenuFlyoutSubItem>
 
-            
+
         </MenuBarItem>
 
         <MenuBarItem Text="{x:Static local:Lang.menubar_network}">
@@ -120,6 +132,17 @@
                                 Clicked="OGN_RefreshClick"/>
                 <MenuFlyoutItem Text="{x:Static local:Lang.show}"
                                 Clicked="OGN_FetcherClick"/>
+                <MenuFlyoutSubItem Text="{x:Static local:Lang.link}">
+                    <MenuFlyoutItem Text="{x:Static local:Lang.newobj}"
+                                    Clicked="OGN_LinkOverwriteClick"/>
+                    <MenuFlyoutItem Text="{x:Static local:Lang.refresh}"
+                                    Clicked="OGN_LinkKeepClick"/>
+                    <MenuFlyoutItem Text="{x:Static local:Lang.ogn_linkmanual}"
+                                    Clicked="OGN_LinkManualClick"/>
+                    <MenuFlyoutItem Text="{x:Static local:Lang.ogn_linkremain}"
+                                    Clicked="OGN_LinkRemainingManualClick"/>
+                    
+                </MenuFlyoutSubItem>
             </MenuFlyoutSubItem>
         </MenuBarItem>
 
@@ -240,7 +263,8 @@
                 </Grid>
             </Border>
             <ScrollView Grid.Row="1"
-                        VerticalScrollBarVisibility="Always">
+                        VerticalScrollBarVisibility="Always"
+                        HorizontalScrollBarVisibility="Default">
                 <Grid RowSpacing="0"
                       ColumnSpacing="0"
                       Padding="10"

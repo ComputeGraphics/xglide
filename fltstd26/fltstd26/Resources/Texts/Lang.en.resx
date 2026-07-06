@@ -229,7 +229,7 @@
     <value>Airborne</value>
   </data>
   <data name="xplan_status_app" xml:space="preserve">
-    <value>Approach</value>
+    <value>Landed</value>
   </data>
   <data name="xplan_status_cancel" xml:space="preserve">
     <value>Cancelled</value>
@@ -241,13 +241,13 @@
     <value>Departing</value>
   </data>
   <data name="xplan_status_finished" xml:space="preserve">
-    <value>Finished</value>
+    <value>Arrived</value>
   </data>
   <data name="xplan_status_fuel" xml:space="preserve">
     <value>Refuel</value>
   </data>
   <data name="xplan_status_ontime" xml:space="preserve">
-    <value>On-Time</value>
+    <value>Scheduled</value>
   </data>
   <data name="xplan_status_outofservice" xml:space="preserve">
     <value>Out of Service</value>
@@ -259,7 +259,7 @@
     <value>Unavailable</value>
   </data>
   <data name="xplan_status_unclear" xml:space="preserve">
-    <value>Unclear</value>
+    <value>Unknown</value>
   </data>
   <data name="xplan_status_waiting" xml:space="preserve">
     <value>Waiting</value>
@@ -401,5 +401,41 @@
   </data>
   <data name="full" xml:space="preserve">
     <value>Complete</value>
+  </data>
+  <data name="dont_care" xml:space="preserve">
+    <value>Disregard</value>
+  </data>
+  <data name="delay" xml:space="preserve">
+    <value>Delay</value>
+  </data>
+  <data name="overload" xml:space="preserve">
+    <value>Overload</value>
+  </data>
+  <data name="cleanup" xml:space="preserve">
+    <value>Clean</value>
+  </data>
+  <data name="night" xml:space="preserve">
+    <value>Daytime</value>
+  </data>
+  <data name="overlap" xml:space="preserve">
+    <value>Overlap</value>
+  </data>
+  <data name="corrupted_links" xml:space="preserve">
+    <value>Corrupted Link</value>
+  </data>
+  <data name="link" xml:space="preserve">
+    <value>Link</value>
+  </data>
+  <data name="ogn_linkmanual" xml:space="preserve">
+    <value>Manual</value>
+  </data>
+  <data name="ogn_linkremain" xml:space="preserve">
+    <value>Remaining</value>
+  </data>
+  <data name="notification" xml:space="preserve">
+    <value>Notification</value>
+  </data>
+  <data name="ticket_notification" xml:space="preserve">
+    <value>The Target/Ticket is due now.</value>
   </data>
 </root>

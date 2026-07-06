@@ -241,15 +241,15 @@
     <comment>FLT Status</comment>
   </data>
   <data name="xplan_status_app" xml:space="preserve">
-    <value>Anflug</value>
+    <value>Gelandet</value>
     <comment>FLT Status</comment>
   </data>
   <data name="xplan_status_cancel" xml:space="preserve">
-    <value>Abgesagt</value>
+    <value>Gestrichen</value>
     <comment>FLT Status</comment>
   </data>
   <data name="xplan_status_delayed" xml:space="preserve">
-    <value>Verzögert</value>
+    <value>Verspätet</value>
     <comment>FLT Status</comment>
   </data>
   <data name="xplan_status_dpt" xml:space="preserve">
@@ -257,7 +257,7 @@
     <comment>FLT Status</comment>
   </data>
   <data name="xplan_status_finished" xml:space="preserve">
-    <value>Abgeschlossen</value>
+    <value>Angekommen</value>
     <comment>FLT Status</comment>
   </data>
   <data name="xplan_status_fuel" xml:space="preserve">
@@ -281,7 +281,7 @@
     <comment>FLT Status</comment>
   </data>
   <data name="xplan_status_unclear" xml:space="preserve">
-    <value>Unklar</value>
+    <value>Unbekannt</value>
     <comment>FLT Status</comment>
   </data>
   <data name="xplan_status_waiting" xml:space="preserve">
@@ -429,5 +429,41 @@
   </data>
   <data name="full" xml:space="preserve">
     <value>Vollständig</value>
+  </data>
+  <data name="dont_care" xml:space="preserve">
+    <value>Nicht berücksichtigen</value>
+  </data>
+  <data name="delay" xml:space="preserve">
+    <value>Verspätung</value>
+  </data>
+  <data name="overload" xml:space="preserve">
+    <value>Überladung</value>
+  </data>
+  <data name="cleanup" xml:space="preserve">
+    <value>Bereinigen</value>
+  </data>
+  <data name="night" xml:space="preserve">
+    <value>Tageszeit</value>
+  </data>
+  <data name="overlap" xml:space="preserve">
+    <value>Überlappung</value>
+  </data>
+  <data name="corrupted_links" xml:space="preserve">
+    <value>Beschädigte Verknüpfung</value>
+  </data>
+  <data name="link" xml:space="preserve">
+    <value>Verknüpfung</value>
+  </data>
+  <data name="ogn_linkmanual" xml:space="preserve">
+    <value>Manuell</value>
+  </data>
+  <data name="ogn_linkremain" xml:space="preserve">
+    <value>Verbleibende</value>
+  </data>
+  <data name="notification" xml:space="preserve">
+    <value>Benachrichtigung</value>
+  </data>
+  <data name="ticket_notification" xml:space="preserve">
+    <value>Das Ziel/Das Ticket ist jetzt fällig.</value>
   </data>
 </root>

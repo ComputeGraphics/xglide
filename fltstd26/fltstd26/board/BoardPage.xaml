@@ -16,7 +16,7 @@
             <Label HorizontalOptions="Start"
                    Grid.Column="1"
                    VerticalOptions="Center"
-                   FontFamily="ZenDots"
+                   FontFamily="Archive"
                    FontSize="{Binding Source={x:Static uset:USettings.TitleSize}}"
                    x:Name="BoardTitle"/>
             <Image Aspect="AspectFit"
