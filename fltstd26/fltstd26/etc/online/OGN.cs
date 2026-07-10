@@ -20,6 +20,15 @@ namespace fltstd26.etc.online
             return null;
         }
 
+        public static DateTime? FormatTimeToday(string? time)
+        {
+            if(time == null) return null;
+            string[] split = time.Split('h');
+            DateTime today = DateTime.Now;
+            if (Int32.TryParse(split[0],out int hour) && Int32.TryParse(split[1],out int minute)) return new(today.Year,today.Month,today.Day,hour,minute,today.Second);
+            return null;
+        }
+
         internal async static void Sync()
         {
             try

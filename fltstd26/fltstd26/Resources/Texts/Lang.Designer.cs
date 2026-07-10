@@ -61,6 +61,26 @@ namespace fltstd26.Resources.Texts {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Über ähnelt.
+        /// </summary>
+        internal static string about {
+            get {
+                return ResourceManager.GetString("about", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die X-Fly Management Studio ist ein System, um den Gastflugverkehr an kleinen Flugplätzen einfach zu regeln. Es hilft durch Visualisierung sowohl den Gästen als auch dem Veranstalter den Überblick über viele Tickets zu haben und die Kasse zu verwalten. 
+        ///Dieses Programm basiert auf einer Entwicklung für den Aero Club Bad Nauheim.
+        ///© REDFOXXD STUDIO ähnelt.
+        /// </summary>
+        internal static string about_text {
+            get {
+                return ResourceManager.GetString("about_text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Fortfahren ähnelt.
         /// </summary>
         internal static string assistant_continue {
@@ -111,6 +131,33 @@ namespace fltstd26.Resources.Texts {
         internal static string cleanup {
             get {
                 return ResourceManager.GetString("cleanup", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Datenbank löschen ähnelt.
+        /// </summary>
+        internal static string clear_db {
+            get {
+                return ResourceManager.GetString("clear_db", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Uhr Neustart ähnelt.
+        /// </summary>
+        internal static string clock_restart {
+            get {
+                return ResourceManager.GetString("clock_restart", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Aufgabenplanung ähnelt.
+        /// </summary>
+        internal static string clockcheck {
+            get {
+                return ResourceManager.GetString("clockcheck", resourceCulture);
             }
         }
         
@@ -178,11 +225,39 @@ namespace fltstd26.Resources.Texts {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Dieser Vorgang wird die gesamte Datenbank leeren und ist nicht mehr rückgängig zu machen.
+        ///SIND SIE SICHER? ähnelt.
+        /// </summary>
+        internal static string db_clear_warning {
+            get {
+                return ResourceManager.GetString("db_clear_warning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Verspätung ähnelt.
         /// </summary>
         internal static string delay {
             get {
                 return ResourceManager.GetString("delay", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Die angegebene Verzögerung kann in diesem Slot aufgefangen werden ähnelt.
+        /// </summary>
+        internal static string delay_compensation {
+            get {
+                return ResourceManager.GetString("delay_compensation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Die angegebene Verzögerung kann nicht angewandt werden, da entweder keine Slots mehr verfügbar sind oder die Verzögerung über der höchstmöglichen Beschränkung liegt ähnelt.
+        /// </summary>
+        internal static string delay_error {
+            get {
+                return ResourceManager.GetString("delay_error", resourceCulture);
             }
         }
         
@@ -219,6 +294,24 @@ namespace fltstd26.Resources.Texts {
         internal static string edit {
             get {
                 return ResourceManager.GetString("edit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Wird ausgeführt am:  ähnelt.
+        /// </summary>
+        internal static string execution_at {
+            get {
+                return ResourceManager.GetString("execution_at", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Letzte Ausführung am:  ähnelt.
+        /// </summary>
+        internal static string execution_last {
+            get {
+                return ResourceManager.GetString("execution_last", resourceCulture);
             }
         }
         
@@ -327,6 +420,15 @@ namespace fltstd26.Resources.Texts {
         internal static string info {
             get {
                 return ResourceManager.GetString("info", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Intervall ähnelt.
+        /// </summary>
+        internal static string interval {
+            get {
+                return ResourceManager.GetString("interval", resourceCulture);
             }
         }
         
@@ -700,6 +802,24 @@ namespace fltstd26.Resources.Texts {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Systemuhr ähnelt.
+        /// </summary>
+        internal static string systemclock {
+            get {
+                return ResourceManager.GetString("systemclock", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Geplante Ereignisse löschen ähnelt.
+        /// </summary>
+        internal static string systemclock_clear {
+            get {
+                return ResourceManager.GetString("systemclock_clear", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Ticket/Ziel Optionen ähnelt.
         /// </summary>
         internal static string target_option {
@@ -741,6 +861,15 @@ namespace fltstd26.Resources.Texts {
         internal static string too_late {
             get {
                 return ResourceManager.GetString("too_late", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Auslösen ähnelt.
+        /// </summary>
+        internal static string trigger {
+            get {
+                return ResourceManager.GetString("trigger", resourceCulture);
             }
         }
         
@@ -813,6 +942,24 @@ namespace fltstd26.Resources.Texts {
         internal static string welcome {
             get {
                 return ResourceManager.GetString("welcome", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Alle Instanzen beenden ähnelt.
+        /// </summary>
+        internal static string xboard_close_all {
+            get {
+                return ResourceManager.GetString("xboard_close_all", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Interaktives Register ähnelt.
+        /// </summary>
+        internal static string xplan {
+            get {
+                return ResourceManager.GetString("xplan", resourceCulture);
             }
         }
         

@@ -21,7 +21,7 @@ namespace fltstd26.etc.online
                 if (devices != null)
                 {
                     int dev = devices.FindIndex(x => x.address == ac.OGN);
-                    if (dev != -1 && OGN.CurrentOGN.flights != null)
+                    if (ac.OGN != null && dev != -1 && OGN.CurrentOGN.flights != null)
                     {
                         OGN.Flight? ognflt = OGN.CurrentOGN.flights.Where(x => x.device == dev).Where(x => MatchesSlot(x.start,slt.STime,slt.FTime)).OrderBy(x => OGN.FormatTime(x.start)).FirstOrDefault();
                         if(ognflt == null)
@@ -32,19 +32,19 @@ namespace fltstd26.etc.online
                         else
                         {
                             //Erneuter scan in 2 min
-                            TimeSpan? to = OGN.FormatTime(ognflt.start);
+                            DateTime? to = OGN.FormatTimeToday(ognflt.start);
                             if(to.HasValue)
                             {
                                 if (ognflt.stop == null)
                                 {
                                     //Flug noch im Gange
-                                    status = (byte)(DateTime.Now.TimeOfDay < to.Value.Add(TimeSpan.FromMinutes(USettings.TakeoffDuration)) ? 4 : 5);
-                                    nextCheck = (int)Double.Ceiling(slt.Length - (DateTime.Now.TimeOfDay - to.Value).TotalMinutes - 1);
+                                    status = (byte)(DateTime.Now < to.Value.Add(TimeSpan.FromMinutes(USettings.TakeoffDuration)) ? 4 : 5);
+                                    nextCheck = (int)Double.Ceiling(slt.Length - (DateTime.Now - to.Value).TotalMinutes - 1);
                                     if(nextCheck < 1) nextCheck = 1;
                                 }
                                 else
                                 {
-                                    status = (byte)(DateTime.Now.TimeOfDay < slt.FTime.TimeOfDay ? 6 : 7);
+                                    status = (byte)(DateTime.Now < slt.FTime ? 6 : 7);
                                     nextCheck = -1;
                                 }
                             }

@@ -466,4 +466,55 @@
   <data name="ticket_notification" xml:space="preserve">
     <value>Das Ziel/Das Ticket ist jetzt fällig.</value>
   </data>
+  <data name="delay_compensation" xml:space="preserve">
+    <value>Die angegebene Verzögerung kann in diesem Slot aufgefangen werden</value>
+  </data>
+  <data name="delay_error" xml:space="preserve">
+    <value>Die angegebene Verzögerung kann nicht angewandt werden, da entweder keine Slots mehr verfügbar sind oder die Verzögerung über der höchstmöglichen Beschränkung liegt</value>
+  </data>
+  <data name="clear_db" xml:space="preserve">
+    <value>Datenbank löschen</value>
+  </data>
+  <data name="db_clear_warning" xml:space="preserve">
+    <value>Dieser Vorgang wird die gesamte Datenbank leeren und ist nicht mehr rückgängig zu machen.
+SIND SIE SICHER?</value>
+  </data>
+  <data name="xboard_close_all" xml:space="preserve">
+    <value>Alle Instanzen beenden</value>
+  </data>
+  <data name="clock_restart" xml:space="preserve">
+    <value>Uhr Neustart</value>
+  </data>
+  <data name="xplan" xml:space="preserve">
+    <value>Interaktives Register</value>
+  </data>
+  <data name="systemclock" xml:space="preserve">
+    <value>Systemuhr</value>
+  </data>
+  <data name="systemclock_clear" xml:space="preserve">
+    <value>Geplante Ereignisse löschen</value>
+  </data>
+  <data name="about" xml:space="preserve">
+    <value>Über</value>
+  </data>
+  <data name="about_text" xml:space="preserve">
+    <value>X-Fly Management Studio ist ein System, um den Gastflugverkehr an kleinen Flugplätzen einfach zu regeln. Es hilft durch Visualisierung sowohl den Gästen als auch dem Veranstalter den Überblick über viele Tickets zu haben und die Kasse zu verwalten. 
+Dieses Programm basiert auf einer Entwicklung für den Aero Club Bad Nauheim.
+© REDFOXXD STUDIO</value>
+  </data>
+  <data name="clockcheck" xml:space="preserve">
+    <value>Aufgabenplanung</value>
+  </data>
+  <data name="execution_at" xml:space="preserve">
+    <value>Wird ausgeführt am: </value>
+  </data>
+  <data name="execution_last" xml:space="preserve">
+    <value>Letzte Ausführung am: </value>
+  </data>
+  <data name="trigger" xml:space="preserve">
+    <value>Auslösen</value>
+  </data>
+  <data name="interval" xml:space="preserve">
+    <value>Intervall</value>
+  </data>
 </root>

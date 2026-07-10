@@ -19,7 +19,7 @@
             else Start();
         }
 
-        internal void Start() { timer?.Start(); System.Diagnostics.Debug.WriteLine("Synced"); }
+        internal void Start() { timer?.Start(); }
         internal void Pause() { if(timer is not null && timer.IsRunning) timer.Stop(); }
     }
 }

@@ -192,7 +192,7 @@ namespace fltstd26.XFly
                             }
                             else if (t.Result == -1)
                             {
-                                ProcResult = (new() { Id = -1 }, -1);
+                                //ProcResult = (new() { Id = -1 }, -1);
                                 //VOLLSTÄNDIGER ABBRUCH
                             }
                             else if (t.Result == 0) ProcResult = (new() { Id = -1 }, -1);
@@ -217,9 +217,11 @@ namespace fltstd26.XFly
                         {
                             if (t.Result >= 0)
                             {
-                                ProcResult = (Manager.CreateFlight(Manager.CreateEID(),SelLfzs[t.Result],SelectedSlot,InStatus,InAdd), SelLfzs[t.Result]);
+                                Sheets.Flt f = Manager.CreateFlight(Manager.CreateEID(),SelLfzs[t.Result],SelectedSlot,InStatus,InAdd);
+                                if(f.Id != -1) ProcResult = (f, SelLfzs[t.Result]);
+                                
                             }
-                            else ProcResult = (new() { Id = -1 }, -1);
+                            //else ProcResult = (new() { Id = -1 }, -1);
                         });
 
                         return ProcResult;

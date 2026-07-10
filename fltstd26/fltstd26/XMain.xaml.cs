@@ -7,18 +7,22 @@ using fltstd26.etc.online;
 using fltstd26.Resources.Texts;
 using fltstd26.system;
 using fltstd26.XFly;
-using Microsoft.Maui.Platform;
-using System.Data.Common;
 using System.Text;
 namespace fltstd26
 {
     public partial class XMain : ContentPage
     {
         //CLEANUP FLIGHTS REVERSABLE MACHEN!!!!!!
-        //List<List<Border>> cells = [];
+
+
+        private readonly List<int> HiddenSlots = [];
+        private readonly List<List<Border>> Cells = [];
+        private readonly List<Border> Slots = [];
+        internal static readonly List<FBorder> FlightCollectors = [];
         private readonly List<List<TargetStack>> StackContainers = [];
         private readonly List<int> CurrentPriceCatIds = [];
         private readonly List<int> CurrentAircraftIds = [];
+        private readonly Dictionary<int,int> SlotTickLink = [];
 
         private readonly Dictionary<Guid,XBlock> NodeLibrary = [];
         private Guid copyBuffer = new(new byte[16]);
@@ -35,11 +39,20 @@ namespace fltstd26
             RData.Init();
             OGN.Sync();
             DskMan.SaveConfig("Test");
+            USettings.FinalizeConfig();
             System.Diagnostics.Debug.WriteLine(Application.Current!.RequestedTheme.ToString());
             //System.Diagnostics.Debug.WriteLine(RData.Insert<Sheets.Target>(new() { Name = "Test" }));
             //System.Diagnostics.Debug.WriteLine(RData.GetWhere<Sheets.Slot>($"id=2").First().Length);
             //Application.Current!.UserAppTheme = AppTheme.Light;
 
+        }
+
+
+        private (int, int) GetCellIndex(int slotid,int? lfzid)
+        {
+            int rowIndex = RData.GetSlotsTable().Where(x => !HiddenSlots.Contains(x.Id)).ToList().FindIndex(fts => fts.Id.Equals(slotid));
+            int colIndex = lfzid == null ? -1 : RData.GetAircraftTable().FindIndex(lfz => lfz.Id.Equals(lfzid));
+            return (rowIndex, colIndex);
         }
 
         private void SidebarRefresh()
@@ -78,7 +91,11 @@ namespace fltstd26
                 XPlan.ColumnDefinitions.Clear();
                 XPlan.RowDefinitions.Clear();
                 XPlan.Children.Clear();
+                Slots.Clear();
+                Cells.Clear();
                 StackContainers.Clear();
+                FlightCollectors.Clear();
+                HiddenSlots.Clear();
                 XPlanOpen = false;
             }
         }
@@ -88,14 +105,15 @@ namespace fltstd26
             {
                 List<Sheets.Flt> allFLT = RData.GetFlightTable();
                 List<Sheets.Target> allTGT = RData.GetTargetTable();
-
+                List<Sheets.Slot> allSLT = RData.GetSlotsTable();
+                if (BoardController.Boards.Count > 0) BoardController.SynchronizeWithFlight(allFLT,allTGT);
                 //Alle Nodes löschen
                 XPlanClear(false);
 
                 //Datenbank Nodes einfügen
                 if (allFLT.Count != 0 && allTGT.Count != 0)
                 {
-                    AddFlightNo(allFLT);
+                    AddFlightNo(allFLT,allSLT);
                     foreach (var t in allTGT)
                     {
                         Sheets.Flt? f = allFLT.Find(x => x.Id == t.LId);
@@ -104,7 +122,8 @@ namespace fltstd26
                             ConProc.Log("[XPLAN-SYNC] Target " + t.Id.ToString() + " konnte kein Flug zugeordnet werden",2);
                             continue;
                         }
-                        Sheets.Slot? s = RData.Get<Sheets.Slot>(f.Slot);
+
+                        Sheets.Slot? s = allSLT.Find(x => x.Id == f.Slot);
                         if (s == null)
                         {
                             ConProc.Log("[XPLAN-SYNC] Target " + t.Id.ToString() + " konnte kein Slot zugeordnet werden",2);
@@ -115,53 +134,62 @@ namespace fltstd26
                 }
             }
         }
-        private void AddFlightNo(List<Sheets.Flt> allFLT)
+        private void AddFlightNo(List<Sheets.Flt> flts,List<Sheets.Slot> slts)
         {
-            foreach (Sheets.Flt flt in allFLT)
+            FlightCollectors.Clear();
+            List<Sheets.Lfz> acs = RData.GetAircraftTable();
+
+            foreach (Sheets.Flt flt in flts)
             {
-                short rowIndex = (short)RData.GetSlotsTable().FindIndex(fts => fts.Id.Equals(flt.Slot));
-                //System.Diagnostics.Debug.WriteLine($"Row Index: {rowIndex}");
-                short colIndex = (short)RData.GetAircraftTable().FindIndex(lfz => lfz.Id.Equals(flt.Lfz));
-                //System.Diagnostics.Debug.WriteLine($"Col Index: {colIndex}");
-                if (rowIndex == -1 || colIndex == -1)
+                int occupied = RData.GetTargetTable().Where(x => x.LId == flt.Id).Count();
+                (int, int) coords = GetCellIndex(flt.Slot,flt.Lfz);
+                if (coords.Item1 == -1 || coords.Item2 == -1)
                 {
                     ConProc.Log($"[XPLAN-RENDERER] Dem Flug {flt.Id} konnte keine Zelle zugeordnet werden",2);
                     continue;
                 }
-                StackContainers.ElementAt(rowIndex).ElementAt(colIndex).Children.Add(Drawer.CreateFltCollector(flt.Id,flt.EId));
+                FBorder fltcollect = new(flt,occupied,acs[coords.Item2].Seats);
+                StackContainers.ElementAt(coords.Item1).ElementAt(coords.Item2).Children.Add(fltcollect);
+                FlightCollectors.Add(fltcollect);
+                if (flt.Status == 13) GSettings.StatusLink.TryAdd(flt.Id,11);
             }
         }
+
+
+
         internal void XPlanRestart()
         {
-            try
-            {
-                XPlanClear(true);
-                Color stroke = GSettings.DarkMode ? Colors.DarkGray : Colors.LightGray;
-                List<Sheets.Lfz> allLFZ = RData.GetAircraftTable();
-                SidebarRefresh();
 
-                //XPLAN AUFBAUEN
-                TapGestureRecognizer Deselector = new();
-                Deselector.Tapped += NodeDeselectionHandler;
-                XPlan.GestureRecognizers.Add(Deselector);
-                XPlan.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
-                XPlan.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
-                ImageButton refreshButton = new()
-                {
-                    BackgroundColor = Colors.Transparent,
-                    Source = "refresh.png",
-                    Aspect = Aspect.AspectFit,
-                    Behaviors =
+            /*try
+            {*/
+            List<IView> DateDisplay = [];
+            XPlanClear(true);
+            Color stroke = GSettings.DarkMode ? Colors.DarkGray : Colors.LightGray;
+            List<Sheets.Lfz> allLFZ = RData.GetAircraftTable();
+            SidebarRefresh();
+
+            //XPLAN AUFBAUEN
+            TapGestureRecognizer Deselector = new();
+            Deselector.Tapped += NodeDeselectionHandler;
+            XPlan.GestureRecognizers.Add(Deselector);
+            XPlan.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
+            XPlan.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
+            ImageButton refreshButton = new()
+            {
+                BackgroundColor = Colors.Transparent,
+                Source = "refresh.png",
+                Aspect = Aspect.AspectFit,
+                Behaviors =
                     {
                         new IconTintColorBehavior { TintColor = GSettings.DarkMode ? Colors.White : Colors.Black }
                     },
-                };
-                refreshButton.Clicked += (s,e) => XPlanRestart();
-                XPlan.Add(refreshButton,0,0);
-                foreach (Sheets.Lfz lfz in allLFZ)
-                {
-                    XPlan.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Star });
-                    VerticalStackLayout v = [ new Label()
+            };
+            refreshButton.Clicked += (s,e) => XPlanRestart();
+            XPlan.Add(refreshButton,0,0);
+            foreach (Sheets.Lfz lfz in allLFZ)
+            {
+                XPlan.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Star });
+                VerticalStackLayout v = [ new Label()
                     {
                         Text = lfz.Reg,
                         VerticalOptions = LayoutOptions.Center,
@@ -175,14 +203,58 @@ namespace fltstd26
                         HorizontalOptions = LayoutOptions.Center,
                         FontSize = 16,
                     },];
-                    v.Margin = new Thickness(0,10);
-                    XPlan.Add(v,XPlan.ColumnDefinitions.Count - 1,0);
-                }
-                foreach (Sheets.Slot fts in RData.GetSlotsTable())
+                v.Margin = new Thickness(0,10);
+                XPlan.Add(v,XPlan.ColumnDefinitions.Count - 1,0);
+            }
+            List<DateTime> drawnDays = [];
+            List<Sheets.Slot> slts = RData.GetSlotsTable();
+            DateTime now = DateTime.Now;
+            foreach (Sheets.Slot fts in slts)
+            {
+
+                if (!USettings.HidePastSlots || fts.FTime >= now)
                 {
+
                     List<Border> borders = [];
                     List<TargetStack> containersRow = [];
                     XPlan.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
+
+                    if (!drawnDays.Contains(fts.STime.Date))
+                    {
+                        HorizontalStackLayout hsl = new()
+                        {
+                            VerticalOptions = LayoutOptions.Center,
+                            HorizontalOptions = LayoutOptions.Center,
+                            Margin = new Thickness(0,10)
+                        };
+                        IconTintColorBehavior itb = new()
+                        {
+                            TintColor = GSettings.DarkMode ? Colors.White : Colors.Black,
+                        };
+                        Image ico = new()
+                        {
+                            Source = "calendar.png",
+                            Aspect = Aspect.AspectFit,
+                            Margin = new Thickness(10,0),
+                            VerticalOptions = LayoutOptions.Center,
+                        };
+                        ico.Behaviors.Add(itb);
+                        hsl.Add(ico);
+                        hsl.Add(new Label()
+                        {
+                            Text = fts.STime.Date.ToShortDateString(),
+                            FontAttributes = FontAttributes.Bold,
+                            VerticalOptions = LayoutOptions.Center,
+                        });
+                        XPlan.Add(hsl,1,XPlan.RowDefinitions.Count - 1);
+                        XPlan.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
+                        DateDisplay.Add(hsl);
+                        drawnDays.Add(fts.STime.Date);
+                    }
+
+
+
+
                     Grid slot = new()
                     {
                         Padding = new Thickness(4),
@@ -199,7 +271,7 @@ namespace fltstd26
                     };
 
                     VerticalStackLayout v = [
-                    new Label()
+                            new Label()
                     {
                         Text = $"{fts.STime:HH:mm}",
                         FontAttributes = FontAttributes.Bold,
@@ -227,6 +299,7 @@ namespace fltstd26
                     ];
                     v.Margin = new Thickness(5,10);
                     v.VerticalOptions = LayoutOptions.Center;
+
                     slot.Add(v,0,0);
                     slot.SetRowSpan(v,2);
 
@@ -239,6 +312,7 @@ namespace fltstd26
                         FontAttributes = FontAttributes.Bold,
                         VerticalOptions = LayoutOptions.End,
                     };
+                    min5.Clicked += (s,e) => SlotDelayInteraction(fts.Id,5);
                     slot.Add(min5,1,0);
                     Button min10 = new()
                     {
@@ -249,9 +323,19 @@ namespace fltstd26
                         FontAttributes = FontAttributes.Bold,
                         VerticalOptions = LayoutOptions.Start,
                     };
+                    min10.Clicked += (s,e) => SlotDelayInteraction(fts.Id,10);
                     slot.Add(min10,1,1);
 
-                    XPlan.Add(slot,0,XPlan.RowDefinitions.Count - 1);
+                    Border slotb = new()
+                    {
+                        StrokeThickness = 0,
+                        BackgroundColor = Colors.Transparent,
+                        Content = slot
+                    };
+
+
+                    Slots.Add(slotb);
+                    XPlan.Add(slotb,0,XPlan.RowDefinitions.Count - 1);
                     for (int i = 0; i < allLFZ.Count; i++)
                     {
                         // Event Handlers
@@ -301,38 +385,156 @@ namespace fltstd26
                         borders.Add(cellBorder);
                         XPlan.Add(cellBorder,i + 1,XPlan.RowDefinitions.Count - 1);
                     }
+                    Cells.Add(borders);
                     StackContainers.Add(containersRow);
-                    //cells.Add(borders);
                 }
-                XPlanOpen = true;
-                ConProc.Log("[XPLAN] XPlan reset",0);
-                XPlanRefresh();
+                else
+                {
+                    HiddenSlots.Add(fts.Id);
+                }
+
+                if (fts.FTime > now)
+                {
+                    if (!SlotTickLink.TryGetValue(fts.Id,out int ev) || ev == -1) SlotTickLink.TryAdd(fts.Id,TimeServ.Schedule(fts.STime,() => InvokeSlot(fts.Id)));
+                    else if (fts.Delay) SlotTickLink[fts.Id] = TimeServ.Reschedule(SlotTickLink[fts.Id],fts.STime);
+                }
+                else
+                {
+                    SlotTickLink.TryAdd(fts.Id,-1);
+                    FinishSlot(fts.Id,slts);
+                }
+
+                /*if (!SlotTickLink.ContainsKey(fts.Id)) SlotTickLink.Add(fts.Id,fts.FTime > DateTime.Now ? TimeServ.Schedule(fts.STime,() => InvokeSlot(fts.Id)) : 0);
+                if (DateTime.Now > fts.FTime)*/
+
+
             }
+            DateDisplay.ForEach(d => XPlan.SetColumnSpan(d,XPlan.ColumnDefinitions.Count - 1));
+            XPlanOpen = true;
+            ConProc.Log("[XPLAN] XPlan zurückgesetzt",0);
+            XPlanRefresh();
+            /*}
             catch (Exception e)
             {
                 XPlanOpen = false;
-                ConProc.Log("[XPLAN] XPlan restart failed" + e.Message.ToString(),2);
-            }
+                ConProc.Log("[XPLAN] XPlan-Start fehlgeschlagen: " + e.Message.ToString(),2);
+            }*/
         }
 
-        private void SlotDelayInteraction(object sender, EventArgs e)
+        private void InvokeSlot(int id)
         {
+            //Cell Defaults Dark/Light
+            //Neutral: OffBlack (#1f1f1f)  -  idk
+            //Active: SecondaryDarkBg (#004152)  -  SecondaryBg (#a0f0f8)
+            //Passed: Gray900 (#212121)  -  Gray300 (#ACACAC)
 
+            List<Sheets.Slot> slottable = RData.GetSlotsTable();
+            Sheets.Slot? slot = slottable.Find(x => x.Id == id);
+            if (slot == null) return;
+            DateTime now = DateTime.Now;
+            (int, int) coords = GetCellIndex(id,null);
+            if (coords.Item1 == -1 || coords.Item1 > slottable.Count - 1) return;
+            if (now <= slot.FTime && now >= slot.STime.Subtract(TimeSpan.FromMinutes(USettings.SlotTolerance)))
+            {
+                //Slot hat bereits begonnen
+
+                List<Sheets.Flt?>? flts = RData.GetWhere<Sheets.Flt>($"slot={id}");
+                //Redetermine Status
+                if (flts == null) return;
+                Manager.DetermineStatus(slot,flts,USettings.OGNStatus);
+                //Status aktualisieren
+                IEnumerable<int> tgts = RData.GetTargetTable().Where(t => flts.Where(x => x != null).Select(x => x!.Id).Contains(t.Id)).Select(x => x.Id);
+                List<XBlock> affectedNodes = [.. NodeLibrary.Select(x => x.Value).Where(x => tgts.Contains(x.TargetID))];
+                string messages = "";
+                foreach (XBlock node in affectedNodes)
+                {
+                    if (node.Attribs[2]) messages += $"- {node.Name} ({node.TargetID}) -\r\n";
+                    node.DisableAttrib(2);
+                }
+                if (messages != "") system.modals.ModalPush.Message(Lang.notification,messages + Lang.ticket_notification);
+                //Umfärben
+                if (coords.Item1 != -1)
+                {
+                    Cells.ElementAt(coords.Item1).ForEach(x => x.BackgroundColor = GSettings.CellBackgroundActiveColour);
+                    Slots.ElementAt(coords.Item1).BackgroundColor = GSettings.CellBackgroundActiveColour;
+                }
+                //Finish qeuen
+                SlotTickLink[id] = TimeServ.Schedule(slot.FTime,() => FinishSlot(id));
+            }
+            else
+            {
+                //Fehler qeue muss geprüft werden
+                if (coords.Item1 != -1)
+                {
+                    Cells.ElementAt(coords.Item1).ForEach(x => x.BackgroundColor = GSettings.CellBackgroundNeutralColour);
+                    Slots.ElementAt(coords.Item1).BackgroundColor = GSettings.CellBackgroundNeutralColour;
+                }
+                if (SlotTickLink.TryGetValue(id,out int link))
+                {
+
+                    if (now >= slot.FTime)
+                    {
+                        TimeServ.Unschedule(link);
+                        FinishSlot(id);
+                    }
+                    else if (now < slot.STime)
+                    {
+                        SlotTickLink[id] = TimeServ.Schedule(slot.STime,() => InvokeSlot(id));
+                    }
+                    //Neu qeuen
+                }
+            }
+
+
+        }
+
+        private void FinishSlot(int id,List<Sheets.Slot>? slt = null)
+        {
+            List<Sheets.Slot> slottable = slt ?? RData.GetSlotsTable();
+            (int, int) coords = GetCellIndex(id,null);
+            //Sheets.Slot? slot = slottable.Find(x => x.Id == id);
+            if (coords.Item1 == -1 || coords.Item1 > slottable.Count - 1) return;
+
+            if (DateTime.Now >= slottable[coords.Item1].FTime)
+            {
+                //Slot hat bereits geendet
+                //Umfärben
+
+
+                Cells.ElementAt(coords.Item1).ForEach(x => x.BackgroundColor = GSettings.CellBackgroundPassedColour);
+                Slots.ElementAt(coords.Item1).BackgroundColor = GSettings.CellBackgroundPassedColour;
+                if (USettings.HidePastSlots)
+                {
+                    HiddenSlots.Add(id);
+                    XPlanRestart();
+                }
+            }
+            else
+            {
+                //Fehler
+                Cells.ElementAt(coords.Item1).ForEach(x => x.BackgroundColor = GSettings.CellBackgroundNeutralColour);
+                Slots.ElementAt(coords.Item1).BackgroundColor = GSettings.CellBackgroundNeutralColour;
+            }
+            SlotTickLink.Remove(id);
+        }
+
+        private void SlotDelayInteraction(int id,int minutes)
+        {
+            Manager.InitDelay(id,minutes);
+            XPlanRestart();
         }
 
         private bool AddNode(Sheets.Slot timeIn,int lfzIn,Sheets.Target tgtIn)
         {
             try
             {
-                int rowIndex = RData.GetSlotsTable().FindIndex(fts => fts.Id.Equals(timeIn.Id));
-                //System.Diagnostics.Debug.WriteLine($"Row Index: {rowIndex}");
-                int colIndex = RData.GetAircraftTable().FindIndex(lfz => lfz.Id.Equals(lfzIn));
+                (int, int) coords = GetCellIndex(timeIn.Id,lfzIn);
                 //System.Diagnostics.Debug.WriteLine($"Col Index: {colIndex} of {lfzIn}");
                 //System.Diagnostics.Debug.WriteLine($"LFZ Details:\nId: {lfzIn.Id}\nReg: {lfzIn.Reg}\nType: {lfzIn.Type}\nSeats: {lfzIn.Seats}\nInterval: {lfzIn.Interval}\nPriceCat: {lfzIn.PriceCat}\nAuto: {lfzIn.AutoAssign}\nAvail: {string.Join(", ",lfzIn.AvailTimes)}\n---------");
-                if (rowIndex == -1 || colIndex == -1) return false; //No Cell found
+                if (coords.Item1 == -1 || coords.Item2 == -1) return false; //No Cell found
 
                 XBlock NewNode = new(tgtIn,timeIn.Length);
-
+                if (DateTime.Now >= timeIn.STime.Subtract(TimeSpan.FromMinutes(USettings.SlotTolerance))) NewNode.DisableAttrib(2);
                 var Drag = new DragGestureRecognizer();
                 Drag.DragStarting += NodeDragStartHandler;
                 Drag.CanDrag = !tgtIn.Persistent;
@@ -345,7 +547,7 @@ namespace fltstd26
                 LClick.Tapped += NodeSelectionHandler;
                 NewNode.GestureRecognizers.Add(LClick);
 
-                StackContainers.ElementAt(rowIndex).ElementAt(colIndex).Children.Add(NewNode);
+                StackContainers.ElementAt(coords.Item1).ElementAt(coords.Item2).Children.Add(NewNode);
                 NodeLibrary.Add(NewNode.Id,NewNode);
                 return true;
             }
@@ -412,13 +614,13 @@ namespace fltstd26
                 {
                     (int, DatabaseAction?) result = await now.Value.Item1.Invoke();
                     now.Value.Item2.Item2.LId = result.Item1;
-                    if(result.Item1 != -1)
+                    if (result.Item1 != -1)
                     {
                         List<DatabaseAction> a = [];
                         DatabaseAction da = new() { ActionID = 3,CurrentValue = now.Value.Item2.Item2,PreviousValue = now.Value.Item2.Item1,DataType = typeof(Sheets.Target),ObjectID = now.Value.Item2.Item1.Id };
                         List<Sheets.Flt> rmv = Patcher.CleanupFlights();
                         a.Add(da);
-                        if(result.Item2 != null) a.Add(result.Item2 with { LinkAction = da.ID });
+                        if (result.Item2 != null) a.Add(result.Item2 with { LinkAction = da.ID });
                         rmv.ForEach(x => a.Add(new() { ActionID = 2,CurrentValue = null,PreviousValue = x,DataType = typeof(Sheets.Flt),ObjectID = x.Id,ForeignKeyName = now.Value.Item2.Item1.LId == x.Id ? "LId" : null,LinkAction = now.Value.Item2.Item1.LId == x.Id ? da.ID : 0 }));
                         AutoAct.PushAction(null,a);
                     }
@@ -554,25 +756,7 @@ namespace fltstd26
             xConsoleWindow.Destroying += ConProc.Window_Closed;
             Application.Current?.OpenWindow(xConsoleWindow);
         }
-        private void XBoardClick(object sender,EventArgs e)
-        {
-            Window w = new(new BoardPage());
-            w.Created += (s,e) =>
-            {
-                BoardController.WindowWidth = w.Width;
-                BoardPage.Refresh();
-            };
 
-            //RESIZE BUG
-            w.SizeChanged += (s,e) =>
-            {
-                BoardController.WindowWidth = w.Width;
-                BoardPage.Refresh();
-            };
-            w.Destroying += (s,e) => BoardController.Terminate();
-
-            Application.Current?.OpenWindow(w);
-        }
 
 
 
@@ -587,7 +771,7 @@ namespace fltstd26
             {
                 if (TGT_Price_Dropdown.SelectedIndex > 0)
                 {
-                    TgtPrice = -CurrentPriceCatIds[TGT_Price_Dropdown.SelectedIndex-1];
+                    TgtPrice = -CurrentPriceCatIds[TGT_Price_Dropdown.SelectedIndex - 1];
                 }
                 else
                 {
@@ -596,7 +780,7 @@ namespace fltstd26
                 }
             }
             //int TgtPrice = TGT_PriceCat_Dropdown_Enable.IsChecked ? 0 : (TGT_Price_Dropdown.SelectedIndex > 0 ? -CurrentPriceCatIds[TGT_Price_Dropdown.SelectedIndex] : (Int32.TryParse(TGT_Price_Entry.Text.Trim(),out int ParsePrice) ? GSettings.FormatPrice(ParsePrice) : -USettings.FallbackPriceCat));
-            int FltStatus = FLT_Status_Dropdown_Enable.IsChecked ? GSettings.Status.Length - 1 : FLT_Status_Dropdown.SelectedIndex;
+            int FltStatus = FLT_Status_Dropdown_Enable.IsChecked ? 13 : FLT_Status_Dropdown.SelectedIndex;
             int? LfzOverride = TGT_LFZ_Dropdown_Enable.IsChecked ? null : CurrentAircraftIds[TGT_LFZ_Dropdown.SelectedIndex];
             string Adds = "";
             foreach (Entry entry in FLTAddsEntryContainer.OfType<Entry>())
@@ -669,13 +853,13 @@ namespace fltstd26
         //////////////////////////////////////////INTERACTION BAR HANDLING//////////////////////////////////////////
         private void UndoInterClick(object sender,EventArgs e)
         {
-            AutoAct.Undo();
-            XPlanRefresh();
+            if (AutoAct.Undo()) XPlanRestart();
+            else XPlanRefresh();
         }
         private void RedoInterClick(object sender,EventArgs e)
         {
-            AutoAct.Redo();
-            XPlanRefresh();
+            if (AutoAct.Redo()) XPlanRestart();
+            else XPlanRefresh();
         }
         private void CopyInterClick(object sender,EventArgs e)
         {
@@ -692,7 +876,7 @@ namespace fltstd26
                 {
                     System.Diagnostics.Debug.WriteLine($"Node switching - 1: {source.TargetID}, 2: {target.TargetID}");
                     (Func<Task<(int, DatabaseAction?)>>, (Sheets.Target, Sheets.Target))? move12 = await Manager.DatabaseNodeMove(source,vsl2,RData.Get<Sheets.Target>(target.TargetID)?.Weight ?? 0,false);
-                    (Func<Task<(int, DatabaseAction ?) >>, (Sheets.Target, Sheets.Target))? move21 = await Manager.DatabaseNodeMove(target,vsl1,RData.Get<Sheets.Target>(source.TargetID)?.Weight ?? 0,true);
+                    (Func<Task<(int, DatabaseAction?)>>, (Sheets.Target, Sheets.Target))? move21 = await Manager.DatabaseNodeMove(target,vsl1,RData.Get<Sheets.Target>(source.TargetID)?.Weight ?? 0,true);
                     if (move12.HasValue && move21.HasValue)
                     {
                         (int, DatabaseAction?) ra12 = await move12.Value.Item1.Invoke();
@@ -845,13 +1029,72 @@ namespace fltstd26
         //Close
         private void CloseClick(object sender,EventArgs e) => System.Diagnostics.Debug.WriteLine("Not implemented");
 
+        ////////////////////////////////////////////SYSTEM MENU HANDLING////////////////////////////////////////////
+
+        //XPlan Options
+        private void XPlan_Restart_Click(object sender,EventArgs e) => XPlanRestart();
+        private void XPlan_Refresh_Click(object sender,EventArgs e) => XPlanRefresh();
+
+        //FLIGHT INFORMATION DISPLAY SYSTEM
+        private void XBoardClick(object sender,EventArgs e)
+        {
+            BoardPage bp = new();
+            Window w = new(bp);
+            w.Created += (s,e) =>
+            {
+                bp.WindowWidth = w.Width;
+                BoardController.Refresh(bp.BoardIndex);
+                BoardController.SyncBoard(bp,null,null,null,null);
+            };
+
+            //RESIZE BUG
+            w.SizeChanged += (s,e) =>
+            {
+                bp.WindowWidth = w.Width;
+                BoardController.Refresh(bp.BoardIndex);
+                BoardController.SyncBoard(bp,null,null,null,null);
+            };
+            w.Destroying += (s,e) => BoardController.Terminate(bp.BoardIndex);
+
+            Application.Current?.OpenWindow(w);
+        }
+        private void XBoard_RefreshClick(object sender,EventArgs e)
+        {
+            if (BoardController.Boards.Count > 0)
+            {
+                List<Sheets.Flt> flts = RData.GetFlightTable();
+                List<Sheets.Target> tgts = RData.GetTargetTable();
+                BoardController.SynchronizeWithFlight(flts,tgts);
+            }
+        }
+
+        private void XBoard_ClockRestartClick(object sender,EventArgs e)
+        {
+            BoardTimeServ.Pause();
+            BoardTimeServ.Init();
+        }
+
+        private void XBoard_TerminateAllClick(object sener,EventArgs e)
+        {
+            for(int i = 0; i < BoardController.Boards.Count; i++)
+            {
+                BoardController.Terminate(i);
+            }
+        }
+
+        //Clock Options
+        private void SystemClockDisplay_Click(object sender,EventArgs e)
+        {
+            Navigation.PushModalAsync(new ClockCheck());
+        }
+        private void SystemClockClear_Click(object sender,EventArgs e) => TimeServ.Clear();
+        private void SystemClockRestart_Click(object sender,EventArgs e) => TimeServ.Restart();
+
 
         ////////////////////////////////////////////MANAGE MENU HANDLING////////////////////////////////////////////
 
-
-
         //Delay
-        private void CustomDelayClick(object sender, EventArgs e)
+        private void CustomDelayClick(object sender,EventArgs e)
         {
 
         }
@@ -878,11 +1121,20 @@ namespace fltstd26
             XPlanRefresh();
         }
 
+        //Clear DB
+        private async void ClearDB_Click(object sender,EventArgs e)
+        {
+            await system.modals.ModalPush.Question(Lang.warning,Lang.db_clear_warning).ContinueWith(t =>
+            {
+                if (t.Result) RData.Reset();
+            });
+        }
 
 
 
-        /////////////////////////////////////////////TOOLS MENU HANDLING////////////////////////////////////////////
-
+        ////////////////////////////////////////////NETWORK MENU HANDLING///////////////////////////////////////////
+        
+        //OGN
         private void OGN_RefreshClick(object sender,EventArgs e) => OGN.Sync();
 
         private void OGN_FetcherClick(object sender,EventArgs e) => Application.Current?.OpenWindow(new OnlineFetch());
@@ -899,11 +1151,28 @@ namespace fltstd26
         private void OGN_LinkManualClick(object sender,EventArgs e) => OGN.RelinkAddress(true,true);
         private void OGN_LinkRemainingManualClick(object sender,EventArgs e) => OGN.RelinkAddress(false,false);
 
-        /////////////////////////////////////////////VIEW MENU HANDLING/////////////////////////////////////////////
 
-        //XPlan Options
-        private void XPlan_Restart_Click(object sender,EventArgs e) => XPlanRestart();
-        private void XPlan_Refresh_Click(object sender,EventArgs e) => XPlanRefresh();
+
+        /////////////////////////////////////////////TOOLS MENU HANDLING////////////////////////////////////////////
+
+
+
+
+
+        /////////////////////////////////////////////VIEW MENU HANDLING/////////////////////////////////////////////
+        
+        
+        /////////////////////////////////////////////ABOUT MENU HANDLING////////////////////////////////////////////
+        private void About_Clicked(object sender, EventArgs e)
+        {
+            system.modals.ModalPush.Message(Lang.info,Lang.about_text);
+        }
+
+        private void Docs_Clicked(object sender,EventArgs e)
+        {
+            system.modals.ModalPush.Message(Lang.info,"WIP");
+        }
+
     }
 
     /*internal partial class XBorder : Border
@@ -922,8 +1191,8 @@ namespace fltstd26
         internal byte SLTID { get; init; }
     }
 
-    internal partial class FBorder : Border
+    /*internal partial class FBorder : Border
     {
         internal int FltId { get; set; }
-    }
+    }*/
 }

@@ -438,4 +438,55 @@
   <data name="ticket_notification" xml:space="preserve">
     <value>The Target/Ticket is due now.</value>
   </data>
+  <data name="delay_compensation" xml:space="preserve">
+    <value>The given delay can be compensated in this slot</value>
+  </data>
+  <data name="delay_error" xml:space="preserve">
+    <value>The given delay can not be applied, either due to missing available slots or the delay being out of maximum boundaries</value>
+  </data>
+  <data name="clear_db" xml:space="preserve">
+    <value>Clear Database</value>
+  </data>
+  <data name="db_clear_warning" xml:space="preserve">
+    <value>This process will clear the entire database.
+ARE YOU SURE?</value>
+  </data>
+  <data name="xboard_close_all" xml:space="preserve">
+    <value>Close all instances</value>
+  </data>
+  <data name="clock_restart" xml:space="preserve">
+    <value>Restart Clock</value>
+  </data>
+  <data name="xplan" xml:space="preserve">
+    <value>Interactive Registry</value>
+  </data>
+  <data name="systemclock" xml:space="preserve">
+    <value>System Clock</value>
+  </data>
+  <data name="systemclock_clear" xml:space="preserve">
+    <value>Clear scheduled events</value>
+  </data>
+  <data name="about" xml:space="preserve">
+    <value>About</value>
+  </data>
+  <data name="about_text" xml:space="preserve">
+    <value>X-Fly Manager Studio 2026 is a system designed to make the organization of passenger flight on smaller airfields more accessible. The automated Visualization for guests and the organizer helps everyone maintain an overview of the situation. The tool may also assist the cashier and maintains a portable logging database
+This Program is based on a development for the "Aero Club Bad Nauheim"
+© REDFOXXD STUDIO</value>
+  </data>
+  <data name="clockcheck" xml:space="preserve">
+    <value>Scheduler Service</value>
+  </data>
+  <data name="execution_at" xml:space="preserve">
+    <value>Will trigger at:</value>
+  </data>
+  <data name="execution_last" xml:space="preserve">
+    <value>Last execution at:</value>
+  </data>
+  <data name="trigger" xml:space="preserve">
+    <value>Trigger</value>
+  </data>
+  <data name="interval" xml:space="preserve">
+    <value>Interval</value>
+  </data>
 </root>

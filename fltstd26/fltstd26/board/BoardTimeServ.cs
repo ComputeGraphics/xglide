@@ -11,7 +11,7 @@ namespace fltstd26.board
     internal static class BoardTimeServ
     {
         private static Scheduler? clock = null;
-
+        internal static Dictionary<Guid,Action> TimeListen = [];
         internal static void Init()
         {
             if (clock == null)
@@ -19,13 +19,18 @@ namespace fltstd26.board
             else clock.Start();
         }
 
-        internal static void Pause() => clock?.Pause();
-
-        internal static Dictionary<Guid,Action> TimeListen = [];
-
-        internal static void Clock(Guid id, Action a)
+        internal static void Pause()
         {
-            TimeListen.TryAdd(id,a);
+            clock?.Pause();
+            clock = null;
+        }
+
+        internal static void Clock(Guid id,Action a)
+        {
+            if(TimeListen.TryAdd(id,a))
+            {
+                TimeListen[id] = a;
+            }
         }
 
         internal static void Unload(Guid id)
@@ -33,7 +38,7 @@ namespace fltstd26.board
             TimeListen.Remove(id);
         }
 
-        private static void TickHandler(object? sender, EventArgs e)
+        private static void TickHandler(object? sender,EventArgs e)
         {
             foreach (KeyValuePair<Guid,Action> t in TimeListen)
             {

@@ -4,12 +4,13 @@
              xmlns:sys="clr-namespace:System;assembly=netstandard"
              xmlns:uset="clr-namespace:fltstd26.etc"
              x:Class="fltstd26.board.BoardPage"
+             BackgroundColor="{AppThemeBinding Dark={StaticResource Black}, Light={StaticResource White}}"
              Title="">
     <Grid RowDefinitions="Auto,*,Auto">
         <Grid ColumnDefinitions="Auto,*,Auto,Auto"
               Padding="15,10"
               ColumnSpacing="35"
-              BackgroundColor="{AppThemeBinding Dark={StaticResource PrimaryDark}, Light={StaticResource Primary}}">
+              BackgroundColor="{AppThemeBinding Dark={StaticResource SecondaryBg}, Light={StaticResource SecondaryDark}}">
             <Image Aspect="AspectFit"
                    WidthRequest="{Binding Source={x:Static uset:USettings.LogoSize_L}}"
                    x:Name="TopIconL"/>
@@ -39,14 +40,42 @@
         <Grid Grid.Row="1"
               RowDefinitions="Auto,*">
             <Grid x:Name="XTitles"/>
-            <ScrollView Grid.Row="1">
-                <VerticalStackLayout 
-                  BackgroundColor="{AppThemeBinding Dark={StaticResource Gray800}, Light={StaticResource Gray200}}"
-                  x:Name="XBoard"/>
+            <ScrollView Grid.Row="1"
+                        x:Name="XBoardScroll">
+                <VerticalStackLayout x:Name="XBoard"/>
             </ScrollView>
         </Grid>
-        <Grid Grid.Row="2">
-            <Label Text="Message Center"/>
-        </Grid>
+        <Border BackgroundColor="{AppThemeBinding Dark={StaticResource Gray050}, Light={StaticResource Gray800}}"
+                Padding="20"
+                Margin="15"
+                Grid.Row="2">
+            <Grid ColumnSpacing="20"
+                  ColumnDefinitions="Auto,*">
+
+                <Image x:Name="msgcenter_icon"
+                       Source="minus.png"
+                       VerticalOptions="Center"
+                       Aspect="AspectFit"
+                       HeightRequest="{Binding Source={x:Static uset:USettings.MSGCenterIconSize}}"/>
+                <VerticalStackLayout Grid.Column="1"
+                                     VerticalOptions="Center"
+                                     HorizontalOptions="Start"
+                                     Spacing="10">
+                    <Label  Text="Message Center"
+                        FontFamily="Archive"
+                        x:Name="msgcenter_title"
+                        FontSize="{Binding Source={x:Static uset:USettings.MSGCenterTitleSize}}"
+                        TextColor="{AppThemeBinding Dark={StaticResource Black}, Light={StaticResource White}}"/>
+
+                    <Label  Text="Warten auf Systemuhr... (bis zu 1min)"
+                        FontFamily="Archive"
+                        VerticalOptions="Center"
+                        x:Name="msgcenter_text"
+                        FontSize="{Binding Source={x:Static uset:USettings.MSGCenterTextSize}}"
+                        TextColor="{AppThemeBinding Dark={StaticResource Black}, Light={StaticResource White}}"/>
+                </VerticalStackLayout>
+            </Grid>
+        </Border>
+
     </Grid>
 </ContentPage>

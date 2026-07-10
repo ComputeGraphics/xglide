@@ -106,7 +106,7 @@ namespace fltstd26.core
             public int Price { get; set; }
         }
 
-        public static T? Clone<T>(T obj) where T : class, new()
+        public static T? Clone<T>(T? obj) where T : class, new()
         {
             /*var serialized = JsonSerializer.Serialize(obj);
             return JsonSerializer.Deserialize<T>(serialized);*/

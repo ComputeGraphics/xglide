@@ -70,6 +70,7 @@
 	<ItemGroup>
 		<!-- App Icon -->
 		<MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg.svg" Color="#512BD4" />
+		<MauiImage Include="Resources\Icons\play.svg" />
 		<MauiImage Include="Resources\Icons\takeoff_large.svg" />
 		<MauiImage Include="Resources\Icons\view.svg" />
 
@@ -119,6 +120,7 @@
 	  <None Remove="Resources\Icons\notify.svg" />
 	  <None Remove="Resources\Icons\paste.svg" />
 	  <None Remove="Resources\Icons\pin.svg" />
+	  <None Remove="Resources\Icons\play.svg" />
 	  <None Remove="Resources\Icons\plus.svg" />
 	  <None Remove="Resources\Icons\price.svg" />
 	  <None Remove="Resources\Icons\quick.svg" />
@@ -195,6 +197,12 @@
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="board\BoardView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="debug\ClockCheck.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="debug\ClockView.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="debug\DBPreview.xaml">

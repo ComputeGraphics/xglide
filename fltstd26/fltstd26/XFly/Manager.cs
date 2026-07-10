@@ -1,9 +1,11 @@
 ﻿using CommunityToolkit.Maui.Converters;
+using fltstd26.board;
 using fltstd26.core;
 using fltstd26.etc;
 using fltstd26.etc.online;
 using fltstd26.Resources.Texts;
 using fltstd26.system;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Runtime.Serialization;
 
@@ -24,7 +26,7 @@ namespace fltstd26.XFly
             {
                 Sheets.Slot? slot = RData.Get<Sheets.Slot>(flt.Slot);
                 if (slot is null || slot.Length != Length) continue;
-                if (!Now || slot.STime.TimeOfDay > (Quick ? DateTime.Now.AddMinutes(Quick ? -USettings.QuickTolerance : 0).TimeOfDay : DateTime.Now.TimeOfDay))
+                if (!Now || slot.STime > (Quick ? DateTime.Now.AddMinutes(Quick ? -USettings.QuickTolerance : 0) : DateTime.Now))
                 {
                     if (FlightFitsWeight(flt.Id,flt.Lfz,Weight)) flts.Add(flt);
                 }
@@ -273,37 +275,149 @@ namespace fltstd26.XFly
         }
 
         //Determine für einen ganzen Slot statt einen Flug!!!
-        public static void DetermineStatus(Sheets.Slot slt,bool UseOGN)
+        public static void DetermineStatus(Sheets.Slot slt,List<Sheets.Flt?>? optionalflt,bool UseOGN)
         {
-            List<byte> fltstatus = [];
-            List<Sheets.Flt?>? flts = RData.GetWhere<Sheets.Flt>($"slot={slt.Id}");
+            List<Sheets.Flt?>? flts = optionalflt ?? RData.GetWhere<Sheets.Flt>($"slot={slt.Id}");
             if (flts == null) return;
+            List<double> necessaryResyncs = [];
             foreach (Sheets.Flt? flt in flts)
             {
-                if (flt == null) continue;
-                byte status =(byte)(slt.Delay ? 3 : 0);
-                if (DateTime.Now.TimeOfDay >= slt.STime.TimeOfDay)
+                if (flt == null || flt.Status != 13) continue;
+                byte status = (byte)(slt.Delay ? 3 : 0);
+                DateTime now = DateTime.Now;
+                if (now >= slt.STime)
                 {
                     status = 2;
-
                     if (UseOGN)
                     {
                         (byte, int) online = OnlineManager.DetermineOnline(flt,slt);
+                        necessaryResyncs.Add(online.Item2);
                         status = online.Item1;
+                        //Neuen OGN Check ansetzen
                     }
                     else
                     {
-                        if (DateTime.Now.TimeOfDay >= slt.FTime.TimeOfDay) status = 7;
-                        else if (DateTime.Now.TimeOfDay >= slt.STime.TimeOfDay.Add(new TimeSpan(0,(int)Double.Ceiling(((slt.FTime.TimeOfDay - slt.STime.TimeOfDay).TotalMinutes - slt.Length) / 2),0))) status = 5;
+                        if (now >= slt.FTime) status = 7;
+                        else if (now >= slt.STime.Add(new TimeSpan(0,(int)double.Ceiling(((slt.FTime - slt.STime).TotalMinutes - slt.Length) / 2),0)))
+                        {
+                            necessaryResyncs.Add((slt.FTime - now).Add(TimeSpan.FromSeconds(5)).TotalMinutes);
+                            status = 5;
+                        }
                     }
                     //dpt/airborne/app/finished - OGN
                 }
-                fltstatus.Add(status);
+                StatusChange(flt.Id,status,flt.Status,false);
 
+                /*if (GSettings.StatusLink.ContainsKey(flt.Id)) GSettings.StatusLink[flt.Id] = status;
+                else GSettings.StatusLink.TryAdd(flt.Id, status);*/
+            }
+            StatusRefresh();
+            foreach (double resync in necessaryResyncs.Distinct().Where(x => x > 0))
+            {
+                TimeServ.Schedule(DateTime.Now.AddMinutes(resync),() => DetermineStatus(slt,null,USettings.OGNStatus));
             }
         }
 
+        internal static void StatusChange(int FltID,int prev,int status,bool dbupdate = true)
+        {
+            if (prev == 13 && status != 13) GSettings.StatusLink.Remove(FltID);
+            else if (status == 13 && !GSettings.StatusLink.TryAdd(FltID,prev)) GSettings.StatusLink[FltID] = status;
+            if (dbupdate) RData.UpdateProperty(FltID,(byte)status,"Status",typeof(Sheets.Flt));
+            StatusRefresh();
+            //Invoke Plan Update
+            //Invoke Board Update
+        }
 
+        internal static void StatusRefresh()
+        {
+            List<Sheets.Flt> allFlt = RData.GetFlightTable();
+            foreach (var fltcollector in XMain.FlightCollectors)
+            {
+                fltcollector.UpdateStatus(allFlt.Find(x => x.Id == fltcollector.FlightID)?.Status ?? 11);
+            }
+            //Xboard updaten
+            BoardController.SynchronizeWithStatus(allFlt);
+        }
+
+        private static readonly List<(Action, DatabaseAction)> DelayActions = [];
+        internal static void InitDelay(int slot,int minutes)
+        {
+            DateTime now = DateTime.Now;
+
+            List<Sheets.Slot> slots = RData.GetSlotsTable();
+            List<Sheets.Flt> flts = RData.GetFlightTable();
+            //Aktuelle betroffene Flüge
+            IEnumerable<Sheets.Flt> currentFLT = flts.Where(x => x.Slot == slot);
+            //Aktuell betroffene Flugzeuge
+            List<Sheets.Lfz> affectedAC = [.. RData.GetAircraftTable().Where(x => currentFLT.Select(x => x.Lfz).Contains(x.Id))];
+            //Verzögerter Slot
+            Sheets.Slot? delayed = slots.Find(x => x.Id == slot);
+            //Copy für ActionStack
+            Sheets.Slot? newdelay = Sheets.Clone<Sheets.Slot>(delayed);
+            //Folgende Slots in Zeitlicher Reihenfolge
+            if (delayed != null)
+            {
+                List<Sheets.Slot> orderedSlots = [.. slots.Where(x => x.STime >= delayed.FTime).OrderBy(x => x.STime)];
+                DelaySlotBy(delayed,newdelay,orderedSlots,affectedAC,minutes,true);
+                foreach ((Action, DatabaseAction) da in DelayActions)
+                {
+                    da.Item1.Invoke();
+                }
+                if (DelayActions.Count > 0) AutoAct.PushAction(null,[.. DelayActions.Select(x => x.Item2)]);
+            }
+        }
+
+        internal static void DelaySlotBy(Sheets.Slot delayed,Sheets.Slot? copy,List<Sheets.Slot> orderedSlots,List<Sheets.Lfz> affectedAC,double minutes,bool init)
+        {
+
+            //double affected = minutes / USettings.DelayTolerance;
+
+            if (copy != null)
+            {
+                if (orderedSlots.Count > 0 && minutes < USettings.MaxDelay)
+                {
+                    int tol = delayed.Delay ? 0 : USettings.DelayTolerance;
+                    TimeSpan dlyspn = orderedSlots[0].STime - delayed.FTime;
+                    double buff = dlyspn.TotalMinutes + tol;
+                    copy.Delay = true;
+                    copy.STime = copy.STime.AddMinutes(minutes);
+                    System.Diagnostics.Debug.WriteLine($"Buffer {buff} - Delay {minutes}");
+                    System.Diagnostics.Debug.WriteLine($"Buffer Slot ID {orderedSlots[0].Id} - Delayed Slot ID {delayed.Id}");
+                    DelayActions.Add((() =>
+                    {
+                        RData.UpdateProperty<bool>(delayed.Id,true,"Delay",typeof(Sheets.Slot));
+                        RData.UpdateProperty<DateTime>(delayed.Id,copy.STime,"STime",typeof(Sheets.Slot));
+                    },
+                    new() { ActionID = 3,DataType = typeof(Sheets.Slot),ObjectID = delayed.Id,PreviousValue = delayed,CurrentValue = copy }));
+                    if (buff < minutes)
+                    {
+                        double newdly = minutes - buff;
+                        copy.FTime = copy.FTime.AddMinutes(newdly);
+                        DelayActions.Add((() =>
+                        {
+                            RData.UpdateProperty<DateTime>(delayed.Id,copy.FTime,"FTime",typeof(Sheets.Slot));
+                        },
+                            new() { ActionID = 3,DataType = typeof(Sheets.Slot),ObjectID = delayed.Id,PreviousValue = delayed,CurrentValue = copy }));
+                        if (orderedSlots.Count > 0)
+                        {
+                            DelaySlotBy(orderedSlots[0],Sheets.Clone(orderedSlots[0]),orderedSlots[1..],affectedAC,newdly,false);
+                        }
+                    }
+                    else
+                    {
+                        //Kann in diesem Slot aufgefangen werden
+                        if (init) system.modals.ModalPush.Message(Lang.notification,Lang.delay_compensation);
+
+                    }
+                }
+                else
+                {
+                    //Keine Slots zu verschieben oder Delay zu groß
+                    if (init) system.modals.ModalPush.Message(Lang.notification,Lang.delay_error);
+                }
+            }
+
+        }
         public static int FormatPrice(int price) => price < 0 ? RData.Get<Sheets.PriceCat>(price * -1)?.Price ?? RData.Get<Sheets.PriceCat>(USettings.FallbackPriceCat)?.Price ?? 0 : price;
     }
 }

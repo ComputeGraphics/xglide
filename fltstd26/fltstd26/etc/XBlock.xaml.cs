@@ -11,14 +11,15 @@ public partial class XBlock : ContentView
     public int TargetID;
     public int Length;
     public bool[] Attribs;
-    private int NotifierID;
+    public string Name;
     public XBlock(Sheets.Target t,int l)
     {
         InitializeComponent();
         TargetID = t.Id;
         Length = l;
         //NodeID.Text = "TGTID: " + t.Id.ToString();
-        NodeName.Text = t.Name;
+        NodeName.Text = t.Name ?? "N/A";
+        Name = t.Name ?? "";
         NodeWeight.Text = t.Weight.ToString() + " " + Lang.xplan_weight;
         NodeLength.Text = l == -1 ? "N/A" : (l.ToString() + " min");
         Attribs = [t.QuickTicket,t.Persistent,false,false];
@@ -87,12 +88,12 @@ public partial class XBlock : ContentView
                     break;
                 case 2:
                     //Notify
-                    if (Attribs[id]) TimeServ.Unschedule(NotifierID);
-                    else TimeServ.Schedule(DateTime.Now.TimeOfDay.Add(TimeSpan.FromSeconds(5)),() =>
+                    /*if (Attribs[id]) TimeServ.Unschedule(NotifierID);
+                    else TimeServ.Schedule(DateTime.Now.Add(TimeSpan.FromSeconds(5)),() =>
                     {
                         system.modals.ModalPush.Message(Lang.notification,$"- {NodeName.Text} ({TargetID}) -\r\n{Lang.ticket_notification}");
                         DisableAttrib(2);
-                    });
+                    });*/
                     break;
                 case 3:
                     //Flag

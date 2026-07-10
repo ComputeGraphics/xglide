@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             xmlns:local="clr-namespace:fltstd26.Resources.Texts"
+             x:Class="fltstd26.debug.ClockView">
+    <Border StrokeThickness="2"
+            Stroke="{AppThemeBinding Light={StaticResource Gray500}, Dark={StaticResource Gray200}}"
+            Padding="25,16"
+            HorizontalOptions="Center">
+        <Grid ColumnSpacing="20"
+              ColumnDefinitions="Auto,Auto,*,Auto">
+            
+            <Image WidthRequest="24"
+                   HeightRequest="24"
+                   x:Name="Icon">
+                <Image.Behaviors>
+                    <toolkit:IconTintColorBehavior TintColor="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}"/>
+                </Image.Behaviors>
+            </Image>
+
+            <Label x:Name="ID"
+                       VerticalOptions="Center"
+                       HorizontalOptions="Start"
+                       FontAttributes="Bold"
+                       FontSize="Title"
+                   Grid.Column="1"/>
+
+            <Label x:Name="Info"
+                       VerticalOptions="Center"
+                       HorizontalOptions="Start"
+                       FontSize="Title"
+                   Grid.Column="2"/>
+
+            <HorizontalStackLayout Grid.Column="3"
+                                   VerticalOptions="Center"
+                                   HorizontalOptions="End">
+                <Button Text="{x:Static local:Lang.trigger}"
+                            Clicked="TriggerClick"
+                            TextColor="Black"
+                            CornerRadius="0"
+                            BackgroundColor="{AppThemeBinding Light={StaticResource SecondaryDark}, Dark={StaticResource SecondaryDark}}"
+                            FontAttributes="Bold"
+                            ImageSource="play.png"/>
+                <Button Text="{x:Static local:Lang.delete}"
+                            Clicked="DeleteClick"
+                            TextColor="Black"
+                            CornerRadius="0"
+                            BackgroundColor="{AppThemeBinding Light={StaticResource SecondaryDark}, Dark={StaticResource SecondaryDark}}"
+                            FontAttributes="Bold"
+                            ImageSource="bin.png"/>
+            </HorizontalStackLayout>
+        </Grid>
+    </Border>
+
+</ContentView>

@@ -4,7 +4,7 @@
              xmlns:uset="clr-namespace:fltstd26.etc"
              x:Class="fltstd26.board.BoardView">
     <Grid Padding="10"
-          BackgroundColor = "{AppThemeBinding Dark={StaticResource Gray900}, Light={StaticResource Gray100}}"
+          BackgroundColor = "{AppThemeBinding Dark={StaticResource Gray960}, Light={StaticResource Gray100}}"
           ColumnDefinitions="80, *">
         <Grid ColumnDefinitions="Auto,Auto"
               VerticalOptions="Center"
@@ -12,10 +12,12 @@
               ColumnSpacing="5">
             <Label Text="●"
                x:Name="GreenLight"
+                       FontFamily="ZenDots"
                TextColor="DarkGray"
                FontSize="{Binding Source={x:Static uset:USettings.FlashSize}}"/>
             <Label Text="●"
                x:Name="RedLight"
+                       FontFamily="ZenDots"
                Grid.Column="1"
                TextColor="DarkGray"
                FontSize="{Binding Source={x:Static uset:USettings.FlashSize}}"/>

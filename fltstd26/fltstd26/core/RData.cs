@@ -165,16 +165,16 @@ namespace fltstd26.core
             }
         }
 
-        internal static List<T?>? GetWhere<T>(string Predicate) where T : class, new()
+        internal static List<T?> GetWhere<T>(string Predicate) where T : class, new()
         {
             try
             {
-                return rdb?.Query<T?>($"SELECT * FROM {typeof(T).Name} WHERE {Predicate}");
+                return rdb?.Query<T?>($"SELECT * FROM {typeof(T).Name} WHERE {Predicate}") ?? [null];
             }
             catch (Exception e)
             {
                 ConProc.Log($"[RDATA] Selektion nach Eigenschaft fehlgeschlagen: {e.Message}",2);
-                return null;
+                return [null];
             }
         }
 

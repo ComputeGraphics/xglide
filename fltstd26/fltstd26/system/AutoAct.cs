@@ -42,8 +42,8 @@ namespace fltstd26.system
         {
             if (ActionButtons != null)
             {
-                ActionButtons.Item1.IsEnabled = !RedoLock && ActionStack.Count != 0;
-                ActionButtons.Item2.IsEnabled = !UndoLock && RedoStack.Count != 0;
+                //ActionButtons.Item1.IsEnabled = !RedoLock && ActionStack.Count != 0;
+                //ActionButtons.Item2.IsEnabled = !UndoLock && RedoStack.Count != 0;
             }
             if (RedoLock)
             {
@@ -70,7 +70,7 @@ namespace fltstd26.system
             UndoLock = false;
         }
 
-        public static void Undo()
+        public static bool Undo()
         {
             if (ActionStack.TryPeek(out List<DatabaseAction>? SingleStack) && SingleStack != null)
             {
@@ -84,13 +84,15 @@ namespace fltstd26.system
                 for (int i = 0; i < SingleStack.Count; i++) Modified.Add(SingleStack[i] with { ObjectID = ids[i] });
                 RedoStack.Push(Modified);
                 UndoLock = true;
-                if (ActionStack.Count > 0) ActionStack.Pop();     
+                if (ActionStack.Count > 0) ActionStack.Pop();
+                return SingleStack.Select(x => x.DataType).Intersect(GSettings.NecessaryResetTypes).Any();
             }
+            return false;
             //ConProc.ReportActionStack("ActionStack",ActionStack,UndoLock);
             //ConProc.ReportActionStack("RedoStack",RedoStack,RedoLock);
         }
 
-        public static void Redo()
+        public static bool Redo()
         {
             if (RedoStack.TryPeek(out List<DatabaseAction>? SingleStack) && SingleStack != null)
             {
@@ -101,7 +103,9 @@ namespace fltstd26.system
                 ActionStack.Push(Modified);
                 RedoLock = true;
                 if (RedoStack.Count > 0) RedoStack.Pop();
+                return SingleStack.Select(x => x.DataType).Intersect(GSettings.NecessaryResetTypes).Any();
             }
+            return false;
             //ConProc.ReportActionStack("ActionStack",ActionStack,UndoLock);
             //ConProc.ReportActionStack("RedoStack",RedoStack,RedoLock);
         }

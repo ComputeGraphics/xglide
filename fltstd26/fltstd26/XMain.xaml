@@ -66,6 +66,33 @@
         </MenuBarItem>
         <MenuBarItem Text="{x:Static local:Lang.menubar_system}">
 
+            <MenuFlyoutSubItem Text="{x:Static local:Lang.xplan}">
+                <MenuFlyoutItem Text="{x:Static local:Lang.refresh}"
+                            Clicked="XPlan_Refresh_Click" />
+                <MenuFlyoutItem Text="{x:Static local:Lang.restart}"
+                            Clicked="XPlan_Restart_Click" />
+            </MenuFlyoutSubItem>
+
+            <!--FLIGH INFORMATION DISPLAY SYSTEM-->
+            <MenuFlyoutSubItem Text="FIDS">
+                <MenuFlyoutItem Text="{x:Static local:Lang.open}"
+                                Clicked="XBoardClick"/>
+                <MenuFlyoutItem Text="{x:Static local:Lang.refresh}"
+                                Clicked="XBoard_RefreshClick"/>
+                <MenuFlyoutItem Text="{x:Static local:Lang.xboard_close_all}"
+                                Clicked="XBoard_TerminateAllClick"/>
+                <MenuFlyoutItem Text="{x:Static local:Lang.clock_restart}"
+                                Clicked="XBoard_ClockRestartClick"/>
+            </MenuFlyoutSubItem>
+
+            <MenuFlyoutSubItem Text="{x:Static local:Lang.systemclock}">
+                <MenuFlyoutItem Text="{x:Static local:Lang.view}"
+                                Clicked="SystemClockDisplay_Click" />
+                <MenuFlyoutItem Text="{x:Static local:Lang.systemclock_clear}"
+                                Clicked="SystemClockClear_Click" />
+                <MenuFlyoutItem Text="{x:Static local:Lang.restart}"
+                                Clicked="SystemClockRestart_Click" />
+            </MenuFlyoutSubItem>
 
             <MenuFlyoutSeparator/>
 
@@ -117,16 +144,19 @@
                                 Clicked="CheckDB_Overlap_Click" />
             </MenuFlyoutSubItem>
 
+            <MenuFlyoutItem Text="{x:Static local:Lang.clear_db}"
+                            Clicked="ClearDB_Click"/>
+
 
         </MenuBarItem>
 
         <MenuBarItem Text="{x:Static local:Lang.menubar_network}">
 
-            <MenuFlyoutItem Text="Change Theme"
-                     Command="{Binding ChangeThemeCommand}" />
-        </MenuBarItem>
-
-        <MenuBarItem Text="{x:Static local:Lang.menubar_tools}">
+            
+            
+            
+            <MenuFlyoutSeparator/>
+            
             <MenuFlyoutSubItem Text="OGN">
                 <MenuFlyoutItem Text="{x:Static local:Lang.refresh}"
                                 Clicked="OGN_RefreshClick"/>
@@ -141,32 +171,45 @@
                                     Clicked="OGN_LinkManualClick"/>
                     <MenuFlyoutItem Text="{x:Static local:Lang.ogn_linkremain}"
                                     Clicked="OGN_LinkRemainingManualClick"/>
-                    
+
                 </MenuFlyoutSubItem>
             </MenuFlyoutSubItem>
+            
+        </MenuBarItem>
+
+        <MenuBarItem Text="{x:Static local:Lang.menubar_tools}">
+            <MenuFlyoutItem Text="{x:Static local:Lang.undo}"
+                            Clicked="UndoInterClick"/>
+            <MenuFlyoutItem Text="{x:Static local:Lang.redo}"
+                            Clicked="RedoInterClick"/>
+            <MenuFlyoutItem Text="{x:Static local:Lang.copy}"
+                            Clicked="CopyInterClick"/>
+            <MenuFlyoutItem Text="{x:Static local:Lang.paste}"
+                            Clicked="PasteInterClick"/>
+            <MenuFlyoutItem Text="{x:Static local:Lang.edit}"
+                            Clicked="EditInterClick"/>
+            <MenuFlyoutItem Text="{x:Static local:Lang.flag}"
+                            Clicked="FlagInterClick"/>
+            <MenuFlyoutItem Text="{x:Static local:Lang.notify}"
+                            Clicked="NotifyInterClick"/>
+            <MenuFlyoutItem Text="{x:Static local:Lang.info}"
+                            Clicked="InfoInterClick"/>
+            <MenuFlyoutItem Text="{x:Static local:Lang.delete}"
+                            Clicked="DeleteInterClick"/>
         </MenuBarItem>
 
         <MenuBarItem Text="{x:Static local:Lang.view}">
-            <MenuFlyoutSubItem Text="XPlan">
-                <MenuFlyoutItem Text="{x:Static local:Lang.refresh}"
-                            Clicked="XPlan_Refresh_Click" />
-                <MenuFlyoutItem Text="{x:Static local:Lang.restart}"
-                            Clicked="XPlan_Restart_Click" />
-            </MenuFlyoutSubItem>
+
             <MenuFlyoutItem Text="XConsole"
                             Clicked="XConsoleClick" />
-            <MenuFlyoutItem Text="XBoard"
-                            Clicked="XBoardClick" />
-            <MenuFlyoutItem Text="Zoom Out"
-                            Command="{Binding ZoomOutCommand}" />
-            <MenuFlyoutItem Text="Reset Zoom"
-                            Command="{Binding ResetZoomCommand}" />
+
         </MenuBarItem>
+
         <MenuBarItem Text="{x:Static local:Lang.menubar_help}">
-            <MenuFlyoutItem Text="Documentation"
-                            Command="{Binding OpenDocumentationCommand}" />
-            <MenuFlyoutItem Text="About"
-                            Command="{Binding OpenAboutCommand}" />
+            <MenuFlyoutItem Text="Docs"
+                            Clicked="Docs_Clicked" />
+            <MenuFlyoutItem Text="{x:Static local:Lang.about}"
+                            Clicked="About_Clicked" />
         </MenuBarItem>
     </ContentPage.MenuBarItems>
 
@@ -175,7 +218,7 @@
               ColumnDefinitions="*, Auto">
         <Grid RowDefinitions="Auto,*"
               Grid.Column="0">
-            <Border Background="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource PrimaryDark}}"
+            <Border Background="{AppThemeBinding Light={StaticResource SecondaryDark}, Dark={StaticResource SecondaryDark}}"
                     Padding="10"
                     StrokeThickness="0">
                 <Grid ColumnDefinitions="*,*,*,*,*,*,*,*,*">
@@ -273,7 +316,7 @@
             </ScrollView>
         </Grid>
 
-        <Border Background="{AppThemeBinding Light={StaticResource Gray300}, Dark={StaticResource Gray800}}"
+        <Border Background="{AppThemeBinding Light={StaticResource Gray050}, Dark={StaticResource Gray800}}"
                 StrokeThickness="0"
                 Padding="10"
                 Grid.Column="1">
@@ -281,10 +324,10 @@
                   VerticalOptions="Fill">
                 <Label Text="{x:Static local:Lang.xplan_creator}"
                        FontSize="Medium"
-                       FontFamily="Archive"
+                       FontAttributes="Bold"
                        TextTransform="Uppercase"
                        HorizontalOptions="Center"
-                       FontAttributes="Bold"
+                       FontFamily="Archive"
                        Margin="0,0,0,5"
                        Grid.Row="0"/>
 
@@ -411,7 +454,7 @@
                 </ScrollView>
                 <Button Text="{x:Static local:Lang.xplan_add}"
                         Grid.Row="2"
-                        BackgroundColor="{AppThemeBinding Dark={StaticResource Secondary}, Light={StaticResource SecondaryDarkText}}"
+                        BackgroundColor="{AppThemeBinding Dark={StaticResource PrimaryDark}, Light={StaticResource Primary}}"
                         VerticalOptions="End"
                         HorizontalOptions="Fill"
                         CornerRadius="0"

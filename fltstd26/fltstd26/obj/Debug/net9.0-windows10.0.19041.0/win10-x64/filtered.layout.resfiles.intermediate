@@ -161,6 +161,11 @@ info.scale-125.png
 info.scale-150.png
 info.scale-200.png
 info.scale-400.png
+info_big.scale-100.png
+info_big.scale-125.png
+info_big.scale-150.png
+info_big.scale-200.png
+info_big.scale-400.png
 mail.scale-100.png
 mail.scale-125.png
 mail.scale-150.png
@@ -201,6 +206,11 @@ plane.scale-125.png
 plane.scale-150.png
 plane.scale-200.png
 plane.scale-400.png
+play.scale-100.png
+play.scale-125.png
+play.scale-150.png
+play.scale-200.png
+play.scale-400.png
 plus.scale-100.png
 plus.scale-125.png
 plus.scale-150.png

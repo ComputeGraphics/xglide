@@ -74,7 +74,8 @@ public partial class TargetCustomizer : ContentPage
             {
                 Entry[] addEntries = [.. FLTAddsEntryContainer.Children.OfType<Entry>()];
                 if (addEntries.Length == _splitAdds.Length) for (int i = 0; i < _splitAdds.Length; i++) if (ValueChanged(_splitAdds[i],addEntries[i].Text)) _splitAdds[i] = addEntries[i].Text ?? "";
-                _flight.Add = string.Join(';',_splitAdds);
+                string adds = string.Join(';',_splitAdds);
+                _flight.Add = adds == "" ? ";" : adds;
             }
         }
 

@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             xmlns:local="clr-namespace:fltstd26.Resources.Texts"
+             BackgroundColor="#88000000"
+             x:Class="fltstd26.debug.ClockCheck"
+             Title="ClockCheck">
+    <Border StrokeThickness="2"
+            Margin="200"
+            BackgroundColor="{x:AppThemeBinding Dark={StaticResource Gray950}, Light={StaticResource Gray200}}"
+            VerticalOptions="Fill"
+            HorizontalOptions="Fill">
+        <VerticalStackLayout>
+            <Grid RowDefinitions="Auto,*">
+                <Grid ColumnDefinitions="*,Auto"
+                  BackgroundColor="{x:AppThemeBinding Dark={StaticResource Gray900}, Light={StaticResource Gray300}}"
+                  Padding="20">
+                    <Label FontSize="28"
+                       x:Name="ItemTitle"
+                       FontFamily="Archive"
+                           VerticalOptions="Center"
+                       Text="{x:Static local:Lang.clockcheck}"
+                       HorizontalOptions="Start"/>
+                    <ImageButton Grid.Column="1"
+                             Source="x.png"
+                             BackgroundColor="Transparent"
+                             Clicked="QuitClicked">
+                        <ImageButton.Behaviors>
+                            <toolkit:IconTintColorBehavior TintColor="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}"/>
+                        </ImageButton.Behaviors>
+                    </ImageButton>
+                </Grid>
+                <VerticalStackLayout Grid.Row="1">
+                    <Border Background="{AppThemeBinding Light={StaticResource SecondaryDark}, Dark={StaticResource SecondaryDark}}"
+                            HorizontalOptions="Fill"
+                    Padding="10"
+                    StrokeThickness="0">
+                        <Grid ColumnDefinitions="*,*,*,*">
+                            <Button Text="{x:Static local:Lang.trigger}"
+                                    Clicked="TriggerClick"
+                                    TextColor="Black"
+                                    Grid.Column="0"
+                                    CornerRadius="0"
+                                    BackgroundColor="Transparent"
+                                    FontAttributes="Bold"
+                                    ImageSource="quick.png"/>
+                            <Button Text="{x:Static local:Lang.refresh}"
+                                    Clicked="RefreshClick"
+                                    TextColor="Black"
+                                    Grid.Column="1"
+                                    CornerRadius="0"
+                                    BackgroundColor="Transparent"
+                                    FontAttributes="Bold"
+                                    ImageSource="refresh.png"/>
+                            <Button Text="{x:Static local:Lang.restart}"
+                                    Clicked="RestartClick"
+                                    TextColor="Black"
+                                    Grid.Column="2"
+                                    CornerRadius="0"
+                                    BackgroundColor="Transparent"
+                                    FontAttributes="Bold"
+                                    ImageSource="quick.png"/>
+                            <Button Text="{x:Static local:Lang.delete}"
+                                    Clicked="ClearClick"
+                                    TextColor="Black"
+                                    Grid.Column="3"
+                                    CornerRadius="0"
+                                    BackgroundColor="Transparent"
+                                    FontAttributes="Bold"
+                                    ImageSource="bin.png"/>
+                        </Grid>
+                    </Border>
+                    <ScrollView Padding="20">
+                        <VerticalStackLayout x:Name="EventStack"
+                                             Spacing="10"/>
+                    </ScrollView>
+                </VerticalStackLayout>
+            </Grid>
+        </VerticalStackLayout>
+    </Border>
+</ContentPage>
