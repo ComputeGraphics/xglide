@@ -14,7 +14,7 @@ namespace fltstd26.XFly
         {
             try
             {
-                if (!RData.Active()) throw new Exception("Keine Datenbank");
+                if (!RData.Active()) throw new Exception("No Database");
                 bool FlightCreate = false;
                 IEnumerable<int>? OverrideSlotID = null;
                 if (TimeOverride != null)
@@ -23,30 +23,30 @@ namespace fltstd26.XFly
                     //DateTime? OverrideDateTime = OverrideFormat < DateTime.Now ? OverrideFormat + new TimeSpan(1,0,0,0) : OverrideFormat;
                     OverrideSlotID = RData.GetSlotsTable().Where(x => x.STime == OverrideFormat).Select(x => x.Id);
                 }
-                int FltLength = Length is null ? USettings.DefaultFltLength : Length.Value;
-                List<Sheets.Flt> FitFlightWeight = Manager.FindFitWeightLength(FltLength,TgtWeight,USettings.AutoTimeCheck,Quick);
+                int FltLength = Length is null ? USettings.Instance.DefaultFltLength : Length.Value;
+                List<Sheets.Flt> FitFlightWeight = Manager.FindFitWeightLength(FltLength,TgtWeight,USettings.Instance.AutoTimeCheck,Quick);
                 if (FitFlightWeight.Count != 0)
                 {
                     // -> Genug Flüge. Nutzer muss sich einen aussuchen
                     List<int> PriceList = [];
                     List<(string, string, string)> content = [("add.png", Lang.newflt, "")];
-                    foreach (Sheets.Flt i in FitFlightWeight)
+                    for(int i = 0; i < FitFlightWeight.Count; i++)
                     {
-                        if (LfzOverride == null || LfzOverride == i.Lfz)
+                        if (LfzOverride == null || LfzOverride == FitFlightWeight[i].Lfz)
                         {
-                            if (OverrideSlotID == null || OverrideSlotID.Contains(i.Slot))
+                            if (OverrideSlotID == null || OverrideSlotID.Contains(FitFlightWeight[i].Slot))
                             {
-                                Sheets.Lfz? lfz = RData.Get<Sheets.Lfz>(i.Lfz);
+                                Sheets.Lfz? lfz = RData.Get<Sheets.Lfz>(FitFlightWeight[i].Lfz);
                                 if (lfz != null)
                                 {
                                     Sheets.PriceCat? pc = RData.Get<Sheets.PriceCat>(lfz.PriceCat);
                                     if (TgtPrice < 0 && pc?.Id != -TgtPrice)
                                     {
-                                        FitFlightWeight.Remove(i);
+                                        FitFlightWeight.RemoveAt(i--);
                                         continue;
                                     }
                                     PriceList.Add(pc?.Id ?? -1);
-                                    content.Add(("plane.png", $"{i.EId ?? i.Id.ToString()} ({RData.Get<Sheets.Slot>(i.Slot)?.STime.ToShortTimeString() ?? "N/A"})", $"REG: {lfz?.Reg ?? "N/A"} PC: {pc?.Price} STATUS: {GSettings.Status[i.Status]}"));
+                                    content.Add(("plane.png", $"{FitFlightWeight[i].EId ?? FitFlightWeight[i].Id.ToString()} ({RData.Get<Sheets.Slot>(FitFlightWeight[i].Slot)?.STime.ToShortTimeString() ?? "N/A"})", $"REG: {lfz?.Reg ?? "N/A"} PC: {pc?.Price} STATUS: {GSettings.Status[FitFlightWeight[i].Status]}"));
                                 }
                             }
                         }
@@ -56,7 +56,7 @@ namespace fltstd26.XFly
                     await system.modals.ModalPush.Selector(Lang.select_flight,content).ContinueWith(t => TResult = t.Result);
                     if (TResult > 0)
                     {
-                        int Price = TgtPrice == 0 ? (PriceList[TResult - 1] == -1 ? -USettings.FallbackPriceCat : -PriceList[TResult - 1]) : TgtPrice;
+                        int Price = TgtPrice == 0 ? (PriceList[TResult - 1] == -1 ? -USettings.Instance.FallbackPriceCat : -PriceList[TResult - 1]) : TgtPrice;
                         if (Relink != null)
                         {
                             System.Diagnostics.Debug.WriteLine("Relinking directly");
@@ -74,7 +74,8 @@ namespace fltstd26.XFly
                     else if (TResult == -1)
                     {
                         //VOLLSTÄNDIGER ABBRUCH
-                        throw new Exception("Der Erstellungsvorgang des Ziels wurde durch den Nutzer abgebrochen");
+                        ConProc.Log("[XFLY-BUILDER] The Target Creation System was cancelled by the user",1);
+                        return false;
                     }
                     else if (TResult == 0)
                     {
@@ -94,7 +95,7 @@ namespace fltstd26.XFly
                     {
                         await CreateFlight(TgtWeight,Adds,Status,FltLength,Quick,TgtPrice,LfzOverride,OverrideSlotID).ContinueWith(x =>
                         {
-                            int Price = TgtPrice == 0 ? (x.Result.Item2 == -1 ? -USettings.FallbackPriceCat : -RData.Get<Sheets.Lfz>(x.Result.Item2)?.PriceCat ?? -USettings.FallbackPriceCat) : TgtPrice;
+                            int Price = TgtPrice == 0 ? (x.Result.Item2 == -1 ? -USettings.Instance.FallbackPriceCat : -RData.Get<Sheets.Lfz>(x.Result.Item2)?.PriceCat ?? -USettings.Instance.FallbackPriceCat) : TgtPrice;
                             if (x.Result.Item1.Id != -1)
                             {
                                 DatabaseAction da;
@@ -117,13 +118,17 @@ namespace fltstd26.XFly
                             //else throw new Exception("Flug konnte nicht erstellt werden");
                         });
                     }
-                    else throw new Exception("Erstellung des Fluges durch den Nutzer abgebrochen");
+                    else
+                    {
+                        ConProc.Log("[XFLY-BUILDER] The Flight Creation System was rejected by the user",1);
+                        return false;
+                    }
                 }
                 return true;
             }
             catch (Exception ex)
             {
-                ConProc.Log("[BUILDER] Fehler bei der Erstellung des Ziels: " + ex.Message,2);
+                ConProc.Log("[XFLY-BUILDER] Error creating target: " + ex.Message,2);
                 return false;
             }
         }
@@ -135,14 +140,14 @@ namespace fltstd26.XFly
             {
 
                 System.Diagnostics.Debug.WriteLine("Creating new flight. Length: " + Length.ToString() + ", Price: " + PriceFilter.ToString());
-                int FltLength = Length is null ? USettings.DefaultFltLength : Length.Value;
-                List<int> FitSlots = Manager.FindCompatibleSlots(FltLength,USettings.AutoTimeCheck ? DateTime.Now.AddMinutes(Quick ? -USettings.QuickTolerance : 0) : null);
+                int FltLength = Length is null ? USettings.Instance.DefaultFltLength : Length.Value;
+                List<int> FitSlots = Manager.FindCompatibleSlots(FltLength,USettings.Instance.AutoTimeCheck ? DateTime.Now.AddMinutes(Quick ? -USettings.Instance.QuickTolerance : 0) : null);
                 if (OverrideSlots != null) FitSlots = [.. FitSlots.Intersect(OverrideSlots)];
                 if (FitSlots.Count != 0)
                 {
                     System.Diagnostics.Debug.WriteLine("Checks for new flight passed");
                     //Alle Slots in denen Länge und Zeit passen
-                    if (USettings.AutoASAP)
+                    if (USettings.Instance.AutoASAP)
                     {
                         for (int i = 0; i < FitSlots.Count; i++)
                         {
@@ -231,14 +236,14 @@ namespace fltstd26.XFly
                 {
                     //Keine passenden Slots. yikes. würd mir stinken
                     //Methode für Slot generierung todo
-                    ConProc.Log("[BUILDER] Flug konnte wegen fehlender Slots nicht erstellt werden",1);
+                    ConProc.Log("[XFLY-BUILDER] Flight could not be created due to missing slots",1);
                     system.modals.ModalPush.Message(Lang.warning,Lang.missing_slots_warning);
                     return (new() { Id = -1 }, -1);
                 }
             }
             catch (Exception e)
             {
-                ConProc.Log("[BUILDER] Erstellung eines Fluges fehlgeschlagen: " + e.Message,1);
+                ConProc.Log("[XFLY-BUILDER] Flight could not be created: " + e.Message,1);
                 return (new() { Id = -1 }, -1);
             }
         }

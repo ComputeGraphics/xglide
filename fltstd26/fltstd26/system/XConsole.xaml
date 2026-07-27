@@ -6,10 +6,17 @@
 
     <ContentPage>
         <Grid RowDefinitions="Auto,*">
-            <Label Text="XConsole" FontSize="24" HorizontalOptions="Center" Margin="0,20"/>
-            <ScrollView Grid.Row="1">
+            <Label Text="Console" 
+                   FontSize="30"
+                   FontFamily="Archive"
+                   HorizontalOptions="Start"
+                   Margin="20,10"/>
+            <ScrollView Grid.Row="1"
+                        BackgroundColor="Black">
                 <Label HorizontalOptions="Start"
                        x:Name="XConsoleContent"
+                       FontSize="16"
+                       TextColor ="White"
                        Padding="10"/>
             </ScrollView>
         </Grid>

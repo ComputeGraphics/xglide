@@ -15,13 +15,14 @@ namespace fltstd26.board
         internal static void Init()
         {
             if (clock == null)
-                clock = new(TimeSpan.FromMilliseconds(USettings.FlashInterval),TickHandler,true);
+                clock = new(TimeSpan.FromMilliseconds(USettings.Instance.FlashInterval),TickHandler,true);
             else clock.Start();
         }
 
-        internal static void Pause()
+        internal static void Pause(bool clear)
         {
             clock?.Pause();
+            if(clear) TimeListen.Clear();
             clock = null;
         }
 

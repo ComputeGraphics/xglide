@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             BackgroundColor="#88000000"
+             x:Class="fltstd26.system.modals.WindowLock"
+             xmlns:local="clr-namespace:fltstd26.Resources.Texts"
+             Title="WindowLock">
+    <Border StrokeThickness="2"
+            WidthRequest="600"
+            BackgroundColor="{x:AppThemeBinding Dark={StaticResource Gray950}, Light={StaticResource Gray200}}"
+            VerticalOptions="Center"
+            HorizontalOptions="Center">
+        <VerticalStackLayout>
+            <VerticalStackLayout Grid.Column="1"
+                                     Padding="10">
+                <Label FontSize="28"
+                           Text="{x:Static local:Lang.session_locked_title}"
+                           FontAttributes="Bold"
+                           FontFamily="Archive"
+                           HorizontalOptions="Start"/>
+                <Label FontSize="16"
+                           Text="{x:Static local:Lang.session_locked}"
+                           Margin="0,5"
+                           HorizontalOptions="Start"/>
+            </VerticalStackLayout>
+            <Grid BackgroundColor="{x:AppThemeBinding Dark={StaticResource Gray900}, Light={StaticResource Gray300}}"
+              ColumnSpacing="10"
+              ColumnDefinitions="*,Auto">
+                <Button Text="{x:Static local:Lang.proceed_anyway}"
+                        CornerRadius="0"
+                        WidthRequest="180"
+                    Grid.Column="1"
+                        Clicked="OnOK"/>
+            </Grid>
+        </VerticalStackLayout>
+    </Border>
+</ContentPage>

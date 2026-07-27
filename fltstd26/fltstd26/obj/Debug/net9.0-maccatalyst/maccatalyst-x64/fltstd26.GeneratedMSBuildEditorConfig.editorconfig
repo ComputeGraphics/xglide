@@ -3,6 +3,11 @@ build_property.EnableAotAnalyzer =
 build_property.EnableSingleFileAnalyzer = 
 build_property.EnableTrimAnalyzer = false
 build_property.IncludeAllContentForSelfExtract = 
+build_property.MvvmToolkitEnableINotifyPropertyChangingSupport = true
+build_property._MvvmToolkitIsUsingWindowsRuntimePack = false
+build_property.CsWinRTComponent = 
+build_property.CsWinRTAotOptimizerEnabled = 
+build_property.CsWinRTAotWarningLevel = 
 build_property.TargetFramework = net9.0-maccatalyst
 build_property.TargetFrameworkIdentifier = .NETCoreApp
 build_property.TargetFrameworkVersion = v9.0
@@ -38,6 +43,24 @@ build_metadata.AdditionalFiles.ManifestResourceName = fltstd26.assistant.Assista
 build_metadata.AdditionalFiles.TargetPath = assistant\Assistant.xaml
 build_metadata.AdditionalFiles.RelativePath = assistant\Assistant.xaml
 
+[C:/Users/Arthur/Documents/GitHub/xglide/fltstd26/fltstd26/assistant/config/ConfigSettings.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = fltstd26.assistant.config.ConfigSettings.xaml
+build_metadata.AdditionalFiles.TargetPath = assistant\config\ConfigSettings.xaml
+build_metadata.AdditionalFiles.RelativePath = assistant\config\ConfigSettings.xaml
+
+[C:/Users/Arthur/Documents/GitHub/xglide/fltstd26/fltstd26/assistant/EntityView.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = fltstd26.assistant.EntityView.xaml
+build_metadata.AdditionalFiles.TargetPath = assistant\EntityView.xaml
+build_metadata.AdditionalFiles.RelativePath = assistant\EntityView.xaml
+
+[C:/Users/Arthur/Documents/GitHub/xglide/fltstd26/fltstd26/assistant/FileManager.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = fltstd26.assistant.FileManager.xaml
+build_metadata.AdditionalFiles.TargetPath = assistant\FileManager.xaml
+build_metadata.AdditionalFiles.RelativePath = assistant\FileManager.xaml
+
 [C:/Users/Arthur/Documents/GitHub/xglide/fltstd26/fltstd26/assistant/IABoard.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
 build_metadata.AdditionalFiles.ManifestResourceName = fltstd26.assistant.IABoard.xaml
@@ -50,11 +73,29 @@ build_metadata.AdditionalFiles.ManifestResourceName = fltstd26.assistant.ListTil
 build_metadata.AdditionalFiles.TargetPath = assistant\ListTile.xaml
 build_metadata.AdditionalFiles.RelativePath = assistant\ListTile.xaml
 
+[C:/Users/Arthur/Documents/GitHub/xglide/fltstd26/fltstd26/assistant/profiles/AircraftCreator.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = fltstd26.assistant.profiles.AircraftCreator.xaml
+build_metadata.AdditionalFiles.TargetPath = assistant\profiles\AircraftCreator.xaml
+build_metadata.AdditionalFiles.RelativePath = assistant\profiles\AircraftCreator.xaml
+
+[C:/Users/Arthur/Documents/GitHub/xglide/fltstd26/fltstd26/assistant/profiles/PriceCatCreator.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = fltstd26.assistant.profiles.PriceCatCreator.xaml
+build_metadata.AdditionalFiles.TargetPath = assistant\profiles\PriceCatCreator.xaml
+build_metadata.AdditionalFiles.RelativePath = assistant\profiles\PriceCatCreator.xaml
+
 [C:/Users/Arthur/Documents/GitHub/xglide/fltstd26/fltstd26/assistant/profiles/ProfileCreator.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
 build_metadata.AdditionalFiles.ManifestResourceName = fltstd26.assistant.profiles.ProfileCreator.xaml
 build_metadata.AdditionalFiles.TargetPath = assistant\profiles\ProfileCreator.xaml
 build_metadata.AdditionalFiles.RelativePath = assistant\profiles\ProfileCreator.xaml
+
+[C:/Users/Arthur/Documents/GitHub/xglide/fltstd26/fltstd26/assistant/profiles/SlotCreator.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = fltstd26.assistant.profiles.SlotCreator.xaml
+build_metadata.AdditionalFiles.TargetPath = assistant\profiles\SlotCreator.xaml
+build_metadata.AdditionalFiles.RelativePath = assistant\profiles\SlotCreator.xaml
 
 [C:/Users/Arthur/Documents/GitHub/xglide/fltstd26/fltstd26/board/BoardPage.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
@@ -110,6 +151,12 @@ build_metadata.AdditionalFiles.ManifestResourceName = fltstd26.Resources.Styles.
 build_metadata.AdditionalFiles.TargetPath = Resources\Styles\Styles.xaml
 build_metadata.AdditionalFiles.RelativePath = Resources\Styles\Styles.xaml
 
+[C:/Users/Arthur/Documents/GitHub/xglide/fltstd26/fltstd26/system/modals/Entry.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = fltstd26.system.modals.Entry.xaml
+build_metadata.AdditionalFiles.TargetPath = system\modals\Entry.xaml
+build_metadata.AdditionalFiles.RelativePath = system\modals\Entry.xaml
+
 [C:/Users/Arthur/Documents/GitHub/xglide/fltstd26/fltstd26/system/modals/Notification.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
 build_metadata.AdditionalFiles.ManifestResourceName = fltstd26.system.modals.Notification.xaml
@@ -127,6 +174,12 @@ build_metadata.AdditionalFiles.GenKind = Xaml
 build_metadata.AdditionalFiles.ManifestResourceName = fltstd26.system.modals.SelectorItem.xaml
 build_metadata.AdditionalFiles.TargetPath = system\modals\SelectorItem.xaml
 build_metadata.AdditionalFiles.RelativePath = system\modals\SelectorItem.xaml
+
+[C:/Users/Arthur/Documents/GitHub/xglide/fltstd26/fltstd26/system/modals/WindowLock.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = fltstd26.system.modals.WindowLock.xaml
+build_metadata.AdditionalFiles.TargetPath = system\modals\WindowLock.xaml
+build_metadata.AdditionalFiles.RelativePath = system\modals\WindowLock.xaml
 
 [C:/Users/Arthur/Documents/GitHub/xglide/fltstd26/fltstd26/system/modals/YesNo.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml

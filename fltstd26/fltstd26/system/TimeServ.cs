@@ -14,7 +14,7 @@ namespace fltstd26.system
         internal static void Init()
         {
             clock ??= new(TimeSpan.FromSeconds(5),(s,e) => Tick(),true,RoundToMinute(DateTime.Now) - DateTime.Now - TimeSpan.FromSeconds(5));
-            ConProc.Log("[TIME] Uhr gestartet");
+            ConProc.Log("[TIME] Clock started");
         }
 
         internal static int Schedule(DateTime executionTime,Action action)
@@ -32,11 +32,10 @@ namespace fltstd26.system
             BoardController.ClockID = -1;
         }
 
-        internal static void Restart()
+        internal static void Close()
         {
             clock?.Pause();
             clock = null;
-            Init();
         }
 
         internal static void Unschedule(int id)

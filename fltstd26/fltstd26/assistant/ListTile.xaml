@@ -4,15 +4,14 @@
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              x:Class="fltstd26.assistant.ListTile">
     <Border StrokeThickness="2"
-            x:Name="ElementBorder"
             HorizontalOptions="Fill">
-        <Grid Margin="5,15"
+        <Grid Margin="15,5"
               ColumnDefinitions="Auto,Auto,*,Auto">
             <CheckBox x:Name="Check"/>
-            <Image WidthRequest="36"
-                   HeightRequest="36"
+            <Image WidthRequest="48"
+                   HeightRequest="48"
                    Margin="0,10"
-                   VerticalOptions="Start"
+                   VerticalOptions="Center"
                    x:Name="Icon"
                    Grid.Column="1">
                 <Image.Behaviors>
@@ -26,18 +25,57 @@
                        VerticalOptions="End"
                        HorizontalOptions="Start"
                        FontAttributes="Bold"
-                       FontSize="Title"/>
+                       FontSize="22"/>
                 <Label x:Name="Description"
                        Grid.Row="1"
                        VerticalOptions="Start"
                        HorizontalOptions="Start"
-                       FontSize="Subtitle"/>
+                       FontSize="18"/>
             </Grid>
             <HorizontalStackLayout Grid.Column="3"
                                    HorizontalOptions="End"
                                    VerticalOptions="Center">
+                
                 <ImageButton BackgroundColor="Transparent"
+                             Clicked="PlayClick"
+                             x:Name="Play"
+                             Source="play.png"
+                             Aspect="AspectFit">
+                    <ImageButton.Behaviors>
+                        <toolkit:IconTintColorBehavior TintColor="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}"/>
+                    </ImageButton.Behaviors>
+                </ImageButton>
+                <ImageButton BackgroundColor="Transparent"
+                             Clicked="ViewClick"
+                             x:Name="View"
                              Source="view.png"
+                             Aspect="AspectFit">
+                    <ImageButton.Behaviors>
+                        <toolkit:IconTintColorBehavior TintColor="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}"/>
+                    </ImageButton.Behaviors>
+                </ImageButton>
+                <ImageButton BackgroundColor="Transparent"
+                             Clicked="ModifyClick"
+                             x:Name="Modify"
+                             Source="modify.png"
+                             Aspect="AspectFit">
+                    <ImageButton.Behaviors>
+                        <toolkit:IconTintColorBehavior TintColor="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}"/>
+                    </ImageButton.Behaviors>
+                </ImageButton>
+                <ImageButton BackgroundColor="Transparent"
+                             Clicked="ShareClick"
+                             x:Name="Share"
+                             Source="mail.png"
+                             Aspect="AspectFit">
+                    <ImageButton.Behaviors>
+                        <toolkit:IconTintColorBehavior TintColor="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}"/>
+                    </ImageButton.Behaviors>
+                </ImageButton>
+                <ImageButton BackgroundColor="Transparent"
+                             Clicked="DeleteClick"
+                             x:Name="Delete"
+                             Source="bin.png"
                              Aspect="AspectFit">
                     <ImageButton.Behaviors>
                         <toolkit:IconTintColorBehavior TintColor="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}"/>

@@ -206,7 +206,8 @@
     <value>Rückgängig</value>
   </data>
   <data name="welcome" xml:space="preserve">
-    <value>Willkommen im Flugplaner Studio 2026!</value>
+    <value>Willkommen im 
+XFly Manager Studio 2026!</value>
     <comment>assistant</comment>
   </data>
   <data name="xplan_add" xml:space="preserve">
@@ -498,9 +499,9 @@ SIND SIE SICHER?</value>
     <value>Über</value>
   </data>
   <data name="about_text" xml:space="preserve">
-    <value>X-Fly Management Studio ist ein System, um den Gastflugverkehr an kleinen Flugplätzen einfach zu regeln. Es hilft durch Visualisierung sowohl den Gästen als auch dem Veranstalter den Überblick über viele Tickets zu haben und die Kasse zu verwalten. 
+    <value>XFly Management Studio ist ein System, um den Gastflugverkehr an kleinen Flugplätzen einfach zu regeln. Es hilft durch Visualisierung sowohl den Gästen als auch dem Veranstalter den Überblick über viele Tickets zu haben und die Kasse zu verwalten. 
 Dieses Programm basiert auf einer Entwicklung für den Aero Club Bad Nauheim.
-© REDFOXXD STUDIO</value>
+© REDFOXX STUDIO</value>
   </data>
   <data name="clockcheck" xml:space="preserve">
     <value>Aufgabenplanung</value>
@@ -516,5 +517,210 @@ Dieses Programm basiert auf einer Entwicklung für den Aero Club Bad Nauheim.
   </data>
   <data name="interval" xml:space="preserve">
     <value>Intervall</value>
+  </data>
+  <data name="welcome_init" xml:space="preserve">
+    <value>Zuerst müssen wir eine Konfiguration erstellen, damit das Programm einsatzfähig ist. Der intelligente Assistent wird Ihnen dabei helfen</value>
+  </data>
+  <data name="profile_manager" xml:space="preserve">
+    <value>Profilverzeichnis</value>
+  </data>
+  <data name="remote_continue" xml:space="preserve">
+    <value>Als NEXUS Slave fortfahren</value>
+  </data>
+  <data name="explorer_continue" xml:space="preserve">
+    <value>In File-Explorer öffnen</value>
+  </data>
+  <data name="profile_select" xml:space="preserve">
+    <value>Bitte wählen oder erstellen Sie ein Profil:</value>
+  </data>
+  <data name="last_change" xml:space="preserve">
+    <value>Letzte Änderung</value>
+  </data>
+  <data name="newprofile" xml:space="preserve">
+    <value>Neues Profil</value>
+  </data>
+  <data name="forward" xml:space="preserve">
+    <value>Weiter</value>
+  </data>
+  <data name="backward" xml:space="preserve">
+    <value>Zurück</value>
+  </data>
+  <data name="price_doubledot" xml:space="preserve">
+    <value>Preis:</value>
+  </data>
+  <data name="name_doubledot" xml:space="preserve">
+    <value>Bezeichnung:</value>
+  </data>
+  <data name="price_create" xml:space="preserve">
+    <value>Preiskategorie</value>
+  </data>
+  <data name="new_db" xml:space="preserve">
+    <value>Neue Datenbank</value>
+  </data>
+  <data name="new_db_name" xml:space="preserve">
+    <value>Name der neuen Datenbank:</value>
+  </data>
+  <data name="manual_refresh" xml:space="preserve">
+    <value>Änderungen werden nur bei Drücken von "Aktualisieren" dargestellt!</value>
+  </data>
+  <data name="slotcustomizer" xml:space="preserve">
+    <value>Slot Konfiguration</value>
+  </data>
+  <data name="start" xml:space="preserve">
+    <value>Start</value>
+  </data>
+  <data name="end" xml:space="preserve">
+    <value>Ende</value>
+  </data>
+  <data name="length_doubledot" xml:space="preserve">
+    <value>Länge (min):</value>
+  </data>
+  <data name="session_locked" xml:space="preserve">
+    <value>Die Sitzung wurde aus Sicherheitsgründen gesperrt. Diese Meldung verschwindet automatisch, wenn die Sperrung aufgehoben ist und der Safe-Mode verlassen wird.</value>
+  </data>
+  <data name="session_locked_title" xml:space="preserve">
+    <value>Sitzung gesperrt</value>
+  </data>
+  <data name="proceed_anyway" xml:space="preserve">
+    <value>Trotzdem Fortfahren</value>
+  </data>
+  <data name="aircraft_create" xml:space="preserve">
+    <value>Lfz. Erstellen</value>
+  </data>
+  <data name="type" xml:space="preserve">
+    <value>Muster</value>
+  </data>
+  <data name="type_doubledot" xml:space="preserve">
+    <value>Muster:</value>
+  </data>
+  <data name="autoassign" xml:space="preserve">
+    <value>Automatische Ticket Zuweisung</value>
+  </data>
+  <data name="weight_doubledot" xml:space="preserve">
+    <value>Verfügbare Sitze:</value>
+  </data>
+  <data name="flight_interval_doubledot" xml:space="preserve">
+    <value>Planungsintervall:</value>
+  </data>
+  <data name="ogn_doubledot" xml:space="preserve">
+    <value>OGN-Adresse:</value>
+  </data>
+  <data name="ogn_address" xml:space="preserve">
+    <value>OGN Adresse</value>
+  </data>
+  <data name="lfzreg_doubledot" xml:space="preserve">
+    <value>Lfz Kennzeichen:</value>
+  </data>
+  <data name="lfzreg" xml:space="preserve">
+    <value>Kennzeichen</value>
+  </data>
+  <data name="available_in_doubledot" xml:space="preserve">
+    <value>Verfügbar am:</value>
+  </data>
+  <data name="accustomizer" xml:space="preserve">
+    <value>Luftfahrzeug Konfiguration</value>
+  </data>
+  <data name="requestfromdb" xml:space="preserve">
+    <value>Aus anderem Profil importieren</value>
+  </data>
+  <data name="profile_choose" xml:space="preserve">
+    <value>Profil wählen</value>
+  </data>
+  <data name="profile_ready" xml:space="preserve">
+    <value>Ihr Profil ist jetzt bereit.
+Falls ihr Profil nicht sofort erscheint, drücken Sie einfach den "Aktualisieren" Knopf.</value>
+  </data>
+  <data name="config_manager" xml:space="preserve">
+    <value>Konfigurationsverzeichnis</value>
+  </data>
+  <data name="config_select" xml:space="preserve">
+    <value>Bitte wählen oder erstellen Sie eine Konfiguration:</value>
+  </data>
+  <data name="price_sum" xml:space="preserve">
+    <value>Gesamtpreis in €</value>
+  </data>
+  <data name="xmlreport" xml:space="preserve">
+    <value>XML-Register</value>
+  </data>
+  <data name="lfz" xml:space="preserve">
+    <value>Luftfahrzeuge</value>
+  </data>
+  <data name="slots" xml:space="preserve">
+    <value>Zeitfenster</value>
+  </data>
+  <data name="pricecats" xml:space="preserve">
+    <value>Preiskategorien</value>
+  </data>
+  <data name="targets" xml:space="preserve">
+    <value>Tickets</value>
+  </data>
+  <data name="flights" xml:space="preserve">
+    <value>Flüge</value>
+  </data>
+  <data name="db_preview" xml:space="preserve">
+    <value>Datenbankvorschau</value>
+  </data>
+  <data name="status_finish_old" xml:space="preserve">
+    <value>Abgelaufene Flüge beenden</value>
+  </data>
+  <data name="status_refresh_current" xml:space="preserve">
+    <value>Aktuellen Slot aktualisieren</value>
+  </data>
+  <data name="status_refresh_next" xml:space="preserve">
+    <value>Nächsten Slot aktualisieren</value>
+  </data>
+  <data name="status_refresh_all" xml:space="preserve">
+    <value>Alle Flüge aktualisieren</value>
+  </data>
+  <data name="console" xml:space="preserve">
+    <value>Konsole</value>
+  </data>
+  <data name="flight_sum" xml:space="preserve">
+    <value>Fluganzahl</value>
+  </data>
+  <data name="targets_transported" xml:space="preserve">
+    <value>Tickets transportiert</value>
+  </data>
+  <data name="weight_transported" xml:space="preserve">
+    <value>Passagiere transportiert</value>
+  </data>
+  <data name="length_sum" xml:space="preserve">
+    <value>Gesamtzeit in der Luft</value>
+  </data>
+  <data name="turnover" xml:space="preserve">
+    <value>Gesamtumsatz in €</value>
+  </data>
+  <data name="activity_range" xml:space="preserve">
+    <value>Aktivitätsfenster</value>
+  </data>
+  <data name="targets_sold" xml:space="preserve">
+    <value>Verkaufte Tickets</value>
+  </data>
+  <data name="new_config" xml:space="preserve">
+    <value>Neue Konfiguration</value>
+  </data>
+  <data name="new_config_name" xml:space="preserve">
+    <value>Name der neuen Konfiguration:</value>
+  </data>
+  <data name="config_switch" xml:space="preserve">
+    <value>Konfigurationswechsel</value>
+  </data>
+  <data name="config_switch_warn" xml:space="preserve">
+    <value>Soll in die ausgewählte Konfiguration gewechselt werden?</value>
+  </data>
+  <data name="xml_report_target" xml:space="preserve">
+    <value>Ticketbericht exportieren...</value>
+  </data>
+  <data name="xml_report_ac" xml:space="preserve">
+    <value>Luftfahrzeugbericht exportieren...</value>
+  </data>
+  <data name="open_flipit" xml:space="preserve">
+    <value>Fallblattanzeige öffnen</value>
+  </data>
+  <data name="total_transactions" xml:space="preserve">
+    <value>Registrierte Transaktionen</value>
+  </data>
+  <data name="apply" xml:space="preserve">
+    <value>Anwenden</value>
   </data>
 </root>

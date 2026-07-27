@@ -9,7 +9,7 @@ public partial class OnlineFetch : Window
     public OnlineFetch()
     {
         InitializeComponent();
-        AP.Text = USettings.Homebase;
+        AP.Text = USettings.Instance.Homebase;
     }
 
     public async void Refresh_Click(object sender,EventArgs e)

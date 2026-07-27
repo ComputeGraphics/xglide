@@ -3,37 +3,38 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:sys="clr-namespace:System;assembly=netstandard"
              xmlns:uset="clr-namespace:fltstd26.etc"
+             BindingContext="{x:Static uset:USettings.Oberservables}"
+             x:DataType="uset:ObservableSettings"
              x:Class="fltstd26.board.BoardPage"
-             BackgroundColor="{AppThemeBinding Dark={StaticResource Black}, Light={StaticResource White}}"
              Title="">
     <Grid RowDefinitions="Auto,*,Auto">
         <Grid ColumnDefinitions="Auto,*,Auto,Auto"
               Padding="15,10"
               ColumnSpacing="35"
-              BackgroundColor="{AppThemeBinding Dark={StaticResource SecondaryBg}, Light={StaticResource SecondaryDark}}">
+              x:Name="TitleBG">
             <Image Aspect="AspectFit"
-                   WidthRequest="{Binding Source={x:Static uset:USettings.LogoSize_L}}"
+                   WidthRequest="{Binding LogoSize_L}"
                    x:Name="TopIconL"/>
             <Label HorizontalOptions="Start"
                    Grid.Column="1"
                    VerticalOptions="Center"
                    FontFamily="Archive"
-                   FontSize="{Binding Source={x:Static uset:USettings.TitleSize}}"
+                   FontSize="{Binding TitleSize}"
                    x:Name="BoardTitle"/>
             <Image Aspect="AspectFit"
-                   WidthRequest="{Binding Source={x:Static uset:USettings.LogoSize_R}}"
+                   WidthRequest="{Binding LogoSize_R}"
                    Grid.Column="2"
                    x:Name="TopIconR"/>
             <VerticalStackLayout Grid.Column="3"
                                  VerticalOptions="Center">
                 <Label x:Name="BoardTime"
                        HorizontalOptions="Center"
-                       FontSize="{Binding Source={x:Static uset:USettings.ClockSize}}"
+                       FontSize="{Binding ClockSize}"
                        FontFamily="SquareSans"
                        FontAttributes="Bold"/>
                 <Label x:Name="BoardDate"
                        HorizontalOptions="Center"
-                       FontSize="{Binding Source={x:Static uset:USettings.DateSize}}"
+                       FontSize="{Binding DateSize}"
                        FontFamily="ZenDots"/>
             </VerticalStackLayout>
         </Grid>
@@ -46,17 +47,17 @@
             </ScrollView>
         </Grid>
         <Border BackgroundColor="{AppThemeBinding Dark={StaticResource Gray050}, Light={StaticResource Gray800}}"
-                Padding="20"
-                Margin="15"
+                Padding="20,15"
+                Margin="15,13"
                 Grid.Row="2">
             <Grid ColumnSpacing="20"
                   ColumnDefinitions="Auto,*">
 
                 <Image x:Name="msgcenter_icon"
-                       Source="minus.png"
+                       Source="slot.png"
                        VerticalOptions="Center"
                        Aspect="AspectFit"
-                       HeightRequest="{Binding Source={x:Static uset:USettings.MSGCenterIconSize}}"/>
+                       HeightRequest="{Binding MsgCenterIconSize}"/>
                 <VerticalStackLayout Grid.Column="1"
                                      VerticalOptions="Center"
                                      HorizontalOptions="Start"
@@ -64,14 +65,14 @@
                     <Label  Text="Message Center"
                         FontFamily="Archive"
                         x:Name="msgcenter_title"
-                        FontSize="{Binding Source={x:Static uset:USettings.MSGCenterTitleSize}}"
+                        FontSize="{Binding MsgCenterTitleSize}"
                         TextColor="{AppThemeBinding Dark={StaticResource Black}, Light={StaticResource White}}"/>
 
                     <Label  Text="Warten auf Systemuhr... (bis zu 1min)"
                         FontFamily="Archive"
                         VerticalOptions="Center"
                         x:Name="msgcenter_text"
-                        FontSize="{Binding Source={x:Static uset:USettings.MSGCenterTextSize}}"
+                        FontSize="{Binding MsgCenterTextSize}"
                         TextColor="{AppThemeBinding Dark={StaticResource Black}, Light={StaticResource White}}"/>
                 </VerticalStackLayout>
             </Grid>

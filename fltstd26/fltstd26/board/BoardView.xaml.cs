@@ -5,21 +5,43 @@ namespace fltstd26.board;
 public partial class BoardView : ContentView
 {
 	//Scheduler? FlashClock = null;
-	public DateTime StartTime;
+	public readonly DateTime StartTime;
+	public readonly int FlightID;
+	public readonly int AddColumn;
 	//FL - Flash Light
 	// 0 - aus, 1 - grün, 2 - rot
 	// 4 - grün blinken, 5 - rot blinken, 6 - switch blinken
-	private Border? StatusField;
-	public BoardView(View[] contents, double[] widths, byte FL, DateTime time)
+	private readonly Border? StatusField;
+	public BoardView(int id, View[] contents, double[] widths, int addcolumn, byte FL, DateTime time)
 	{
 		InitializeComponent();
+		FlightID = id;
 		StartTime = time;
-        if (contents.Length == widths.Length)
+		AddColumn = addcolumn;
+        if (contents.Length >= widths.Length)
         {
+			int addcount = USettings.Instance.Additionals.Count;
+            //System.Diagnostics.Debug.WriteLine("Add Column is " + addcolumn.ToString());
             for (int i = 0; i < contents.Length; i++)
             {
-                ColumnContainer.AddColumnDefinition(new ColumnDefinition(widths[i]));
-                ColumnContainer.Add(contents[i],ColumnContainer.ColumnDefinitions.Count - 1);
+				//System.Diagnostics.Debug.WriteLine("Looping through Columns " + i.ToString() + "/" + contents.Length.ToString());
+				if(i == addcolumn)
+				{
+					double addwidth = widths[i] / addcount;
+					for(;i-addcolumn < addcount; i++)
+					{
+                        //System.Diagnostics.Debug.WriteLine("Looping through Additional Columns " + i.ToString() + "/" + contents.Length.ToString());
+                        ColumnContainer.AddColumnDefinition(new ColumnDefinition(addwidth));
+                        ColumnContainer.Add(contents[i],ColumnContainer.ColumnDefinitions.Count - 1);
+                    }
+					i--;
+                }
+				else
+				{
+                    ColumnContainer.AddColumnDefinition(new ColumnDefinition(widths[addcolumn != -1 && i > addcolumn ? i- addcount+1 : i]));
+                    ColumnContainer.Add(contents[i],ColumnContainer.ColumnDefinitions.Count - 1);
+                }
+
             }
             StatusField = contents.OfType<Border>().FirstOrDefault();
             UpdateFlash(FL);
@@ -28,7 +50,7 @@ public partial class BoardView : ContentView
 
 	public void UpdateColumn(int no, View content)
 	{
-		IView? prev = ColumnContainer.Children.FirstOrDefault(v => ColumnContainer.GetColumn(v) == 1 && ColumnContainer.GetRow(v) == 0);
+		IView? prev = ColumnContainer.Children.FirstOrDefault(v => ColumnContainer.GetColumn(v) == no && ColumnContainer.GetRow(v) == 0);
 		if (prev != null)
 		{
 			ColumnContainer.Children.Remove(prev);
@@ -36,7 +58,26 @@ public partial class BoardView : ContentView
 		}
     }
 
-	public void UpdateFlash(byte FL)
+	public IList<IView> GetColumns() => ColumnContainer.Children;
+
+	public List<FlipChar> GetColumnFlips()
+	{
+		List<FlipChar> chars = [];
+		foreach(HorizontalStackLayout hsl in ColumnContainer.Children.OfType<HorizontalStackLayout>())
+		{
+			chars.AddRange(hsl.Children.OfType<FlipChar>());
+            /*foreach (IView item in hsl.Children)
+            {
+				//System.Diagnostics.Debug.WriteLine("HSL Content: " + item.GetType().Name);
+				if(item is FlipChar c) chars.Add(c);
+            }*/
+        }
+        return chars;
+	} 
+
+    public IView? GetColumn(int no) => ColumnContainer.Children.FirstOrDefault(v => ColumnContainer.GetColumn(v) == no && ColumnContainer.GetRow(v) == 0);
+
+    public void UpdateFlash(byte FL)
 	{
 		BoardTimeServ.Unload(this.Id);
         RedLight.TextColor = Colors.DarkGray;
@@ -70,9 +111,10 @@ public partial class BoardView : ContentView
 	{
 		if (StatusField != null)
 		{
+			//System.Diagnostics.Debug.WriteLine("Updating Status Field");
             byte BGCode = 0;
-            if (USettings.StatusBG_Green.Contains(status)) BGCode = 1;
-            else if (USettings.StatusBG_Red.Contains(status)) BGCode = 2;
+            if (USettings.Instance.StatusBG_Green.Contains(status)) BGCode = 1;
+            else if (USettings.Instance.StatusBG_Red.Contains(status)) BGCode = 2;
 
 			if(StatusField.Content is Label l)
 			{

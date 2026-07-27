@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             x:Class="fltstd26.assistant.profiles.EntityView">
+    <Border StrokeThickness="2"
+            Margin="10"
+            HorizontalOptions="Fill">
+        <Grid Margin="10,10"
+              ColumnSpacing="16"
+              Padding="15,0"
+              ColumnDefinitions="Auto,*,Auto"
+              RowDefinitions="*,Auto">
+            <Image WidthRequest="56"
+                   HeightRequest="56"
+                   Margin="10"
+                   VerticalOptions="Center"
+                   HorizontalOptions="Center"
+                   x:Name="Icon">
+                <Image.Behaviors>
+                    <toolkit:IconTintColorBehavior TintColor="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}"/>
+                </Image.Behaviors>
+            </Image>
+            <VerticalStackLayout Grid.Column="1"
+                                 VerticalOptions="Center">
+                <Label x:Name="Title"
+                       VerticalOptions="End"
+                       HorizontalOptions="Start"
+                       FontSize="24"/>
+                <Label x:Name="Subtitle"
+                       VerticalOptions="Start"
+                       HorizontalOptions="Start"
+                       FontSize="18"/>
+            </VerticalStackLayout>
+            <Label x:Name="Additional"
+                   VerticalOptions="Start"
+                   HorizontalOptions="Start"
+                   FontSize="14"
+                   Grid.Row="1"
+                   Grid.ColumnSpan="3"/>
+            <VerticalStackLayout Grid.Column="2"
+                                 VerticalOptions="Start"
+                                 HorizontalOptions="End">
+                <ImageButton BackgroundColor="Transparent"
+                             x:Name="DeleteBtn"
+                             Clicked="DeleteClick"
+                             Source="bin.png"
+                             Aspect="AspectFit">
+                    <ImageButton.Behaviors>
+                        <toolkit:IconTintColorBehavior TintColor="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}"/>
+                    </ImageButton.Behaviors>
+                </ImageButton>
+                <ImageButton BackgroundColor="Transparent"
+                             x:Name="ModifyBtn"
+                             Clicked="ModifyClick"
+                             Source="modify.png"
+                             Aspect="AspectFit">
+                    <ImageButton.Behaviors>
+                        <toolkit:IconTintColorBehavior TintColor="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}"/>
+                    </ImageButton.Behaviors>
+                </ImageButton>
+            </VerticalStackLayout>
+        </Grid>
+    </Border>
+</ContentView>

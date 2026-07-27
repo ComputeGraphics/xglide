@@ -10,16 +10,24 @@ public partial class XConsole : Window
 		InitializeComponent();
         GSettings.XConsoleOpen = true;
         instance = this;
-        ConProc.Log("Welcome to the XConsole!");
+        ConProc.Log("[CONSOLE] Welcome");
     }
 
 	public static void Update()
 	{
-		if (instance == null) return;
-        instance!.XConsoleContent.Text = string.Empty;
-        foreach (string entry in ConProc.GetLog())
-		{
-            instance!.XConsoleContent.Text += entry + Environment.NewLine;
+        try
+        {
+            if (instance == null) throw new Exception("No Instance found");
+            instance!.XConsoleContent.Text = string.Empty;
+            foreach (string entry in ConProc.GetLog())
+            {
+                instance!.XConsoleContent.Text += entry + Environment.NewLine;
+            }
         }
+        catch (Exception ex)
+        {
+            ConProc.Log("[CONSOLE] Logging failed: " + ex.Message,2);
+        }
+
     }
 }

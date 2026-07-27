@@ -4,11 +4,11 @@ namespace fltstd26.debug;
 
 public partial class ClockCheck : ContentPage
 {
-	public ClockCheck()
-	{
-		InitializeComponent();
+    public ClockCheck()
+    {
+        InitializeComponent();
         Refresh();
-	}
+    }
 
     private void Refresh()
     {
@@ -18,7 +18,11 @@ public partial class ClockCheck : ContentPage
     }
 
     private void RefreshClick(object sender,EventArgs e) => Refresh();
-    private void RestartClick(object sender,EventArgs e) => TimeServ.Restart();
+    private void RestartClick(object sender,EventArgs e)
+    {
+        TimeServ.Close();
+        TimeServ.Init();
+    }
     private void TriggerClick(object sender,EventArgs e) => TimeServ.Tick();
     private void ClearClick(object sender,EventArgs e) => TimeServ.Clear();
     private void QuitClicked(object sender,EventArgs e) => Navigation.PopModalAsync();

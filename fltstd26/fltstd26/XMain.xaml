@@ -21,18 +21,22 @@
 
             <MenuFlyoutSubItem Text="{x:Static local:Lang.menubar_file_profiles}">
                 <MenuFlyoutItem Text="{x:Static local:Lang.newobj}"
+                                IsEnabled="False"
                                 Clicked="ProfileNewClick" />
                 <MenuFlyoutItem Text="{x:Static local:Lang.open}"
                                 Clicked="ProfileOpenClick" />
                 <MenuFlyoutItem Text="{x:Static local:Lang.save}"
+                                IsEnabled="False"
                                 Clicked="ProfileSaveClick" />
                 <MenuFlyoutItem Text="{x:Static local:Lang.saveas}"
+                                IsEnabled="False"
                                 Clicked="ProfileSaveAsClick" />
                 <MenuFlyoutItem Text="{x:Static local:Lang.view}"
                                 Clicked="ProfileViewClick" />
-                <MenuFlyoutItem Text="{x:Static local:Lang.profile_editor}"
+                <MenuFlyoutItem Text="{x:Static local:Lang.profile_editor}"      
                                 Clicked="ProfileEditorClick" />
                 <MenuFlyoutItem Text="{x:Static local:Lang.info}"
+                                IsEnabled="False"
                                 Clicked="ProfileInfoClick"/>
             </MenuFlyoutSubItem>
 
@@ -61,7 +65,7 @@
             </MenuFlyoutSubItem>
 
             <MenuFlyoutItem Text="{x:Static local:Lang.close}"
-                            Clicked="CloseClick" />
+                            Clicked="CloseProcedure" />
 
         </MenuBarItem>
         <MenuBarItem Text="{x:Static local:Lang.menubar_system}">
@@ -83,6 +87,8 @@
                                 Clicked="XBoard_TerminateAllClick"/>
                 <MenuFlyoutItem Text="{x:Static local:Lang.clock_restart}"
                                 Clicked="XBoard_ClockRestartClick"/>
+                <MenuFlyoutItem Text="{x:Static local:Lang.open_flipit}"
+                                Clicked="XFlipItClick"/>
             </MenuFlyoutSubItem>
 
             <MenuFlyoutSubItem Text="{x:Static local:Lang.systemclock}">
@@ -92,6 +98,13 @@
                                 Clicked="SystemClockClear_Click" />
                 <MenuFlyoutItem Text="{x:Static local:Lang.restart}"
                                 Clicked="SystemClockRestart_Click" />
+            </MenuFlyoutSubItem>
+
+            <MenuFlyoutSubItem Text="{x:Static local:Lang.xmlreport}">
+                <MenuFlyoutItem Text="{x:Static local:Lang.xml_report_target}"
+                                Clicked="XMLReport_Click" />
+                <MenuFlyoutItem Text="{x:Static local:Lang.xml_report_ac}"
+                                Clicked="XMLACReport_Click" />
             </MenuFlyoutSubItem>
 
             <MenuFlyoutSeparator/>
@@ -125,6 +138,18 @@
             </MenuFlyoutSubItem>
             <MenuFlyoutItem Text="{x:Static local:Lang.delay}"
                             Clicked="CustomDelayClick" />
+
+            <MenuFlyoutSubItem Text="{x:Static local:Lang.status}">
+                <MenuFlyoutItem Text="{x:Static local:Lang.status_finish_old}"
+                                Clicked="Status_FinishOld_Click" />
+                <MenuFlyoutItem Text="{x:Static local:Lang.status_refresh_current}"
+                                Clicked="Status_RefreshCurrent_Click" />
+                <MenuFlyoutItem Text="{x:Static local:Lang.status_refresh_next}"
+                                Clicked="Status_RefreshNext_Click" />
+                <MenuFlyoutItem Text="{x:Static local:Lang.status_refresh_all}"
+                                Clicked="Status_RefreshAll_Click" />
+            </MenuFlyoutSubItem>
+
             <MenuFlyoutSeparator/>
             <MenuFlyoutItem Text="{x:Static local:Lang.view_db}"
                     Clicked="OpenDBPreview_Click"/>
@@ -200,7 +225,7 @@
 
         <MenuBarItem Text="{x:Static local:Lang.view}">
 
-            <MenuFlyoutItem Text="XConsole"
+            <MenuFlyoutItem Text="{x:Static local:Lang.console}"
                             Clicked="XConsoleClick" />
 
         </MenuBarItem>
@@ -332,8 +357,9 @@
                        Grid.Row="0"/>
 
                 <ScrollView Grid.Row="1"
-                            VerticalOptions="Fill">
-                    <VerticalStackLayout>
+                            VerticalOptions="Fill"
+                            HorizontalOptions="Fill">
+                    <VerticalStackLayout HorizontalOptions="Fill">
                         <Grid ColumnDefinitions="Auto, *">
                             <HorizontalStackLayout>
                                 <CheckBox x:Name="TGT_LFZ_Dropdown_Enable"
@@ -343,8 +369,10 @@
                             </HorizontalStackLayout>
                             <Picker x:Name="TGT_LFZ_Dropdown"
                                     Grid.Column="1"
-                                    WidthRequest="100"
+                                    HorizontalOptions="End"
+                                    WidthRequest="140"
                                     Margin="0,10,0,10"
+                                    x:DataType="CheckBox"
                                     BindingContext="{x:Reference TGT_LFZ_Dropdown_Enable}"
                                     IsEnabled="{Binding Path=IsChecked, Converter={toolkit:InvertedBoolConverter}}"/>
                         </Grid>
@@ -357,16 +385,8 @@
 
                         <Entry x:Name="TGT_Weight_Entry"
                                Margin="0,10,0,10"
+                               MaxLength="6"
                                Keyboard="Numeric">
-                            <Entry.Behaviors>
-                                <toolkit:NumericValidationBehavior 
-                                    InvalidStyle="{StaticResource InvalidEntryStyle}"
-                                    ValidStyle="{StaticResource ValidEntryStyle}"
-                                    Flags="ValidateOnValueChanged"
-                                    MinimumValue="1.0"
-                                    MaximumValue="255"
-                                    MaximumDecimalPlaces="0" />
-                            </Entry.Behaviors>
                         </Entry>
 
                         <HorizontalStackLayout HorizontalOptions="Center">
@@ -378,6 +398,7 @@
                         <TimePicker x:Name="TGT_Time_Picker"
                                         Format="HH:mm"
                                         HorizontalOptions="Center"
+                                    x:DataType="CheckBox"
                                         BindingContext="{x:Reference TGT_Autotime_Enable}"
                                         IsEnabled="{Binding Path=IsChecked, Converter={toolkit:InvertedBoolConverter}}"/>
 
@@ -405,9 +426,11 @@
                             </HorizontalStackLayout>
                             <Picker x:Name="TGT_Price_Dropdown"
                                     Grid.Column="1"
-                                    WidthRequest="100"
+                                    WidthRequest="150"
+                                    HorizontalOptions="End"
                                     Margin="0,10,0,10"
                                     SelectedIndexChanged="SelectedPriceCatChanged"
+                                    x:DataType="CheckBox"
                                     BindingContext="{x:Reference TGT_PriceCat_Dropdown_Enable}"
                                     IsEnabled="{Binding Path=IsChecked, Converter={toolkit:InvertedBoolConverter}}"/>
                         </Grid>
@@ -428,9 +451,11 @@
                             </HorizontalStackLayout>
                             <Picker x:Name="FLT_Status_Dropdown"
                                     Grid.Column="1"
-                                    WidthRequest="100"
+                                    WidthRequest="150"
+                                    HorizontalOptions="End"
                                     ItemsSource="{x:Static gs:GSettings.Status}"
                                     Margin="0,10,0,10"
+                                    x:DataType="CheckBox"
                                     BindingContext="{x:Reference FLT_Status_Dropdown_Enable}"
                                     IsEnabled="{Binding Path=IsChecked, Converter={toolkit:InvertedBoolConverter}}"/>
                         </Grid>
@@ -449,6 +474,7 @@
                         </Grid>
 
                         <VerticalStackLayout x:Name="FLTAddsEntryContainer"
+                                             Spacing="10"
                                              Padding="0,10,0,0"/>
                     </VerticalStackLayout>
                 </ScrollView>

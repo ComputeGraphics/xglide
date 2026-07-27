@@ -1,6 +1,13 @@
-﻿using fltstd26.etc;
+﻿using CommunityToolkit.Maui.Alerts;
+using CommunityToolkit.Maui.Storage;
+using fltstd26.core;
+using fltstd26.etc;
+using fltstd26.Resources.Texts;
+using Microsoft.Win32.SafeHandles;
 using System.Globalization;
+using System.Text;
 using System.Xml.Linq;
+using System.Xml.Serialization;
 
 namespace fltstd26.system
 {
@@ -10,7 +17,7 @@ namespace fltstd26.system
         public static string[] ICacheFolders = ["Backup","Temp","Logs"];
 
         public static readonly string IAppData = FileSystem.Current.AppDataDirectory;
-        public static readonly string IDynIcons = Path.Combine(FileSystem.Current.AppDataDirectory,"Media");
+        public static readonly string IDynIcons = Path.Combine(IAppData,"Media");
         public static readonly string ICache = FileSystem.Current.CacheDirectory;
         public static bool Init()
         {
@@ -48,11 +55,12 @@ namespace fltstd26.system
         /// Opens the Data Folder or the Cache Folder
         /// </summary>
         /// <param name="cache">false -> Data, true -> Cache</param>
-        public static void OpenFolder(bool cache)
+        public static void OpenFolder(bool cache, string? together)
         {
             try
             {
                 string folderPath = cache ? ICache : IAppData;
+                if(together != null) folderPath = Path.Combine(folderPath,together);
                 if (Directory.Exists(folderPath))
                 {
                     System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
@@ -73,44 +81,69 @@ namespace fltstd26.system
             }
         }
 
+        internal static void Delete(string name, bool config)
+        {
+            try
+            {
+                string path = Path.Combine(IAppData,IAppDataFolders[config ? 1 : 0],name);
+                if (File.Exists(path))
+                {
+                    string newfile = $"Deleted{(config ? "Config" : "Profile")} -" + DateTime.Now.ToString("dd-MM-yy-HH-mm") + (config ? ".xml" : ".sqlite");
+                    File.Move(path,Path.Combine(ICache,ICacheFolders[1],newfile));
+                }
+                else
+                {
+                    ConProc.Log($"[DSKMAN] {(config ? "Config" : "Profile")} does not exist: {path}",2);
+                }
+                
+            }
+            catch(Exception e)
+            {
+                ConProc.Log($"[DSKMAN] Error Deleting {(config ? "Config" : "Profile")}: {e.Message}",2);
+            }
+        }
+
+        //true - config, false - profile
+        internal static List<IFile> GetFolder(bool config)
+        {
+            List<IFile> files = [];
+            try
+            {
+                if (RData.Active()) throw new Exception("RDATA is blocking the Database");
+                string path = Path.Combine(IAppData,IAppDataFolders[config ? 1 : 0]);
+                if (Directory.Exists(path))
+                { 
+                    string[] paths = Directory.GetFiles(path);
+                    foreach(string file in paths)
+                    {
+                        SafeFileHandle handle = File.OpenHandle(file);
+                        string context = Lang.last_change + ": " + File.GetLastWriteTime(handle).ToString("G");
+                        string name = file.Replace(path,string.Empty)[1..];
+                        files.Add(new() { Context = context,Location = file,Name = name });
+                        handle.Close();
+                    }
+                }
+                else
+                {
+                    ConProc.Log($"[DSKMAN] Profile Directory does not exist: {path}",2);
+                }
+
+            }
+            catch (Exception e)
+            {
+                ConProc.Log($"[DSKMAN] Error Requesting Profiles: {e.Message}",2);
+            }
+            files.TrimExcess();
+            return files;
+        }
+
         public static bool SaveConfig(string name)
         {
             try
             {
-                XElement uconfig = new("FlightStudioConfiguration",
-                    new XElement("Meta",
-                        new XElement("Name",USettings.Name),
-                        new XElement("Creator",USettings.Creator),
-                        new XElement("LastChange",USettings.LastChange.ToString("O",CultureInfo.InvariantCulture))
-                    ),
-                    new XElement("General",
-                        new XElement("AskForNodeMove",USettings.AskForNodeMove),
-                        new XElement("AskForNodePriceChange",USettings.AskForNodePriceChange)
-                    ),
-                    new XElement("Properties",
-                        new XElement("Additionals",string.Join(';', USettings.Additionals))
-                    ),
-                    /*new XElement("XBOARD",
-                        new XElement("Columns",string.Join(';', USettings.Columns))
-                    ),*/
-                    new XElement("XFLY",
-                        new XElement("Manager",
-                            new XElement("AutoASAP",USettings.AutoASAP),
-                            new XElement("AutoTimeCheck",USettings.AutoTimeCheck),
-                            new XElement("EnableSlots",USettings.EnableSlots),
-                            new XElement("AntiCol",USettings.AntiCol)
-                        ),
-                        new XElement("Defaults",
-                            new XElement("DefaultCeil",USettings.DefaultCeil),
-                            new XElement("QuickTolerance",USettings.QuickTolerance),
-                            new XElement("DefaultFltLength",USettings.DefaultFltLength),
-                            new XElement("FallbackPriceCat",USettings.FallbackPriceCat),
-                            new XElement("DefaultTgtWeight",USettings.DefaultTgtWeight)
-                        )
-                    )
-                ); 
                 StreamWriter stream = new(Path.Combine(GSettings.Paths["Config"],name.Trim() + ".xml"));
-                uconfig.Save(stream);
+                XmlSerializer xml = new(typeof(ConfigSettings));
+                xml.Serialize(stream,USettings.Instance);
                 stream.Close();
                 ConProc.Log($"[DSKMAN] A configuration was saved: {name}");
                 return true;
@@ -132,32 +165,32 @@ namespace fltstd26.system
                     XElement uconfig = XElement.Load(path);
 
                     //Meta
-                    USettings.Name = uconfig.Element("Name")?.Value ?? "N/A";
-                    USettings.Creator = uconfig.Element("Creator")?.Value ?? "N/A";
-                    USettings.LastChange = DateTime.ParseExact(uconfig.Element("LastChange")?.Value ?? "1970-01-01T17:00:01.0000000", "O", CultureInfo.InvariantCulture);
+                    USettings.Instance.Name = uconfig.Element("Name")?.Value ?? "N/A";
+                    USettings.Instance.Creator = uconfig.Element("Creator")?.Value ?? "N/A";
+                    USettings.Instance.LastChange = DateTime.ParseExact(uconfig.Element("LastChange")?.Value ?? "1970-01-01T17:00:01.0000000", "O", CultureInfo.InvariantCulture);
 
                     //General
-                    USettings.AskForNodeMove = GSettings.GetBoolean(uconfig.Element("AskForNodeMove")?.Value, true);
-                    USettings.AskForNodePriceChange = GSettings.GetBoolean(uconfig.Element("AskForNodePriceChange")?.Value, true);
+                    USettings.Instance.AskForNodeMove = GSettings.GetBoolean(uconfig.Element("AskForNodeMove")?.Value, true);
+                    USettings.Instance.AskForNodePriceChange = GSettings.GetBoolean(uconfig.Element("AskForNodePriceChange")?.Value, true);
 
                     //Properties
-                    USettings.Additionals = uconfig.Element("Additionals")?.Value.Split(';').ToList() ?? [];
+                    USettings.Instance.Additionals = uconfig.Element("Additionals")?.Value.Split(';').ToList() ?? [];
 
                     //XBOARD
-                    //USettings.Columns = uconfig.Element("Columns")?.Value.Split(';').ToList() ?? [];
+                    //USettings.Instance.Columns = uconfig.Element("Columns")?.Value.Split(';').ToList() ?? [];
 
                     //XFLY
                     //Manager
-                    USettings.AutoASAP = GSettings.GetBoolean(uconfig.Element("AutoASAP")?.Value,false);
-                    USettings.AutoTimeCheck = GSettings.GetBoolean(uconfig.Element("AutoTimeCheck")?.Value,true);
-                    USettings.EnableSlots = GSettings.GetBoolean(uconfig.Element("EnableSlots")?.Value,true);
-                    USettings.AntiCol = GSettings.GetBoolean(uconfig.Element("AntiCol")?.Value,false);
+                    USettings.Instance.AutoASAP = GSettings.GetBoolean(uconfig.Element("AutoASAP")?.Value,false);
+                    USettings.Instance.AutoTimeCheck = GSettings.GetBoolean(uconfig.Element("AutoTimeCheck")?.Value,true);
+                    USettings.Instance.EnableSlots = GSettings.GetBoolean(uconfig.Element("EnableSlots")?.Value,true);
+                    USettings.Instance.AntiCol = GSettings.GetBoolean(uconfig.Element("AntiCol")?.Value,false);
                     //Defaults
-                    USettings.DefaultCeil = Int32.TryParse(uconfig.Element("DefaultCeil")?.Value,out int p) ? p : 15;
-                    USettings.QuickTolerance = Int32.TryParse(uconfig.Element("QuickTolerance")?.Value,out p) ? p : 5;
-                    USettings.DefaultFltLength = Int32.TryParse(uconfig.Element("DefaultFltLength")?.Value,out p) ? p : 15;
-                    USettings.FallbackPriceCat = Int32.TryParse(uconfig.Element("FallbackPriceCat")?.Value,out p) ? p : 1;
-                    USettings.DefaultTgtWeight = Int32.TryParse(uconfig.Element("DefaultTgtWeight")?.Value,out p) ? p : 1;
+                    USettings.Instance.DefaultCeil = Int32.TryParse(uconfig.Element("DefaultCeil")?.Value,out int p) ? p : 15;
+                    USettings.Instance.QuickTolerance = Int32.TryParse(uconfig.Element("QuickTolerance")?.Value,out p) ? p : 5;
+                    USettings.Instance.DefaultFltLength = Int32.TryParse(uconfig.Element("DefaultFltLength")?.Value,out p) ? p : 15;
+                    USettings.Instance.FallbackPriceCat = Int32.TryParse(uconfig.Element("FallbackPriceCat")?.Value,out p) ? p : 1;
+                    USettings.Instance.DefaultTgtWeight = Int32.TryParse(uconfig.Element("DefaultTgtWeight")?.Value,out p) ? p : 1;
 
                     ConProc.Log($"[DSKMAN] A configuration was applied: {name}",1);
                 }
@@ -168,6 +201,39 @@ namespace fltstd26.system
             }
         }
 
-       
+        internal static async Task AutoPermSaveFile(MemoryStream stream,string path)
+        {
+            var readPermissionStatus = await Permissions.RequestAsync<Permissions.StorageRead>();
+            var writePermissionStatus = await Permissions.RequestAsync<Permissions.StorageWrite>();
+
+            if (readPermissionStatus != PermissionStatus.Granted ||
+                writePermissionStatus != PermissionStatus.Granted)
+            {
+                ConProc.Log("[DSKMAN] No storage permission.",2);
+                return;
+            }
+
+            await SaveFile(stream,path);
+        }
+
+        internal static async Task SaveFile(MemoryStream stream, string path)
+        {
+            FileSaverResult fileSaverResult = await FileSaver.Default.SaveAsync(path,stream);
+            if (fileSaverResult.IsSuccessful)
+            {
+                ConProc.Log("[DSKMAN] File saved at: " + fileSaverResult.FilePath,0);
+            }
+            else
+            {
+                ConProc.Log("[DSKMAN] Failed to save file: " + fileSaverResult.Exception.Message,2);
+            }
+        }
+    }
+
+    internal struct IFile
+    {
+        public required string Name { get; init; }
+        public required string Context { get; set; }
+        public required string Location { get; init; }
     }
 }

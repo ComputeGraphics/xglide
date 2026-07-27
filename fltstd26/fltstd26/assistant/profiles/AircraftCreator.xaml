@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="fltstd26.assistant.profiles.AircraftCreator"
+             xmlns:local="clr-namespace:fltstd26.Resources.Texts"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             BackgroundColor="#88000000"
+             Title="AircraftCreator">
+    <Border StrokeThickness="2"
+            WidthRequest="700"
+            BackgroundColor="{x:AppThemeBinding Dark={StaticResource Gray950}, Light={StaticResource Gray200}}"
+            VerticalOptions="Center"
+            HorizontalOptions="Center">
+        <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto"
+              Padding="20">
+            <Label FontSize="28"
+                    Text="{x:Static local:Lang.aircraft_create}"
+                    FontAttributes="Bold"
+                    FontFamily="Archive"
+                    HorizontalOptions="Center"
+                    Grid.Row="0"/>
+            
+            <Grid ColumnDefinitions="Auto,Auto"
+                  HorizontalOptions="Center"
+                  RowDefinitions="Auto,Auto,Auto"
+                  Padding="10"
+                  Grid.Row="1"
+                  ColumnSpacing="20"
+                  RowSpacing="10">
+                <Image WidthRequest="96"
+                   HeightRequest="96"
+                       VerticalOptions="Center"
+                       HorizontalOptions="End"
+                   Source="plane.png"
+                       Grid.RowSpan="3">
+                    <Image.Behaviors>
+                        <toolkit:IconTintColorBehavior TintColor="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}"/>
+                    </Image.Behaviors>
+                </Image>
+                <HorizontalStackLayout Spacing="10"
+                                       Grid.Column="1"
+                                       HorizontalOptions="End">
+                    <Label Text="{x:Static local:Lang.lfzreg_doubledot}"
+                                   HorizontalOptions="End"
+                                   VerticalOptions="Center"/>
+                    <Entry x:Name="NameEntry"
+                                   MaxLength="64"
+                           WidthRequest="300"
+                                   VerticalOptions="Center"
+                                   HorizontalOptions="Fill"
+                                   Placeholder="{x:Static local:Lang.lfzreg}"/>
+                </HorizontalStackLayout>
+                <HorizontalStackLayout Spacing="10"
+                                       Grid.Column="1"
+                                       Grid.Row="1"
+                                       HorizontalOptions="End">
+                    <Label Text="{x:Static local:Lang.type_doubledot}"
+                                   HorizontalOptions="End"
+                                   VerticalOptions="Center"/>
+                    <Entry x:Name="TypeEntry"
+                                   MaxLength="64"
+                           WidthRequest="300"
+                                   VerticalOptions="Center"
+                                   HorizontalOptions="Fill"
+                                   Placeholder="{x:Static local:Lang.type}"/>
+                </HorizontalStackLayout>
+                <HorizontalStackLayout Grid.Column="1"
+                                       HorizontalOptions="Center"
+                                       Grid.Row="2">
+                    <CheckBox x:Name="AutoAssignToggle"/>
+                    <Label Text="{x:Static local:Lang.autoassign}" 
+                                    VerticalOptions="Center"/>
+                </HorizontalStackLayout>
+            </Grid>
+
+            <Grid ColumnDefinitions="*,*"
+                  Grid.Row="2"
+                  Margin="10"
+                  RowSpacing="10"
+                  ColumnSpacing="30"
+                  RowDefinitions="Auto,Auto">
+                <Grid ColumnSpacing="10"
+                      ColumnDefinitions="Auto,*"
+                                       HorizontalOptions="Fill">
+                    <Label Text="{x:Static local:Lang.weight_doubledot}"
+                                   HorizontalOptions="End"
+                                   VerticalOptions="Center"/>
+                    <Entry x:Name="SeatsEntry"
+                                   MaxLength="6"
+                           Grid.Column="1"
+                           Keyboard="Numeric"
+                                   VerticalOptions="Center"
+                                   HorizontalOptions="Fill"
+                                   Placeholder="{x:Static local:Lang.xplan_weight}"/>
+                </Grid>
+                <Grid ColumnSpacing="10"
+                      ColumnDefinitions="Auto,*"
+                                       Grid.Column="1"
+                                       HorizontalOptions="Fill">
+                    <Label Text="{x:Static local:Lang.flight_interval_doubledot}"
+                                   HorizontalOptions="End"
+                                   VerticalOptions="Center"/>
+                    <Entry x:Name="IntervalEntry"
+                                   MaxLength="6"
+                           Keyboard="Numeric"
+                                   VerticalOptions="Center"
+                           Grid.Column="1"
+                                   HorizontalOptions="Fill"
+                                   Placeholder="{x:Static local:Lang.interval}"/>
+                </Grid>
+                <Grid ColumnSpacing="10"
+                      HorizontalOptions="Fill"
+                      ColumnDefinitions="Auto,*"
+                                       Grid.Row="1">
+                    <Label Text="{x:Static local:Lang.ogn_doubledot}"
+                                   HorizontalOptions="End"
+                                   VerticalOptions="Center"/>
+                    <Entry x:Name="OGNEntry"
+                           Grid.Column="1"
+                                   MaxLength="6"
+                                   VerticalOptions="Center"
+                                   HorizontalOptions="Fill"
+                                   Placeholder="{x:Static local:Lang.ogn_address}"/>
+                </Grid>
+                <Grid ColumnSpacing="10"
+                      ColumnDefinitions="Auto,*"
+                                       Grid.Column="1"
+                                       Grid.Row="1"
+                                       HorizontalOptions="Fill">
+                    <Label Text="{x:Static local:Lang.price_doubledot}"
+                                   HorizontalOptions="End"
+                                   VerticalOptions="Center"/>
+                    <Picker x:Name="PriceCatPicker"
+                            Grid.Column="1"
+                            HorizontalOptions="Fill"/>
+                </Grid>
+            </Grid>
+
+            <VerticalStackLayout HorizontalOptions="Fill"
+                                 Margin="10"
+                                 Spacing="10"
+                                 Grid.Row="3">
+                <Label Text="{x:Static local:Lang.available_in_doubledot}"/>
+            <Border Padding="10"
+                    MaximumHeightRequest="200"
+                    HorizontalOptions="Fill">
+                <ScrollView>
+                        <VerticalStackLayout x:Name="SlotStack"/>
+                    </ScrollView>
+            </Border>
+            </VerticalStackLayout>
+
+            <Grid Grid.Row="4"
+                x:Name="ButtonGrid"
+                Padding="0,10,0,0"
+                ColumnSpacing="10"
+                ColumnDefinitions="*,*">
+                <Button Text="{x:Static local:Lang.cancel}"
+                        CornerRadius="0"
+                        Clicked="CancelClick"/>
+                <Button Text="{x:Static local:Lang.xplan_add}"
+                        CornerRadius="0"
+                        Grid.Column="1"
+                        Clicked="AddClick"/>
+            </Grid>
+        </Grid>
+
+
+    </Border>
+</ContentPage>

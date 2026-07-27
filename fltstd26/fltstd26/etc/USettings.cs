@@ -1,12 +1,43 @@
-﻿namespace fltstd26.etc
-{
-    /*public sealed class USettings
-    {
-        static USettings() { }
-        private USettings() { }
-        public static USettings Instance { get; } = new USettings();
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using System.Reflection;
 
-        internal string Name { get; init; } = "Standard";
+namespace fltstd26.etc
+{
+
+    public static class USettings
+    {
+        internal static ConfigSettings Instance = new();
+        internal static ObservableSettings Oberservables = new()
+        {
+            logoSize_L = Instance.LogoSize_L,
+            logoSize_R = Instance.LogoSize_R,
+            titleSize = Instance.TitleSize,
+            clockSize = Instance.ClockSize,
+            dateSize = Instance.DateSize,
+            flashSize = Instance.FlashSize,
+            captionSize = Instance.CaptionSize,
+            elementSize = Instance.ElementSize,
+            targetBorderThickness = Instance.TargetBorderThickness,
+            msgCenterTitleSize = Instance.MSGCenterTitleSize,
+            msgCenterTextSize = Instance.MSGCenterTextSize,
+            msgCenterIconSize = Instance.MSGCenterIconSize,
+        };
+
+        //returned den vorherigen wert
+        internal static object? UpdateSetting(string? key, object? value, Type type)
+        {
+            FieldInfo? field = typeof(ConfigSettings).GetFields().FirstOrDefault(x => x.Name == key);
+            object? prev = field?.GetValue(USettings.Instance);
+            if (prev?.GetType() == type)
+            {
+                field?.SetValue(USettings.Instance,value);
+                return prev;
+            }
+            return null;
+        }
+
+
+        /*internal string Name { get; init; } = "Standard";
         internal string Creator = "Arthur Hildebrand";
         internal DateTime LastChange = new(2026,6,1,14,53,0);
 
@@ -24,90 +55,50 @@
         internal int DefaultTgtWeight = 1;
         internal List<string> Additionals = ["Test"];
 
-        internal List<string> Columns = ["eID","Aircraft","Target","Time","Status"];
-    }*/
+        internal List<string> Columns = ["eID","Aircraft","Target","Time","Status"];*/
+    }
 
 
-    public static class USettings
+    public partial class ConfigSettings
     {
+
+        public ConfigSettings() { FinalizeConfig(); }
+
         //Meta
-        internal static string Name = "Standard";
-        internal static string Creator = "Arthur Hildebrand";
-        internal static DateTime LastChange = new(2026,6,1,14,53,0);
+        public string Name = "Standard";
+        public string Creator = "Arthur Hildebrand";
+        public DateTime LastChange = new(2026,6,1,14,53,0);
 
-        //General
-        internal static bool AskForNodeMove = true;
-        internal static bool AskForNodePriceChange = true;
-
-        //Properties
-        internal static List<string> Additionals = ["Test"];
+        //public List<string> Additionals = ["Test","DoubleTest"];
+        public List<string> Additionals = [];
 
         //XBOARD
-        // Name, Link, Width
-        internal static List<(string, string, int)> Columns = [("eID", "Flt.EId", 10),("Aircraft", "Lfz.Reg", 10),("Target", "Ctr.Target.HSL", 40),("Time", "Slot.STime", 10),("Add", "Ctr.Add", 15),("Status", "Ctr.Status", 15)];
+        // Name, Link, Width, MaxChars
+        //public List<(string, string, int)> Columns = [("Flugno.", "Flt.EId", 10),("Flugzeug", "Lfz.Reg", 10),("Tickets", "Ctr.Target.HSL", 40),("Zeit", "Slot.STime", 10),("Add", "Ctr.Add", 15),("Status", "Ctr.Status", 15)];
+        //public List<(string, string, int)> Columns = [("Flugno.", "Flt.EId", 15),("Flugzeug", "Lfz.Reg", 15),("Tickets", "Ctr.Target.HSL", 40),("Zeit", "Slot.STime", 15),("Status", "Ctr.Status", 15)];
+        public List<BoardColumn> Columns =
+        [
+            new() { Name = "Flugno.", Link = "Flt.EId", Width = 12, MaxChars = 4 },
+            new() { Name = "Lfz.", Link = "Lfz.Reg", Width = 17, MaxChars = 6 },
+            new() { Name = "Tickets", Link = "Ctr.Target.HSL", Width = 42, MaxChars = 16 },
+            new() { Name = "Zeit", Link = "Slot.STime", Width = 14, MaxChars = 5 },
+            new() { Name = "Status", Link = "Ctr.Status", Width = 15, MaxChars = -1 },
+        ];
+        
+        public string Homebase = "EDFP";
+        public string BoardTitle = "Tag der offenen Tür 2026";
 
-        //XFLY
-        //Manager
-        internal static bool AutoASAP = false; //Keine Fragen. Einfach machen
-        internal static bool AutoTimeCheck = false;
-        internal static bool EnableSlots = true; // To Implement
-        internal static bool AntiCol = false; // To Implement
-        //Defaults
-        internal static int DefaultCeil = 15; // To Implement
-        internal static int QuickTolerance = 5;
-        internal static int DefaultFltLength = 15; //in min
-        internal static int FallbackPriceCat = 1;
-        internal static int DefaultTgtWeight = 1;
+        public int[] Status_RedBlink = [3,11];
+        public int[] Status_GreenBlink = [2];
+        public int[] Status_Green = [0,6];
+        public int[] Status_Red = [9,10,12];
+        public int[] Status_Switch = [4,5];
+        public int[] StatusBG_Green = [2];
+        public int[] StatusBG_Red = [3,9,10,12];
 
-
-        internal static int SlotTolerance = 1;
-        internal static bool HidePastSlots = false;
-        //NEU NEU NEU
-        internal static bool IgnoreTransactionWeight = false;
-        internal static bool IgnoreTransactionLength = false;
-        internal static int DelayTolerance = 5;
-        internal static int MaxDelay = 30;
-        internal static string Homebase = "EDFP";
-
-        //Angesetzte Minutenanzahl durch SyncLevel
-        internal static bool OGNStatus = true;
-        internal static int OGNSyncLevel = 1;
-        internal static int OGNTolerance = 7;
-        internal static int TakeoffDuration = 2; // in min
-
-        internal static bool TargetOriented = false; // Not implemented
-        internal static bool SortByTime = true;
-        internal static bool UseTargetSquareFont = false;
-        internal static string BoardTitle = "Tag der offenen Tür 2026";
-
-
-        internal static int[] Status_RedBlink = [3,11];
-        internal static int[] Status_GreenBlink = [2];
-        internal static int[] Status_Green = [0,6];
-        internal static int[] Status_Red = [9,10,12];
-        internal static int[] Status_Switch = [4,5];
-
-        internal static int[] StatusBG_Green = [2];
-        internal static int[] StatusBG_Red = [3,9,10,12];
-
-        //Optimiert für FHD
-
-        internal static short LogoSize_L = 144;
-        internal static short LogoSize_R = 144;
-        internal static short TitleSize = 54;
-        internal static short ClockSize = 48;
-        internal static short DateSize = 24;
-        internal static short FlashSize = 38;
-        internal static short CaptionSize = 26;
-        internal static short ElementSize = 22;
-        internal static short TargetBorderThickness = 2;
-
-        internal static short MSGCenterTitleSize = 32;
-        internal static short MSGCenterTextSize = 50;
-        internal static short MSGCenterIconSize = 90;
-        internal static string MSGCenterDefaultTitle = "Informationen vom AEC Bad Nauheim";
+        public string MSGCenterDefaultTitle = "Informationen vom AEC Bad Nauheim";
         //Icon (info when null), Title (default when null), Text
-        internal static List<(string?, string?, string)> MSGCenterTips =
+        public List<(string?, string?, string)> MSGCenterTips =
             [
             (null,null,"Schön, dass du bei uns gelandet bist!"),
             (null,null,"Jetzt im Aero-Club Bad Nauheim fliegen lernen"),
@@ -133,14 +124,211 @@
 
             ];
 
-        internal static short FlashInterval = 500;
-        internal static short HideInactiveFlights = 10;
+        //Last if not found
+        public string Alphabet = "1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ,;.:-_!?&€()/<> ";
 
-        internal static void FinalizeConfig()
+        public short LetterWidth = 42;
+        public short FlipCycleSpeed = 25; //in ms
+        public short FlashInterval = 500; //in ms
+
+        //minutes
+        public short HideInactiveFlights = -1;
+
+        public bool AllowNEXUS = false;
+        public bool AutoASAP = false; //Keine Fragen. Einfach machen
+        public bool AutoTimeCheck = false;
+        public bool EnableSlots = true; // To Implement
+        public bool AntiCol = false; // To Implement
+        public bool TargetOriented = false; //To Implement
+        public bool SortByTime = false;
+        public bool UseTargetSquareFont = false;
+        public bool LogFile = true;
+        public bool IgnoreTransactionWeight = false;
+        public bool IgnoreTransactionLength = false;
+        public bool HidePastSlots = false;
+        public bool AskForNodeMove = true;
+        public bool AskForNodePriceChange = true;
+
+        public int DefaultCeil = 15; // To Implement
+        public int QuickTolerance = 5;
+        public int DefaultFltLength = 15; //in min
+        public int FallbackPriceCat = 1;
+        public int DefaultTgtWeight = 1;
+        public bool OGNStatus = false;
+
+        //Angesetzte Minutenanzahl durch SyncLevel
+        public int OGNSyncLevel = 1;
+        public int OGNTolerance = 7;
+        public int TakeoffDuration = 2; // in min
+        public int LogCapacity = 1024;
+        public int DelayTolerance = 5;
+        public int MaxDelay = 30;
+        public int SlotTolerance = 1;
+
+        public short LogoSize_L = 144;
+        public short LogoSize_R = 144;
+        public short TitleSize = 54;
+        public short ClockSize = 48;
+        public short DateSize = 24;
+        public short FlashSize = 38;
+        public short CaptionSize = 26;
+        public short ElementSize = 20;
+        public short TargetBorderThickness = 2;
+        public short MSGCenterTitleSize = 32;
+        public short MSGCenterTextSize = 50;
+        public short MSGCenterIconSize = 90;
+        internal void FinalizeConfig()
         {
             Columns.TrimExcess();
             MSGCenterTips.TrimExcess();
             Additionals.TrimExcess();
         }
     }
+
+    public partial class ObservableSettings : ObservableObject
+    {
+        [ObservableProperty]
+        internal short logoSize_L = 0;
+        [ObservableProperty]
+        internal short logoSize_R = 0;
+        [ObservableProperty]
+        internal short titleSize = 0;
+        [ObservableProperty]
+        internal short clockSize = 0;
+        [ObservableProperty]
+        internal short dateSize = 0;
+        [ObservableProperty]
+        internal short flashSize = 0;
+        [ObservableProperty]
+        internal short captionSize = 0;
+        [ObservableProperty]
+        internal short elementSize = 0;
+        [ObservableProperty]
+        internal short targetBorderThickness = 0;
+        [ObservableProperty]
+        internal short msgCenterTitleSize = 0;
+        [ObservableProperty]
+        internal short msgCenterTextSize = 0;
+        [ObservableProperty]
+        internal short msgCenterIconSize = 0;
+    }
+
+    public struct BoardColumn
+    {
+        //Name
+        public string Name { get; set; }
+        //Data Link
+        public string Link { get; set; }
+        //Width
+        public int Width { get; set; }
+        //MaxChar -> FlippyFloppy Screen
+        //-1 wenn ohne FlipFlop Dingens
+        //Gleichmäßig aufgeteilt unter multicols
+        public int MaxChars {  get; set; }
+    }
 }
+
+
+/*internal static Dictionary<string,bool> SwitchSettings = new()
+{
+    //GENERAL
+    {"AskForNodeMove", true },
+    {"AskForNodePriceChange", true },
+    {"LogFile", true },
+
+    //XFLY
+    {"AutoASAP", true }, //Flight creation in the earliest possible slot
+    {"AutoTimeCheck", false }, //Flights only in the future
+    {"EnableSlots", true }, //Todo
+    {"AntiCol", false }, //Todo
+    {"IgnoreTransactionWeight", false }, //Dont care for weight limits on transactions
+    {"IgnoreTransactionLength", false }, //Ignore length on transactions
+
+    //XPLAN
+    {"HidePastSlots", false }, //Hide Past Slots on FID
+
+    //XBOARD
+    {"TargetOriented", false }, //Todo
+    {"SortByTime", true }, //Sort Board by time
+    {"UseTargetSquareFont", false }, //Square Fonts for Boards
+
+    //NEXUS
+    {"AllowNEXUS", false }, //Use integrated handling or nexus
+
+    //
+    {"OGNStatus", false } //Use OGN for Status Determination
+};
+
+internal static Dictionary<string,int> ValueSettings = new()
+{
+    //GENERAL
+    {"LogCapacity", 1024 }, //Maximum Lines in Log
+
+    //XFLY
+    {"DefaultCeil", 15 }, //Todo
+    {"QuickTolerance", 5 }, //QuickTicket Creation Tolerance
+    {"DefaultFltLength", 15 },
+    {"FallbackPriceCat", 1 },
+    {"DefaultTgtWeight", 1 }, //QuickTicket Creation Tolerance
+    {"SlotTolerance", 1 }, //Slot Invoking Tolerance in min
+    {"DelayTolerance", 5 }, //After how many minutes a delay procedure shall be invoked
+    {"MaxDelay", 30 }, //Delay can't get higher
+
+    //BOARD
+    //Optimiert für FHD
+    {"LogoSize_L", 144 },
+    {"LogoSize_R", 144 },
+    {"TitleSize", 54 },
+    {"ClockSize", 48 },
+    {"DateSize", 24 },
+    {"FlashSize", 38 },
+    {"CaptionSize", 26 },
+    {"ElementSize", 22 },
+    {"TargetBorderThickness", 2 },
+    {"MSGCenterTitleSize", 32 },
+    {"MSGCenterTextSize", 48 },
+    {"MSGCenterTextSize", 90 },
+    {"FlashInterval", 500 }, //Flash Light Interval in ms
+    {"HideInactiveFlights", -1 }, //Hide flights in xplan after n min
+
+    //OGN
+    {"OGNSyncLevel", 1 }, //Todo
+    {"OGNTolerance", 7 }, //Max Difference between OGN and Plan start
+    {"TakeoffDuration", 2 }, //How long the takeoff usually takes
+
+};
+
+internal static Dictionary<string,int[]> MultiSettings = new()
+{
+    //BOARD
+    {"Status_RedBlink", [3,11] },
+    {"Status_GreenBlink", [2] },
+    {"Status_Green", [0,6] },
+    {"Status_Red", [9,10,12] },
+    {"Status_Switch", [4,5] },
+    {"StatusBG_Green", [2] },
+    {"StatusBG_Red", [3,9,10,12] },
+};
+
+internal static Dictionary<string,string> TextSettings = new()
+{
+    //OGN
+    {"Homebase", "EDFP" }, //ICAO of Home airbase
+
+    //BOARD
+    {"BoardTitle", "Tag der offenen Tür 2026" }, //ICAO of Home airbase
+    {"MSGCenterDefaultTitle", "Informationen vom AEC Bad Nauheim" }, //ICAO of Home airbase
+};
+
+private static Dictionary<Type,object> _typelink = new()
+{
+    { typeof(string), TextSettings },
+    { typeof(int[]), MultiSettings },
+    { typeof(int), TextSettings },
+    { typeof(bool), SwitchSettings },
+};
+
+/*internal static T? Get<T>(string key)
+{
+    return _typelink.TryGetValue(typeof(T),out object? t) && t != null && t is Dictionary<string,T> d && d.TryGetValue(key,out T? val) ? val : default;
+} */

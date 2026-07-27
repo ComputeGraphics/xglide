@@ -3,17 +3,42 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="fltstd26.Assistant"
              Title="Initialization Assistant"
+             BackgroundColor="Black"
              xmlns:local="clr-namespace:fltstd26.Resources.Texts">
-    <VerticalStackLayout>
+    <Grid ColumnDefinitions="*,600">
+
+        <Image Source="wallpaper.jpg"
+               Aspect="AspectFill"/>
+        <VerticalStackLayout Grid.Column="1"
+                             Spacing="50"
+                             Padding="30">
         <Label 
             Text="{x:Static local:Lang.welcome}"
+            FontAttributes="Bold"
+            FontFamily="ZenDots"
+            TextColor="{AppThemeBinding Light={StaticResource SecondaryDark}, Dark={StaticResource SecondaryDark}}"
+            FontSize="56"
             VerticalOptions="Center" 
-            HorizontalOptions="Center" />
+            HorizontalOptions="Start" />
+        <Label 
+            Text="{x:Static local:Lang.welcome_init}"
+            FontSize="22"
+            TextColor="{AppThemeBinding Light={StaticResource Gray800}, Dark={StaticResource Gray200}}"
+            LineBreakMode="WordWrap"
+            VerticalOptions="Center" 
+            HorizontalOptions="Start" />
+
 
         <Button 
             Text="{x:Static local:Lang.startButton}"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center"
+            VerticalOptions="End"
+            FontAttributes="Bold"
+            Padding="20,10"
+            BackgroundColor="{AppThemeBinding Light={StaticResource SecondaryDark}, Dark={StaticResource SecondaryDark}}"
+            ImageSource="play.png"
+            HorizontalOptions="End"
+            CornerRadius="0"
             Clicked="Start_Clicked"/>
     </VerticalStackLayout>
+    </Grid>
 </ContentPage>

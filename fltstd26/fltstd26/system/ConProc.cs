@@ -10,10 +10,10 @@ namespace fltstd26.system
 {
     public static class ConProc
     {
-        static List<DateTime> Stamp = [];
-        static List<(byte, string)> _Log = [];
+        private static readonly List<DateTime> Stamp = [];
+        private static readonly List<(byte, string)> _Log = [];
+        private static StreamWriter? LogfileStream = null;
         //byte 0: Info, 1: Warning, 2: Error
-        static int _MaxEntries = 100;
 
         /// <summary>
         /// Logs a message with a type (0: Info, 1: Warning, 2: Error). If the log exceeds the maximum number of entries, the oldest entry is removed.
@@ -21,15 +21,29 @@ namespace fltstd26.system
         /// <param name="type">(0: Info, 1: Warning, 2: Error)</param>
         public static void Log(string message,byte type = 0)
         {
-            if (_Log.Count >= _MaxEntries)
+            DateTime now = DateTime.Now;
+            if (_Log.Count >= USettings.Instance.LogCapacity)
             {
                 _Log.RemoveAt(0);
                 Stamp.RemoveAt(0);
             }
             _Log.Add((type, message));
-            Stamp.Add(DateTime.Now);
+            Stamp.Add(now);
+            LogfileStream?.WriteLine(GetMessage(type,message,now));
+            if (GSettings.XConsoleOpen) XConsole.Update();
+            
+        }
 
-            if(GSettings.XConsoleOpen) XConsole.Update();
+        private static string GetMessage(byte code, string msg, DateTime tstmp)
+        {
+            string prefix = code switch
+            {
+                0 => "(INF)",
+                1 => "(WRN)",
+                2 => "(ERR)",
+                _ => "(UNK)"
+            };
+            return $"{tstmp:yyyy-MM-dd HH:mm:ss} {prefix} {msg}";
         }
 
         public static List<string> GetLog()
@@ -37,16 +51,27 @@ namespace fltstd26.system
             List<string> output = [];
             for (int i = 0; i < _Log.Count; i++)
             {
-                string prefix = _Log[i].Item1 switch
-                {
-                    0 => "[INFO]",
-                    1 => "[WARN]",
-                    2 => "[ERR]",
-                    _ => "[UNK]"
-                };
-                output.Add($"{Stamp[i]:yyyy-MM-dd HH:mm:ss} {prefix} {_Log[i].Item2}");
+                output.Add(GetMessage(_Log[i].Item1,_Log[i].Item2,Stamp[i]));
             }
             return output;
+        }
+
+        internal static void InitLogFile()
+        {
+            DateTime now = DateTime.Now;
+            string Logfile = Path.Combine(GSettings.Paths["Logs"],$"XFLY {now:dd-MM-yy} {now:HH-mm}.log");
+            LogfileStream = new(Logfile);
+            LogfileStream.WriteLine("XFLY Logfile " + now.ToString("R"));
+        }
+
+        internal static void EndLogFile()
+        {
+            try
+            {
+                LogfileStream?.WriteLine("Log finalized at " + DateTime.Now.ToString("R"));
+                LogfileStream?.Close();
+            }
+            catch { }
         }
 
         public static void ReportActionStack(string Name,Stack<List<DatabaseAction>> ActionStack,bool Lock)

@@ -12,6 +12,7 @@ public partial class Assistant : ContentPage
     private void Start_Clicked(object sender,EventArgs e)
     {
 		//fltstd26.App.Current.Windows[1].Page = new assistant.IABoard();
-        Shell.Current.GoToAsync("//assistant/IABoard");
+		Navigation.PushAsync(new assistant.FileManager(false,false));
+        //Shell.Current.GoToAsync("//assistant/IABoard");
     }
 }

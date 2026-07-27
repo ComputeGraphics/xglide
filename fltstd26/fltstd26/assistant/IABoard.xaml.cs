@@ -2,10 +2,10 @@ namespace fltstd26.assistant;
 
 public partial class IABoard : ContentPage
 {
-	List<CheckBox> visibilityCheck = [];
-	List<Entry> nameEntries = [];
-    List<Entry> bindingEntries = [];
-    List<Entry> widthEntries = [];
+	private readonly List<CheckBox> visibilityCheck = [];
+    private readonly List<Entry> nameEntries = [];
+    private readonly List<Entry> bindingEntries = [];
+    private readonly List<Entry> widthEntries = [];
 
 
     public IABoard()

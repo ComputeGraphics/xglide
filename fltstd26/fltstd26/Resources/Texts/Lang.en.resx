@@ -196,7 +196,8 @@
     <value>Undo</value>
   </data>
   <data name="welcome" xml:space="preserve">
-    <value>Welcome to the Flight Manager Studio 2026!</value>
+    <value>Welcome to the
+X-Fly Manager Studio 2026!</value>
   </data>
   <data name="xplan_add" xml:space="preserve">
     <value>Add</value>
@@ -448,7 +449,7 @@
     <value>Clear Database</value>
   </data>
   <data name="db_clear_warning" xml:space="preserve">
-    <value>This process will clear the entire database.
+    <value>This process will wipe the entire database.
 ARE YOU SURE?</value>
   </data>
   <data name="xboard_close_all" xml:space="preserve">
@@ -472,7 +473,7 @@ ARE YOU SURE?</value>
   <data name="about_text" xml:space="preserve">
     <value>X-Fly Manager Studio 2026 is a system designed to make the organization of passenger flight on smaller airfields more accessible. The automated Visualization for guests and the organizer helps everyone maintain an overview of the situation. The tool may also assist the cashier and maintains a portable logging database
 This Program is based on a development for the "Aero Club Bad Nauheim"
-© REDFOXXD STUDIO</value>
+© REDFOXX STUDIO</value>
   </data>
   <data name="clockcheck" xml:space="preserve">
     <value>Scheduler Service</value>
@@ -488,5 +489,210 @@ This Program is based on a development for the "Aero Club Bad Nauheim"
   </data>
   <data name="interval" xml:space="preserve">
     <value>Interval</value>
+  </data>
+  <data name="welcome_init" xml:space="preserve">
+    <value>First we need to create a configuration for the program to use. The intelligent assistant will help you creating one</value>
+  </data>
+  <data name="profile_manager" xml:space="preserve">
+    <value>Profile Explorer</value>
+  </data>
+  <data name="remote_continue" xml:space="preserve">
+    <value>Continue as NEXUS Slave</value>
+  </data>
+  <data name="explorer_continue" xml:space="preserve">
+    <value>Open in File-Explorer</value>
+  </data>
+  <data name="profile_select" xml:space="preserve">
+    <value>Please select or create a profile:</value>
+  </data>
+  <data name="last_change" xml:space="preserve">
+    <value>Last change</value>
+  </data>
+  <data name="newprofile" xml:space="preserve">
+    <value>New Profile</value>
+  </data>
+  <data name="forward" xml:space="preserve">
+    <value>Continue</value>
+  </data>
+  <data name="backward" xml:space="preserve">
+    <value>Back</value>
+  </data>
+  <data name="price_doubledot" xml:space="preserve">
+    <value>Price</value>
+  </data>
+  <data name="name_doubledot" xml:space="preserve">
+    <value>Name:</value>
+  </data>
+  <data name="price_create" xml:space="preserve">
+    <value>Price Category</value>
+  </data>
+  <data name="new_db" xml:space="preserve">
+    <value>New Database</value>
+  </data>
+  <data name="new_db_name" xml:space="preserve">
+    <value>Name of the new database:</value>
+  </data>
+  <data name="manual_refresh" xml:space="preserve">
+    <value>Changes will only be displayed after the "Refresh" button has been pressed!</value>
+  </data>
+  <data name="slotcustomizer" xml:space="preserve">
+    <value>Slot Configuration</value>
+  </data>
+  <data name="start" xml:space="preserve">
+    <value>Start</value>
+  </data>
+  <data name="end" xml:space="preserve">
+    <value>End</value>
+  </data>
+  <data name="length_doubledot" xml:space="preserve">
+    <value>Length (min):</value>
+  </data>
+  <data name="session_locked" xml:space="preserve">
+    <value>This session has been locked for safety reasons. This popup will disappear automatically once the application exits safe mode.</value>
+  </data>
+  <data name="session_locked_title" xml:space="preserve">
+    <value>Session locked</value>
+  </data>
+  <data name="proceed_anyway" xml:space="preserve">
+    <value>Proceed Anyway</value>
+  </data>
+  <data name="aircraft_create" xml:space="preserve">
+    <value>A/C Creator</value>
+  </data>
+  <data name="type" xml:space="preserve">
+    <value>Type</value>
+  </data>
+  <data name="type_doubledot" xml:space="preserve">
+    <value>Type:</value>
+  </data>
+  <data name="autoassign" xml:space="preserve">
+    <value>Automatic Ticket Assign</value>
+  </data>
+  <data name="weight_doubledot" xml:space="preserve">
+    <value>Available Seats:</value>
+  </data>
+  <data name="flight_interval_doubledot" xml:space="preserve">
+    <value>Planning Interval:</value>
+  </data>
+  <data name="ogn_doubledot" xml:space="preserve">
+    <value>OGN-Address:</value>
+  </data>
+  <data name="ogn_address" xml:space="preserve">
+    <value>OGN-Address</value>
+  </data>
+  <data name="lfzreg_doubledot" xml:space="preserve">
+    <value>A/C Registration:</value>
+  </data>
+  <data name="lfzreg" xml:space="preserve">
+    <value>Registration</value>
+  </data>
+  <data name="available_in_doubledot" xml:space="preserve">
+    <value>Available at:</value>
+  </data>
+  <data name="accustomizer" xml:space="preserve">
+    <value>Aircraft Configuration</value>
+  </data>
+  <data name="requestfromdb" xml:space="preserve">
+    <value>Import from different profile</value>
+  </data>
+  <data name="profile_choose" xml:space="preserve">
+    <value>Choose Profile</value>
+  </data>
+  <data name="profile_ready" xml:space="preserve">
+    <value>Your profile is ready.
+If it does not appear in the list, try refreshing it with the "Refresh" button.</value>
+  </data>
+  <data name="config_manager" xml:space="preserve">
+    <value>Configuration Explorer</value>
+  </data>
+  <data name="config_select" xml:space="preserve">
+    <value>Please select or create a configuration:</value>
+  </data>
+  <data name="price_sum" xml:space="preserve">
+    <value>Total Price in €</value>
+  </data>
+  <data name="xmlreport" xml:space="preserve">
+    <value>XML-Summary</value>
+  </data>
+  <data name="lfz" xml:space="preserve">
+    <value>Aircraft</value>
+  </data>
+  <data name="slots" xml:space="preserve">
+    <value>Slots</value>
+  </data>
+  <data name="pricecats" xml:space="preserve">
+    <value>Price Categories</value>
+  </data>
+  <data name="targets" xml:space="preserve">
+    <value>Tickets</value>
+  </data>
+  <data name="flights" xml:space="preserve">
+    <value>Flights</value>
+  </data>
+  <data name="db_preview" xml:space="preserve">
+    <value>Database Preview</value>
+  </data>
+  <data name="status_finish_old" xml:space="preserve">
+    <value>Finish expired flight</value>
+  </data>
+  <data name="status_refresh_current" xml:space="preserve">
+    <value>Update current slot</value>
+  </data>
+  <data name="status_refresh_next" xml:space="preserve">
+    <value>Update next slot</value>
+  </data>
+  <data name="status_refresh_all" xml:space="preserve">
+    <value>Update all flights</value>
+  </data>
+  <data name="console" xml:space="preserve">
+    <value>Console</value>
+  </data>
+  <data name="flight_sum" xml:space="preserve">
+    <value>Flight Count</value>
+  </data>
+  <data name="targets_transported" xml:space="preserve">
+    <value>Tickets transported</value>
+  </data>
+  <data name="weight_transported" xml:space="preserve">
+    <value>Passengers transported</value>
+  </data>
+  <data name="length_sum" xml:space="preserve">
+    <value>Total time airborne</value>
+  </data>
+  <data name="turnover" xml:space="preserve">
+    <value>Total turnover in €</value>
+  </data>
+  <data name="activity_range" xml:space="preserve">
+    <value>Activity Range</value>
+  </data>
+  <data name="targets_sold" xml:space="preserve">
+    <value>Sold Tickets</value>
+  </data>
+  <data name="new_config" xml:space="preserve">
+    <value>New Configuration</value>
+  </data>
+  <data name="new_config_name" xml:space="preserve">
+    <value>Name of the new configuration:</value>
+  </data>
+  <data name="config_switch" xml:space="preserve">
+    <value>Configuration Change</value>
+  </data>
+  <data name="config_switch_warn" xml:space="preserve">
+    <value>Shall the software switch to the selected configuration?</value>
+  </data>
+  <data name="xml_report_target" xml:space="preserve">
+    <value>Export Ticket Summary...</value>
+  </data>
+  <data name="xml_report_ac" xml:space="preserve">
+    <value>Export Aircraft Summary...</value>
+  </data>
+  <data name="open_flipit" xml:space="preserve">
+    <value>Open Flip-Sheet</value>
+  </data>
+  <data name="total_transactions" xml:space="preserve">
+    <value>Registered Transactions</value>
+  </data>
+  <data name="apply" xml:space="preserve">
+    <value>Apply</value>
   </data>
 </root>

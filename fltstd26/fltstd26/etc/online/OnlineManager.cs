@@ -38,7 +38,7 @@ namespace fltstd26.etc.online
                                 if (ognflt.stop == null)
                                 {
                                     //Flug noch im Gange
-                                    status = (byte)(DateTime.Now < to.Value.Add(TimeSpan.FromMinutes(USettings.TakeoffDuration)) ? 4 : 5);
+                                    status = (byte)(DateTime.Now < to.Value.Add(TimeSpan.FromMinutes(USettings.Instance.TakeoffDuration)) ? 4 : 5);
                                     nextCheck = (int)Double.Ceiling(slt.Length - (DateTime.Now - to.Value).TotalMinutes - 1);
                                     if(nextCheck < 1) nextCheck = 1;
                                 }
@@ -84,7 +84,7 @@ namespace fltstd26.etc.online
         private static bool MatchesSlot(string? ogn_start,DateTime slot_start,DateTime? slot_end)
         {
             TimeSpan? ogn = OGN.FormatTime(ogn_start);
-            TimeSpan tol = TimeSpan.FromMinutes(USettings.OGNTolerance);
+            TimeSpan tol = TimeSpan.FromMinutes(USettings.Instance.OGNTolerance);
             return ogn != null && (ogn.Value > slot_start.TimeOfDay.Subtract(tol) && (slot_end == null || ogn.Value < slot_end.Value.TimeOfDay.Add(tol)));
         }
 

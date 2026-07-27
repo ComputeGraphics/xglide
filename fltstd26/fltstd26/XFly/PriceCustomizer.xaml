@@ -35,6 +35,7 @@
                        Margin="45,10,0,10"
                        Keyboard="Numeric"
                        BindingContext="{x:Reference TGT_Price_Dropdown_Enable}"
+                           x:DataType="CheckBox"
                        IsEnabled="{Binding Path=IsChecked, Converter={toolkit:InvertedBoolConverter}}"/>
                 </Grid>
             </VerticalStackLayout>

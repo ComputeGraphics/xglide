@@ -9,7 +9,13 @@ namespace fltstd26.system.modals
 {
     internal static class ModalPush
     {
-
+        internal async static Task<string?> Entry(string Title,string Subtitle,string Placeholder, string? Preset)
+        {
+            if (GSettings.nav == null) return null;
+            Entry entry = new(Title,Subtitle,Placeholder,Preset);
+            await GSettings.nav!.PushModalAsync(entry);
+            return await entry.ShowAndSelect();
+        }
         internal async static Task<int> Selector(string title, List<(string, string, string)> content)
         {
             if (GSettings.nav == null) return -1;

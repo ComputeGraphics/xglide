@@ -7,7 +7,7 @@
     <Border StrokeThickness="2"
             Stroke="{AppThemeBinding Light={StaticResource Gray500}, Dark={StaticResource Gray200}}"
             Padding="25,16"
-            HorizontalOptions="Center">
+            HorizontalOptions="Fill">
         <Grid ColumnSpacing="20"
               ColumnDefinitions="Auto,Auto,*,Auto">
             
@@ -29,7 +29,7 @@
             <Label x:Name="Info"
                        VerticalOptions="Center"
                        HorizontalOptions="Start"
-                       FontSize="Title"
+                       FontSize="18"
                    Grid.Column="2"/>
 
             <HorizontalStackLayout Grid.Column="3"

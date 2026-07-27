@@ -56,7 +56,7 @@ namespace fltstd26.XFly
                     {
                         //Ask for new length
                         ConProc.Log("[PATCHER] Ziel " + target.Id + " wird ein neuer Flug zugeordnet",1);
-                        int Length = USettings.DefaultFltLength;
+                        int Length = USettings.Instance.DefaultFltLength;
                         byte Status = 13;
                         string? Adds = null;
                         bool success = false;
@@ -110,7 +110,7 @@ namespace fltstd26.XFly
         }
         internal static void TestOverlap()
         {
-            List<Sheets.Slot> slots = RData.GetSlotsTable().OrderBy(x => x.STime).ToList();
+            List<Sheets.Slot> slots = [..RData.GetSlotsTable().OrderBy(x => x.STime)];
             string overlaps = "";
             for(int i = 0; i < slots.Count; i++)
             {

@@ -10,7 +10,7 @@ namespace fltstd26.XFly
         internal static async Task<int> AskForPriceUpdate(int Price,int? LFZ_PriceCat,string Name)
         {
             int pcat = 0;
-            if (USettings.AskForNodePriceChange)
+            if (USettings.Instance.AskForNodePriceChange)
             {
                 PriceCustomizer pc = new(Price,Name);
                 await GSettings.nav!.PushModalAsync(pc);
@@ -19,7 +19,7 @@ namespace fltstd26.XFly
                     pcat = r.Result switch
                     {
                         null => 0,
-                        0 => -(LFZ_PriceCat ?? USettings.FallbackPriceCat),
+                        0 => -(LFZ_PriceCat ?? USettings.Instance.FallbackPriceCat),
                         _ => r.Result.Value,
                     };
                 });

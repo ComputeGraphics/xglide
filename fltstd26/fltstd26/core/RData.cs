@@ -14,30 +14,33 @@ namespace fltstd26.core
         internal static Stack<string> RestoreStack = new();
 
         public static Func<bool> Active = () => rdb != null;
+        internal static bool Locked = false;
 
         private static SQLiteConnection? rdb;
-        private static readonly string DatabaseFilename = "RData.sqlite";
+        internal static string DatabaseFilename = "RData.sqlite";
         private static readonly string DatabasePath = GSettings.Paths["Database"];
 
-        internal static void Init()
+        internal static void Init(string? DB = null)
         {
             try
             {
-                rdb = new SQLiteConnection(Path.Combine(DatabasePath,DatabaseFilename));
+                Locked = DB != null;
+                rdb = new SQLiteConnection(DB ?? Path.Combine(DatabasePath,DatabaseFilename));
                 rdb.CreateTable<Sheets.Flt>();
                 rdb.CreateTable<Sheets.Lfz>();
                 rdb.CreateTable<Sheets.Slot>();
                 rdb.CreateTable<Sheets.Target>();
                 rdb.CreateTable<Sheets.PriceCat>();
-                ConProc.Log($"[RDATA] Datenbank initialisierung abgeschlossen",0);
+                ConProc.Log($"[RDATA] Database initialized successfully",0);
             }
             catch (Exception ex)
             {
-                ConProc.Log($"[RDATA] Initialisierung fehlgeschlagen: {ex.Message}",2);
+                ConProc.Log($"[RDATA] Initialization failed: {ex.Message}",2);
+                Locked = false;
             }
         }
 
-        internal static void Reset()
+        internal static bool Reset()
         {
             try
             {
@@ -54,14 +57,29 @@ namespace fltstd26.core
                     rdb?.CreateTable<Sheets.Target>();
                     rdb?.CreateTable<Sheets.PriceCat>();
                     rdb?.Execute("VACUUM");
-                    ConProc.Log($"[RDATA] Die Datenbank wurde zurückgesetzt",1);
+                    ConProc.Log($"[RDATA] The database was reset successfully",1);
+                    return true;
                 }
             }
             catch (Exception ex)
             {
-                ConProc.Log($"[RDATA] Zurücksetzen der Datenbank fehlgeschlagen: {ex.Message}",2);
+                ConProc.Log($"[RDATA] Database could not be reset: {ex.Message}",2);
+            }
+            return false;
+        }
+
+        internal static void ApplyDatabase(List<Sheets.Flt> flts, List<Sheets.Lfz> acs, List<Sheets.Slot> slots, List<Sheets.Target> tgts, List<Sheets.PriceCat> pcs)
+        {
+            if(Reset())
+            {
+                InsertRange(flts);
+                InsertRange(acs);
+                InsertRange(slots);
+                InsertRange(tgts);
+                InsertRange(pcs);
             }
         }
+
 
         internal static void Backup(string name)
         {
@@ -71,12 +89,12 @@ namespace fltstd26.core
                 {
                     rdb?.Backup(Path.Combine(GSettings.Paths["Backup"],name));
                     BackupStack.Push(name);
-                    ConProc.Log($"[RDATA] Die Datenbank wurde gesichert",1);
+                    ConProc.Log($"[RDATA] The database was backed up",1);
                 }
             }
             catch (Exception ex)
             {
-                ConProc.Log($"[RDATA] Datenbanksicherung fehlgeschlagen: {ex.Message}",2);
+                ConProc.Log($"[RDATA] Database-Backup failed: {ex.Message}",2);
             }
         }
 
@@ -106,11 +124,11 @@ namespace fltstd26.core
                     }
                     Init();
                 }
-                ConProc.Log($"[RDATA] Datenbank " + TargetBackup + " wurde geladen",1);
+                ConProc.Log($"[RDATA] Database " + TargetBackup + " was loaded",1);
             }
             catch (Exception ex)
             {
-                ConProc.Log($"[RDATA] Datenbank konnte nicht wiederhergestellt werden: {ex.Message}",2);
+                ConProc.Log($"[RDATA] Database could not be restored: {ex.Message}",2);
             }
         }
 
@@ -122,12 +140,13 @@ namespace fltstd26.core
                 {
                     rdb?.Close();
                     rdb = null;
-                    ConProc.Log($"[RDATA] Das Datenbanksystem wude beendet",1);
+                    Locked = false;
+                    ConProc.Log($"[RDATA] Database System closed",1);
                 }
             }
             catch (Exception ex)
             {
-                ConProc.Log($"[RDATA] Datenbank konnte nicht geschlossen werden: {ex.Message}",2);
+                ConProc.Log($"[RDATA] Database could not be closed: {ex.Message}",2);
             }
         }
 
@@ -139,15 +158,16 @@ namespace fltstd26.core
         internal static List<Sheets.Target> GetTargetTable() => (Active() ? rdb?.Table<Sheets.Target>().ToList() : []) ?? [];
         internal static List<Sheets.PriceCat> GetPriceTable() => (Active() ? rdb?.Table<Sheets.PriceCat>().ToList() : []) ?? [];
 
-        internal static T? Get<T>(object pk) where T : class, new()
+        internal static T? Get<T>(object? pk) where T : class, new()
         {
             try
             {
+                if (pk == null) throw new Exception("Primary Key was null");
                 return rdb?.Get<T>(pk);
             }
             catch (Exception e)
             {
-                ConProc.Log($"[RDATA] Selektion fehlgeschlagen: {e.Message}",2);
+                ConProc.Log($"[RDATA] Selection Failed: {e.Message}",2);
                 return null;
             }
         }
@@ -160,7 +180,7 @@ namespace fltstd26.core
             }
             catch (Exception e)
             {
-                ConProc.Log($"[RDATA] Generelle Selektion fehlgeschlagen: {e.Message}",2);
+                ConProc.Log($"[RDATA] General Selection failed: {e.Message}",2);
                 return null;
             }
         }
@@ -173,7 +193,7 @@ namespace fltstd26.core
             }
             catch (Exception e)
             {
-                ConProc.Log($"[RDATA] Selektion nach Eigenschaft fehlgeschlagen: {e.Message}",2);
+                ConProc.Log($"[RDATA] Selection after Predicate failed: {e.Message}",2);
                 return [null];
             }
         }
@@ -183,12 +203,12 @@ namespace fltstd26.core
             try
             {
                 rdb?.InsertAll(value,true);
-                ConProc.Log($"[RDATA] Mehrere Entitäten wurden einer Tabelle hinzugefügt",0);
+                ConProc.Log($"[RDATA] Multiple Entities were added to the database in a transaction",0);
                 return true;
             }
             catch (Exception e)
             {
-                ConProc.Log($"[RDATA] Transaktion von Entitäten fehlgeschlagen: {e.Message}",2);
+                ConProc.Log($"[RDATA] Entity transaction failed: {e.Message}",2);
                 return false;
             }
         }
@@ -198,12 +218,12 @@ namespace fltstd26.core
             try
             {
                 rdb?.Insert(value,"",type);
-                ConProc.Log($"[RDATA] Eine Entität wurde der " + type.Name + " Tabelle hinzugefügt",0);
+                ConProc.Log($"[RDATA] An Entity was added to the " + type.Name + " table",0);
                 return rdb!.ExecuteScalar<int>("SELECT last_insert_rowid()");
             }
             catch (Exception e)
             {   
-                ConProc.Log($"[RDATA] Einfügen in die Datenbank fehlgeschlagen: {e.Message}",2);
+                ConProc.Log($"[RDATA] Failed to add Entity to the database: {e.Message}",2);
                 return -1;
             }   
         }
@@ -215,18 +235,18 @@ namespace fltstd26.core
                 PropertyInfo? match = type.GetProperties().Where(p => p.Name == prop).FirstOrDefault();
                 if (match != null)
                 {
-                    if (val == null && !cannull) throw new Exception("Unzulässiger Nullwert");
+                    if (val == null && !cannull) throw new Exception("Value can not be null");
                     object? prev = Get(pk, type);
                     match.SetValue(prev,val);
                     rdb?.Update(prev);
-                    ConProc.Log($"[RDATA] Eine Eigenschaft einer Entität der " + type.Name + " Tabelle wurde verändert",0);
+                    ConProc.Log($"[RDATA] A Property of an entity was updated in the " + type.Name + " table",0);
                     return true;
                 }
                 throw new Exception("Property not found");
             }
             catch (Exception e)
             {
-                ConProc.Log($"[RDATA] Modifikation der Eigenschaften einer Entität fehlgeschlagen: {e.Message}",2);
+                ConProc.Log($"[RDATA] Property of Entity could not be modified: {e.Message}",2);
                 return false;
             }
         }
@@ -235,12 +255,12 @@ namespace fltstd26.core
         {
             try
             {
-                ConProc.Log($"[RDATA] Eine Entität in der " + type?.Name+ " Tabelle wurde bearbeitet",0);
+                ConProc.Log($"[RDATA] An Entity in the " + type?.Name+ " was updated",0);
                 return rdb?.Update(obj, type);
             }
             catch (Exception e)
             {
-                ConProc.Log($"[RDATA] Entität konnte nicht bearbeitet werden: {e.Message}",2);
+                ConProc.Log($"[RDATA] Failed to update Entity: {e.Message}",2);
                 return null;
             }
         }
@@ -249,12 +269,12 @@ namespace fltstd26.core
         {
             try
             {
-                ConProc.Log($"[RDATA] Eine Entität wurde aus der " + type?.Name + " Tabelle gelöscht",0);
+                ConProc.Log($"[RDATA] An Entity was removed from the " + type?.Name + " table",0);
                 return rdb?.Delete(pk,new(type));
             }
             catch (Exception e)
             {
-                ConProc.Log($"[RDATA] Entität konnte nicht gelöscht werden: {e.Message}",2);
+                ConProc.Log($"[RDATA] Entity could not be deleted: {e.Message}",2);
                 return null;
             }
         }

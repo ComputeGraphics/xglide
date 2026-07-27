@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="fltstd26.assistant.config.ConfigSettings"
+             Title=""
+             Shell.NavBarIsVisible="false"
+             x:DataType="Color"
+             xmlns:local="clr-namespace:fltstd26.Resources.Texts">
+    <Grid RowDefinitions="Auto,*,Auto"
+              VerticalOptions="Fill">
+        <Border BackgroundColor="{x:AppThemeBinding Dark={StaticResource Gray950}, Light={StaticResource Gray300}}"
+                        Padding="20"
+                        StrokeThickness="0">
+            <Label FontSize="28"
+                       FontFamily="Archive"
+                       VerticalOptions="Center"
+                   x:Name="WindowTitle"
+                       HorizontalOptions="Start"/>
+        </Border>
+        <Border Grid.Row="1"
+                    VerticalOptions="Fill"
+                    StrokeThickness="2">
+            <Grid    RowSpacing="12"
+                     RowDefinitions="Auto,*"
+                                        VerticalOptions="Fill"
+                                        Padding="20">
+                <Label FontSize="22"
+                       VerticalOptions="Center"
+                       x:Name="WindowSubtitle"
+                       HorizontalOptions="Start"/>
+                <Border StrokeThickness="2"
+                        Padding="10"
+                        Grid.Row="1"
+                        VerticalOptions="Fill"
+                        BackgroundColor="{x:AppThemeBinding Dark={StaticResource Gray950}, Light={StaticResource Gray300}}">
+                    <ScrollView>
+                        <VerticalStackLayout x:Name="FileView"
+                                             Spacing="10"/>
+                    </ScrollView>
+                </Border>
+            </Grid>
+        </Border>
+
+        <Border Background="{AppThemeBinding Light={StaticResource SecondaryDark}, Dark={StaticResource SecondaryDark}}"
+                            HorizontalOptions="Fill"
+                    VerticalOptions="End"
+                    Grid.Row="2"
+                    Padding="10"
+                    StrokeThickness="0">
+            <Grid ColumnDefinitions="*,Auto,Auto">
+                <Button Text="{x:Static local:Lang.cancel}"
+                                    Clicked="CancelClick"
+                                    TextColor="Black"
+                                    Grid.Column="1"
+                                    CornerRadius="0"
+                                    BackgroundColor="Transparent"
+                                    FontAttributes="Bold"/>
+                <Button Text="{x:Static local:Lang.apply}"
+                                    Clicked="ApplyClick"
+                                    TextColor="Black"
+                                    Grid.Column="2"
+                                    CornerRadius="0"
+                                    BackgroundColor="Transparent"
+                                    FontAttributes="Bold"
+                                    ImageSource="check.png"/>
+            </Grid>
+        </Border>
+    </Grid>
+</ContentPage>

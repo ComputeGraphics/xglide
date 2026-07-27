@@ -1,11 +1,12 @@
 {
   "version": 2,
-  "dgSpecHash": "Rorw7XoHh7w=",
+  "dgSpecHash": "bTMDgBQ1HJI=",
   "success": true,
   "projectFilePath": "C:\\Users\\Arthur\\Documents\\GitHub\\xglide\\fltstd26\\fltstd26\\fltstd26.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Arthur\\.nuget\\packages\\communitytoolkit.maui\\12.2.0\\communitytoolkit.maui.12.2.0.nupkg.sha512",
     "C:\\Users\\Arthur\\.nuget\\packages\\communitytoolkit.maui.core\\12.2.0\\communitytoolkit.maui.core.12.2.0.nupkg.sha512",
+    "C:\\Users\\Arthur\\.nuget\\packages\\communitytoolkit.mvvm\\8.4.2\\communitytoolkit.mvvm.8.4.2.nupkg.sha512",
     "C:\\Users\\Arthur\\.nuget\\packages\\microsoft.extensions.configuration\\9.0.9\\microsoft.extensions.configuration.9.0.9.nupkg.sha512",
     "C:\\Users\\Arthur\\.nuget\\packages\\microsoft.extensions.configuration.abstractions\\9.0.9\\microsoft.extensions.configuration.abstractions.9.0.9.nupkg.sha512",
     "C:\\Users\\Arthur\\.nuget\\packages\\microsoft.extensions.dependencyinjection\\9.0.9\\microsoft.extensions.dependencyinjection.9.0.9.nupkg.sha512",

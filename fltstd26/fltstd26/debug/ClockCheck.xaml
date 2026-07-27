@@ -7,7 +7,7 @@
              x:Class="fltstd26.debug.ClockCheck"
              Title="ClockCheck">
     <Border StrokeThickness="2"
-            Margin="200"
+            Margin="300,200"
             BackgroundColor="{x:AppThemeBinding Dark={StaticResource Gray950}, Light={StaticResource Gray200}}"
             VerticalOptions="Fill"
             HorizontalOptions="Fill">
@@ -73,6 +73,7 @@
                     </Border>
                     <ScrollView Padding="20">
                         <VerticalStackLayout x:Name="EventStack"
+                                             HorizontalOptions="Fill"
                                              Spacing="10"/>
                     </ScrollView>
                 </VerticalStackLayout>

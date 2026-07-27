@@ -17,7 +17,7 @@ namespace fltstd26.board
         //BoardController.ClockID = TimeServ.ScheduleRO(TimeSpan.FromMinutes(1),UpdateTime,true);
 
         //20 für Padding + 80 für FlashingLight Column + 5 Safe und Scrollbar
-        public static double GetColumnWidth(int board,int percentage) => (Boards[board].WindowWidth - 115) / 100 * percentage;
+        public static double GetColumnWidth(BoardPage board,int percentage) => (board.WindowWidth - 115) / 100 * percentage;
 
         public static void Tick()
         {
@@ -27,37 +27,51 @@ namespace fltstd26.board
             }
         }
 
+        internal static void Init()
+        {
+            if (ClockID == -1) ClockID = TimeServ.ScheduleRO(TimeSpan.FromMinutes(1),BoardController.UpdateTime,true);
+            if (TickID == -1) TickID = TimeServ.ScheduleRO(TimeSpan.FromSeconds(10),BoardController.Tick,false);
+            BoardTimeServ.Init();
+        }
+
         public static void UpdateTime()
         {
             System.Diagnostics.Debug.WriteLine("Board Time Update");
             Boards.ForEach(board => board.UpdateTime());
         }
 
-        public static void Refresh(int BoardNumber)
+        public static void Refresh(BoardPage Board)
         {
-            if (BoardNumber != -1 && BoardNumber < Boards.Count && !double.IsNaN(Boards[BoardNumber].WindowWidth))
+            if (!double.IsNaN(Board.WindowWidth))
             {
-                Boards[BoardNumber].ColumnSizes = [.. USettings.Columns.Select(x => GetColumnWidth(BoardNumber,x.Item3))];
-                System.Diagnostics.Debug.WriteLine("Window Width: " + Boards[BoardNumber].WindowWidth.ToString());
-                System.Diagnostics.Debug.WriteLine("[{0}]",string.Join(", ",Boards[BoardNumber].ColumnSizes));
-                Boards[BoardNumber].XBoardBuilder();
+                Board.ColumnSizes = [.. USettings.Instance.Columns.Select(x => GetColumnWidth(Board,x.Width))];
+                System.Diagnostics.Debug.WriteLine("Window Width: " + Board.WindowWidth.ToString());
+                System.Diagnostics.Debug.WriteLine("[{0}]",string.Join(", ",Board.ColumnSizes));
+                Board.ClearFlightTags();
+                Board.XBoardBuilder();
             }
         }
 
-        public static void Terminate(int BoardNumber)
+        internal static void Terminate(BoardPage Board)
         {
-            if (BoardNumber != -1 && BoardNumber < Boards.Count)
+            Board.Terminate();
+            Boards.Remove(Board);
+            if (Boards.Count == 0)
             {
-                Boards[BoardNumber].Terminate();
-                Boards.RemoveAt(BoardNumber);
-            }
-            if(Boards.Count == 0)
-            {
+                System.Diagnostics.Debug.WriteLine("Ending FIDS Session");
                 TimeServ.UnscheduleRO(ClockID);
                 TimeServ.UnscheduleRO(TickID);
                 ClockID = -1;
                 TickID = -1;
-                BoardTimeServ.Pause();
+                BoardTimeServ.Pause(true);
+            }
+        }
+
+        internal static void Close(int BoardNumber)
+        {
+            if (BoardNumber != -1 && BoardNumber < Boards.Count)
+            {
+                Boards[BoardNumber].CloseWindow();
             }
         }
 
@@ -69,45 +83,55 @@ namespace fltstd26.board
             List<Sheets.Lfz> acs = RData.GetAircraftTable();
             foreach (var board in Boards)
             {
-                SyncBoard(board,flts,tgts,slots,acs);
+                if (board.IsFlip) FlipBoardController.SyncBoard(board,flts,tgts,slots,acs);
+                else SyncBoard(board,flts,tgts,slots,acs);
             }
         }
+
         internal static void SyncBoard(BoardPage board,List<Sheets.Flt>? fltsn,List<Sheets.Target>? tgtsn,List<Sheets.Slot>? slotsn,List<Sheets.Lfz>? acsn)
         {
-            board.FlightTags.Clear();
-            List<Sheets.Slot> slots = slotsn ?? RData.GetSlotsTable();
-            
-            List <Sheets.Lfz> acs = acsn ?? RData.GetAircraftTable();
-            List <Sheets.Flt> flts = fltsn ?? RData.GetFlightTable();
-            
-            List<Sheets.Target> tgts = tgtsn ?? RData.GetTargetTable();
-
-            if(USettings.HideInactiveFlights != -1)
+            try
             {
-                flts = [.. flts.Where(x => slots.Select(x => x.Id).Contains(x.Slot))];
-                slots = [.. slots.Where(x => x.FTime + TimeSpan.FromMinutes(USettings.HideInactiveFlights) < DateTime.Now)];
-            }
+                board.ClearFlightTags();
+                List<Sheets.Slot> slots = slotsn ?? RData.GetSlotsTable();
 
-            foreach (Sheets.Flt flt in flts)
+                List<Sheets.Lfz> acs = acsn ?? RData.GetAircraftTable();
+                List<Sheets.Flt> flts = fltsn ?? RData.GetFlightTable();
+
+                List<Sheets.Target> tgts = tgtsn ?? RData.GetTargetTable();
+
+                if (USettings.Instance.HideInactiveFlights != -1)
+                {
+                    flts = [.. flts.Where(x => slots.Select(x => x.Id).Contains(x.Slot))];
+                    slots = [.. slots.Where(x => !(x.FTime + TimeSpan.FromMinutes(USettings.Instance.HideInactiveFlights) < DateTime.Now))];
+                }
+                if (USettings.Instance.TargetOriented)
+                {
+
+                }
+                else
+                {
+                    foreach (Sheets.Flt flt in flts)
+                    {
+                        BoardView? bv = Translate(flt,acs.Find(x => x.Id == flt.Lfz),slots.Find(x => x.Id == flt.Slot),tgts.Where(x => x.LId == flt.Id),board.ColumnSizes);
+                        if (bv == null) continue;
+                        board.FlightTags.Add(bv);
+                    }
+                    board.UpdateContent();
+                    board.UpdateStatus(flts);
+                    //Status Update
+                }
+            }
+            catch (Exception ex)
             {
-                BoardView? bv = Translate(flt,acs.Find(x => x.Id == flt.Lfz),slots.Find(x => x.Id == flt.Slot),tgts.Where(x => x.LId == flt.Id),board.ColumnSizes);
-                if (bv == null) continue;
-                board.FlightTags.Add(flt.Id,bv);
+                ConProc.Log("[XBOARD-CTR] Board Sync failed: " + ex.Message);
             }
-            board.UpdateContent();
-            board.UpdateStatus(flts);
-            //Status Update
         }
-        internal static void SyncBoardStatus(BoardPage board, List<Sheets.Flt> flts)
-        {
-            board.UpdateStatus(flts);
-        }
-
         internal static void SynchronizeWithStatus(List<Sheets.Flt> flts)
         {
             foreach (var board in Boards)
             {
-                SyncBoardStatus(board,flts);
+                board.UpdateStatus(flts);
             }
         }
 
@@ -115,46 +139,37 @@ namespace fltstd26.board
         {
             if (ac == null || slot == null) return null;
             List<View> Columns = [];
-            foreach ((string, string, int) column in USettings.Columns)
+            foreach (BoardColumn column in USettings.Instance.Columns)
             {
-                int substringIndex = column.Item2.IndexOf('.');
-                string dir = column.Item2[..substringIndex];
+                int substringIndex = column.Link.IndexOf('.');
+                string dir = column.Link[..substringIndex];
                 if (dir != "Ctr")
                 {
                     object pass = dir == "Flt" ? flt : (dir == "Lfz" ? ac : slot);
-                    Columns.Add(GetInfo(column.Item2[(substringIndex + 1)..],pass,pass.GetType()));
+                    Columns.Add(GetInfo(column.Link[(substringIndex + 1)..],pass,pass.GetType()));
                 }
                 else
                 {
-                    Columns.AddRange(GetCtr(column.Item2[(substringIndex + 1)..],flt,tgts));
+                    Columns.AddRange(GetCtr(column.Link[(substringIndex + 1)..],flt,tgts));
                 }
             }
-            return new([.. Columns],columns,0,slot.STime);
+            return new(flt.Id,[.. Columns],columns,USettings.Instance.Columns.FindIndex(x => x.Link == "Ctr.Add"),0,slot.STime);
         }
 
         private static Label GetInfo(string prop,object obj,Type type,bool time = false)
         {
             Label lbl = new()
             {
-                FontSize = USettings.ElementSize,
+                FontSize = USettings.Instance.ElementSize,
                 VerticalOptions = LayoutOptions.Center,
+                LineBreakMode = LineBreakMode.NoWrap,
                 FontFamily = "ZenDots",
                 Text = "N/A"
             };
             try
             {
-                object? res = GetProp(prop,obj,type);
-                for (int attempts = 0; attempts < 4 && res == null; attempts++)
-                {
-                    if (GSettings.FallbackBoardProps.TryGetValue(prop,out string? n) && n != null) res = GetProp(n,obj,type);
-                    else if (attempts == 3) res = "N/A";
-                }
-                if (res is DateTime s)
-                {
-                    if (time) lbl.FontFamily = "SquareSans";
-                    res = s.ToShortTimeString();
-                }
-                lbl.Text = res!.ToString();
+                if (time) lbl.FontFamily = "SquareSans";
+                lbl.Text = ReflectInfo(prop,obj,type);
             }
             catch (Exception ex)
             {
@@ -163,7 +178,22 @@ namespace fltstd26.board
             return lbl;
         }
 
-        private static object? GetProp(string prop,object obj,Type type)
+        public static string? ReflectInfo(string prop,object obj,Type type)
+        {
+            object? res = GetProp(prop,obj,type);
+            for (int attempts = 0; attempts < 4 && res == null; attempts++)
+            {
+                if (GSettings.FallbackBoardProps.TryGetValue(prop,out string? n) && n != null) res = GetProp(n,obj,type);
+                else if (attempts == 3) res = "N/A";
+            }
+            if (res is DateTime s)
+            {
+                res = s.ToShortTimeString();
+            }
+            return res!.ToString();
+        }
+
+        public static object? GetProp(string prop,object obj,Type type)
         {
             try
             {
@@ -186,12 +216,13 @@ namespace fltstd26.board
                 case "Add":
                     if (obj.Add == null) break;
                     string[] adds = obj.Add.Split(';');
-                    for (int i = 0; i < USettings.Additionals.Count; i++)
+                    for (int i = 0; i < USettings.Instance.Additionals.Count; i++)
                     {
                         views.Add(new Label()
                         {
                             VerticalOptions = LayoutOptions.Center,
-                            FontSize = USettings.ElementSize,
+                            LineBreakMode = LineBreakMode.NoWrap,
+                            FontSize = USettings.Instance.ElementSize,
                             FontFamily = "ZenDots",
                             Text = adds[i],
                         });
@@ -209,7 +240,8 @@ namespace fltstd26.board
                         Content = new Label()
                         {
                             Text = GSettings.Status[status],
-                            FontSize = USettings.ElementSize,
+                            FontSize = USettings.Instance.ElementSize,
+                            LineBreakMode = LineBreakMode.NoWrap,
                             TextTransform = TextTransform.Uppercase,
                             FontAttributes = FontAttributes.Bold,
                             VerticalOptions = LayoutOptions.Center,
@@ -218,7 +250,7 @@ namespace fltstd26.board
                     });
                     break;
                 case string s when s.StartsWith("Target"):
-                    views.Add(GetTarget(s[(s.LastIndexOf('.')+1)..],tgts));
+                    views.Add(GetTarget(s[(s.LastIndexOf('.') + 1)..],tgts));
                     break;
             }
             return views;
@@ -239,15 +271,16 @@ namespace fltstd26.board
                             Padding = 5,
                             HorizontalOptions = LayoutOptions.Fill,
                             VerticalOptions = LayoutOptions.Fill,
-                            StrokeThickness = 2,
+                            StrokeThickness = USettings.Instance.TargetBorderThickness,
                             Content = new Label()
                             {
                                 Padding = 5,
                                 Text = t.Name,
-                                FontSize = USettings.ElementSize,
+                                LineBreakMode = LineBreakMode.NoWrap,
+                                FontSize = USettings.Instance.ElementSize,
                                 VerticalOptions = LayoutOptions.Center,
                                 HorizontalOptions = LayoutOptions.Center,
-                                FontFamily = USettings.UseTargetSquareFont ? "SquareSans" : "ZenDots"
+                                FontFamily = USettings.Instance.UseTargetSquareFont ? "SquareSans" : "ZenDots"
                             }
                         };
                         elements.Add(b);

@@ -55,7 +55,7 @@ public partial class XBlock : ContentView
     {
         if (id >= 0 && id < Attribs.Length && NodeIconStack.Children[id] is ImageButton interaction && interaction.Behaviors[0] is IconTintColorBehavior tint)
         {
-            ConProc.Log($"[XBLOCK] Attribute {id} of target {TargetID} updated");
+            //ConProc.Log($"[XBLOCK] Attribute {id} of target {TargetID} updated");
             AttribAction(id);
             tint.TintColor = Attribs[id] ? GSettings.PrimaryColour : GSettings.InactiveIcon;
         }
@@ -66,7 +66,7 @@ public partial class XBlock : ContentView
     {
         if (id >= 0 && id < Attribs.Length && NodeIconStack.Children[id] is ImageButton interaction && interaction.Behaviors[0] is IconTintColorBehavior tint)
         {
-            ConProc.Log($"[XBLOCK] Attribute {id} of target {TargetID} disabled");
+            //ConProc.Log($"[XBLOCK] Attribute {id} of target {TargetID} disabled");
             interaction.IsEnabled = false;
             tint.TintColor = Colors.Transparent;
         }

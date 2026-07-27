@@ -5,28 +5,11 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:local="clr-namespace:fltstd26"
     xmlns:board="clr-namespace:fltstd26.board"
-    Title="fltstd26">
+    Title="XFly Management Studio 2026">
 
     <ShellContent
         Title="Home"
         ContentTemplate="{DataTemplate local:XMain}"
         Route="XMain" />
     
-    <ShellContent
-        Title="Assistant_Config"
-        ContentTemplate="{DataTemplate local:Assistant}"
-        Route="Assistant" />
-
-    <ShellContent
-        Title="Board"
-        ContentTemplate="{DataTemplate board:BoardPage}"
-        Route="BoardPage"/>
-
-    <Tab Route="assistant">
-        <ShellContent
-            Title="IABoard"
-            ContentTemplate="{DataTemplate local:assistant.IABoard}"
-            Route="IABoard" />
-    </Tab>
-
 </Shell>

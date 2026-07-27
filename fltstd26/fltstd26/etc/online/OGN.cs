@@ -22,7 +22,7 @@ namespace fltstd26.etc.online
 
         public static DateTime? FormatTimeToday(string? time)
         {
-            if(time == null) return null;
+            if (time == null) return null;
             string[] split = time.Split('h');
             DateTime today = DateTime.Now;
             if (Int32.TryParse(split[0],out int hour) && Int32.TryParse(split[1],out int minute)) return new(today.Year,today.Month,today.Day,hour,minute,today.Second);
@@ -33,57 +33,66 @@ namespace fltstd26.etc.online
         {
             try
             {
-                ConProc.Log("[OGN] Synchronisieren...",0);
-                OGNLogbook log = await Get(USettings.Homebase) ?? throw new Exception("Keine Daten empfangen");
+                ConProc.Log("[OGN] Synchronizing..",0);
+                OGNLogbook log = await Get(USettings.Instance.Homebase) ?? throw new Exception("No data recieved");
                 CurrentOGN = log;
             }
             catch (Exception ex)
             {
-                ConProc.Log("[OGN] Fehler: " + ex.Message,2);
-                
+                ConProc.Log("[OGN] Error: " + ex.Message,2);
+
             }
-        }
-
-        internal static void QeueSync(int min)
-        {
-
         }
 
         internal static void LinkAddress(bool Overwrite)
         {
-            if (CurrentOGN.devices == null) return;
-            string nonASCII = @"[^\u0000-\u007F]+";
-            List<Sheets.Lfz> acs = RData.GetAircraftTable();
-            acs.ForEach(ac =>
+            try
             {
-                if (Overwrite || (ac.OGN == null || ac.OGN == ""))
+                if (CurrentOGN.devices == null) return;
+                string nonASCII = @"[^\u0000-\u007F]+";
+                List<Sheets.Lfz> acs = RData.GetAircraftTable();
+                acs.ForEach(ac =>
                 {
-                    RData.UpdateProperty<string>(ac.Id,
-                        CurrentOGN.devices.Find(x => x.registration != null && ac.Reg != null && 
-                        Regex.Replace(x.registration,nonASCII,string.Empty).Replace("-",string.Empty).Trim() == Regex.Replace(ac.Reg,nonASCII,string.Empty).Replace("-",string.Empty).Trim())?.address,
-                        "OGN",typeof(Sheets.Lfz),true);
-                }
-                
-            });
+                    if (Overwrite || (ac.OGN == null || ac.OGN == ""))
+                    {
+                        RData.UpdateProperty<string>(ac.Id,
+                            CurrentOGN.devices.Find(x => x.registration != null && ac.Reg != null &&
+                            Regex.Replace(x.registration,nonASCII,string.Empty).Replace("-",string.Empty).Trim() == Regex.Replace(ac.Reg,nonASCII,string.Empty).Replace("-",string.Empty).Trim())?.address,
+                            "OGN",typeof(Sheets.Lfz),true);
+                    }
+
+                });
+            }
+            catch (Exception e)
+            {
+                ConProc.Log("[OGN] Could not link OGN Aircraft: " + e.Message,2);
+            }
         }
-        internal static async void RelinkAddress(bool allLfz, bool allAdr)
+        internal static async void RelinkAddress(bool allLfz,bool allAdr)
         {
-            if (CurrentOGN.devices == null) return;
-            List<Sheets.Lfz> a = RData.GetAircraftTable();
-            List<Sheets.Lfz> acs = allLfz ? a : [..a.Where(x => x.OGN == null || x.OGN == "")];
-            IEnumerable<Device> dvs = allAdr ? CurrentOGN.devices : CurrentOGN.devices.Where(x => !a.Select(x => x.OGN).Contains(x.address));
-            List<(string, string, string)> elements = [("x.png", Lang.dont_care, ""),.. acs.Select(x => ("plane.png", x.Reg ?? x.Id.ToString(), x.Type))];
-            foreach(Device dv in dvs)
+            try
             {
-                if(dv == null || dv.address == null) continue;
-                int index = -1;
-                await ModalPush.Selector(dv.registration + $"({dv.address})\r\n" + dv.aircraft_type,elements).ContinueWith(t => index = t.Result);
-                if (index > 0)
+                if (CurrentOGN.devices == null) return;
+                List<Sheets.Lfz> a = RData.GetAircraftTable();
+                List<Sheets.Lfz> acs = allLfz ? a : [.. a.Where(x => x.OGN == null || x.OGN == "")];
+                IEnumerable<Device> dvs = allAdr ? CurrentOGN.devices : CurrentOGN.devices.Where(x => !a.Select(x => x.OGN).Contains(x.address));
+                List<(string, string, string)> elements = [("x.png", Lang.dont_care, ""),.. acs.Select(x => ("plane.png", x.Reg ?? x.Id.ToString(), x.Type ?? "N/A"))];
+                foreach (Device dv in dvs)
                 {
-                    RData.UpdateProperty<string>(acs[index - 1],dv.address,"OGN",typeof(Sheets.Lfz),true);
+                    if (dv == null || dv.address == null) continue;
+                    int index = -1;
+                    await ModalPush.Selector(dv.registration + $"({dv.address})\r\n" + dv.aircraft_type,elements).ContinueWith(t => index = t.Result);
+                    if (index > 0)
+                    {
+                        RData.UpdateProperty<string>(acs[index - 1],dv.address,"OGN",typeof(Sheets.Lfz),true);
+                    }
+                    else if (index == -1) break;
                 }
-                else if (index == -1) break;
-            }      
+            }
+            catch (Exception e)
+            {
+                ConProc.Log("[OGN] Could not relink OGN Aircraft: " + e.Message,2);
+            }
         }
         public static async Task<string> GetRaw(string ap)
         {
@@ -98,30 +107,30 @@ namespace fltstd26.etc.online
                     }
                     else
                     {
-                        ConProc.Log("[OGN] Ausnahme: " + rsp.StatusCode,2);
+                        ConProc.Log("[OGN] Error: " + rsp.StatusCode,2);
                         return "EX: " + rsp.StatusCode;
                     }
                 }
                 catch (Exception ex)
                 {
-                    ConProc.Log("[OGN] Ausnahme: " + ex.Message,2);
+                    ConProc.Log("[OGN] Error: " + ex.Message,2);
                     return "EX: " + ex.Message;
                 }
             }
             else
             {
-                ConProc.Log("[OGN] Kein Flugplatz",1);
+                ConProc.Log("[OGN] No airfield",1);
                 return "EX: INVALID";
             }
         }
 
         public static async Task<OGNLogbook?> Get(string ap)
         {
-            ConProc.Log("[OGN] Das Logbuch für " + ap + " wurde angefordert");
+            ConProc.Log("[OGN] Logbook of airfield " + ap + " was requested");
             string raw = await GetRaw(ap);
             if (raw.StartsWith("EX: "))
             {
-                ConProc.Log("[OGN] Logbuch kann nicht erfragt werden: " + raw,2);
+                ConProc.Log("[OGN] Logbook could not be requested: " + raw,2);
                 return null;
             }
             else
@@ -135,13 +144,13 @@ namespace fltstd26.etc.online
                     }
                     else
                     {
-                        ConProc.Log("[OGN] Logbuch Übersetzungsfehler",2);
+                        ConProc.Log("[OGN] Logbook Translation Error",2);
                         return null;
                     }
                 }
                 catch (Exception ex)
                 {
-                    ConProc.Log("[OGN] Fehler bei der Übersetzung des Logbuchs: " + ex.Message,2);
+                    ConProc.Log("[OGN] Error translating the logbook: " + ex.Message,2);
                     return null;
                 }
             }

@@ -1,15 +1,13 @@
-﻿using fltstd26.etc;
-using fltstd26.system;
+﻿using fltstd26.system;
 using SQLite;
-using System.Runtime.Serialization.Formatters.Binary;
 using System.Text.Json;
-using System.Text.Json.Serialization;
-using System.Xml.Linq;
 
 namespace fltstd26.core
 {
     public class Sheets
     {
+        
+        //Aircraft: 
         [Table("Lfz")]
         public class Lfz
         {
@@ -22,11 +20,11 @@ namespace fltstd26.core
             [Column("type")]
             public string? Type { get; set; }
             [Column("seats")]
-            public byte Seats { get; set; }
+            public int Seats { get; set; }
             [Column("interval")]
-            public byte Interval { get; set; } //Zeit zwischen jedem Flug. Im Slotting System nicht berücksichtigt
+            public int Interval { get; set; } //Zeit zwischen jedem Flug. Im Slotting System nicht berücksichtigt
             [Column("pricecat")]
-            public byte PriceCat { get; set; }
+            public int PriceCat { get; set; }
             [Column("avail")]
             public byte[]? AvailTimes { get; set; }
             [Column("autoassign")]

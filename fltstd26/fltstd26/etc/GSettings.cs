@@ -54,7 +54,6 @@ namespace fltstd26.etc
             "AUTO"
         ];
 
-
         internal static Type[] NecessaryResetTypes = [typeof(Sheets.Lfz),typeof(Sheets.PriceCat),typeof(Sheets.Slot)];
         internal static Dictionary<int,int> StatusLink = [];
 
@@ -65,9 +64,13 @@ namespace fltstd26.etc
         public static Dictionary<string,string> Paths = [];
 
         public static Func<string,int> FormatPrice = price => Single.TryParse(price.Trim(),System.Globalization.NumberStyles.Currency,System.Globalization.CultureInfo.CurrentCulture,out Single pc) ? (int)(pc * 100) : -1;
-        public static Func<int,string> UnformatPrice = price => (price / 100).ToString("C",System.Globalization.CultureInfo.CurrentCulture);
-        public static Func<string,int> InterpretePrice = price => (price.Contains(',') || price.Contains('.')) ? FormatPrice(price) : (Int32.TryParse(price,out int ParsePrice) ? ParsePrice : -USettings.FallbackPriceCat);
+        public static Func<int,string> UnformatPrice = price => ((double)price / 100).ToString("C",System.Globalization.CultureInfo.CurrentCulture);
+        public static Func<string,int> InterpretePrice = price => (price.Contains(',') || price.Contains('.')) ? FormatPrice(price) : (Int32.TryParse(price,out int ParsePrice) ? ParsePrice*100 : -USettings.Instance.FallbackPriceCat);
         public static Func<string?,bool,bool> GetBoolean = static (value,fallback) => value != null ? !(value.Trim().Equals("false",StringComparison.OrdinalIgnoreCase) || (!value.Trim().Equals("true",StringComparison.OrdinalIgnoreCase) && !fallback)) : fallback;
+
+        public static bool DateChanged(DateTime? prev,DateTime? now) => now != null && (prev == null || prev.Value.Date != now.Value.Date);
+        public static bool TimeChanged(TimeSpan? prev,TimeSpan? now) => now != null && (prev == null || prev.Value != now.Value);
+        public static Func<string?,string?,bool> ValueChanged => (prev,aft) => !string.IsNullOrEmpty(aft) && (prev == null || prev.Trim() != aft.Trim());
 
         public static bool DarkMode = Application.Current!.RequestedTheme == AppTheme.Dark;
         public static Func<string,Color> GetColour = c => (Color)Application.Current!.Resources[c];

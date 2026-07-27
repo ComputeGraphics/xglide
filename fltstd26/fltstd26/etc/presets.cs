@@ -28,15 +28,15 @@ namespace fltstd26.etc
             allLFZ.Add(new Sheets.Lfz { Reg = "D-MWTN",Type = "WT9 Dynamic",Seats = 1,AutoAssign = true,Interval = 15,PriceCat = 3,AvailTimes = [1,2,3,4,5,6,7,8,9] });
 
             //FTS
-            allFTS.Add(new Sheets.Slot { STime = DateTime.Today.AddHours(13),FTime = DateTime.Today.AddHours(14),Length = 15 });
-            allFTS.Add(new Sheets.Slot { STime = DateTime.Today.AddHours(15),FTime = DateTime.Today.AddHours(16),Length = 30 });
-            allFTS.Add(new Sheets.Slot { STime = DateTime.Today.AddHours(16),FTime = DateTime.Today.AddHours(17),Length = 15 });
-            allFTS.Add(new Sheets.Slot { STime = DateTime.Today.AddHours(17),FTime = DateTime.Today.AddHours(18),Length = 30 });
-            allFTS.Add(new Sheets.Slot { STime = DateTime.Today.AddHours(18),FTime = DateTime.Today.AddHours(19),Length = 15 });
-            allFTS.Add(new Sheets.Slot { STime = DateTime.Today.AddHours(19),FTime = DateTime.Today.AddHours(20),Length = 30 });
-            allFTS.Add(new Sheets.Slot { STime = DateTime.Today.AddHours(19),FTime = DateTime.Today.AddHours(20),Length = 15 });
-            allFTS.Add(new Sheets.Slot { STime = DateTime.Today.AddHours(20),FTime = DateTime.Today.AddHours(21),Length = 15 });
-            allFTS.Add(new Sheets.Slot { STime = DateTime.Today.AddHours(21),FTime = DateTime.Today.AddHours(22),Length = 15 });
+            allFTS.Add(new Sheets.Slot { STime = DateTime.Now,FTime = DateTime.Now.AddMinutes(30),Length = 15 });
+            allFTS.Add(new Sheets.Slot { STime = DateTime.Now.AddMinutes(30),FTime = DateTime.Now.AddMinutes(60),Length = 15 });
+            allFTS.Add(new Sheets.Slot { STime = DateTime.Now.AddMinutes(60),FTime = DateTime.Now.AddMinutes(90),Length = 15 });
+            allFTS.Add(new Sheets.Slot { STime = DateTime.Now.AddMinutes(90),FTime = DateTime.Now.AddMinutes(120),Length = 30 });
+            allFTS.Add(new Sheets.Slot { STime = DateTime.Now.AddMinutes(120),FTime = DateTime.Now.AddMinutes(150),Length = 15 });
+            allFTS.Add(new Sheets.Slot { STime = DateTime.Now.AddMinutes(150),FTime = DateTime.Now.AddMinutes(180),Length = 15 });
+            allFTS.Add(new Sheets.Slot { STime = DateTime.Now.AddMinutes(180),FTime = DateTime.Now.AddMinutes(210),Length = 15 });
+            allFTS.Add(new Sheets.Slot { STime = DateTime.Now.AddMinutes(210),FTime = DateTime.Now.AddMinutes(240),Length = 30 });
+            allFTS.Add(new Sheets.Slot { STime = DateTime.Now.AddMinutes(240),FTime = DateTime.Now.AddMinutes(270),Length = 15 });
 
             //Upload
             RData.InsertRange(allPriceCat);

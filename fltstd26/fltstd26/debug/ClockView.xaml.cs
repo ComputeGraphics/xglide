@@ -15,7 +15,7 @@ public partial class ClockView : ContentView
             LinkedScheduledAction = sc;
             Icon.Source = "calendar.png";
             ID.Text = sc.ID.ToString();
-            Info.Text = $"{Lang.execution_at}: {sc.ScheduledTime:R}";
+            Info.Text = $"{Lang.execution_at}{sc.ScheduledTime:R}";
         }
         else if (lp != null)
         {
@@ -23,7 +23,7 @@ public partial class ClockView : ContentView
             Icon.Source = "refresh.png";
             ID.Text = lp.ID.ToString();
             DateTime newexec = lp.LastExec + lp.Interval;
-            Info.Text = $"{Lang.execution_last}: {lp.LastExec:R}  -  {Lang.execution_at}: {newexec:R}  -  {Lang.interval}: {lp.Interval:G}";
+            Info.Text = $"{Lang.execution_last}{lp.LastExec:R}  -  {Lang.execution_at}{newexec:R}  -  {Lang.interval}: {lp.Interval:g}";
         }
     }
 

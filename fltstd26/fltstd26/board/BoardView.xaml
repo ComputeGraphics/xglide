@@ -2,8 +2,10 @@
 <ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:uset="clr-namespace:fltstd26.etc"
+             BindingContext="{x:Static uset:USettings.Oberservables}"
+             x:DataType="uset:ObservableSettings"
              x:Class="fltstd26.board.BoardView">
-    <Grid Padding="10"
+    <Grid Padding="10,10"
           BackgroundColor = "{AppThemeBinding Dark={StaticResource Gray960}, Light={StaticResource Gray100}}"
           ColumnDefinitions="80, *">
         <Grid ColumnDefinitions="Auto,Auto"
@@ -14,13 +16,13 @@
                x:Name="GreenLight"
                        FontFamily="ZenDots"
                TextColor="DarkGray"
-               FontSize="{Binding Source={x:Static uset:USettings.FlashSize}}"/>
+               FontSize="{Binding FlashSize}"/>
             <Label Text="●"
                x:Name="RedLight"
                        FontFamily="ZenDots"
                Grid.Column="1"
                TextColor="DarkGray"
-               FontSize="{Binding Source={x:Static uset:USettings.FlashSize}}"/>
+               FontSize="{Binding FlashSize}"/>
         </Grid>
         <Grid x:Name="ColumnContainer"
               VerticalOptions="Center"

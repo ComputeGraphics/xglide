@@ -6,36 +6,79 @@
         Title="DBPreview">
 
     <ContentPage>
-        <ScrollView
+        <Grid RowDefinitions="Auto,*"
+              VerticalOptions="Fill">
+            <Border BackgroundColor="{x:AppThemeBinding Dark={StaticResource Gray950}, Light={StaticResource Gray300}}"
+                        Padding="20,0"
+                        StrokeThickness="0">
+                <Grid ColumnDefinitions="Auto,*,Auto">
+                    <Label FontSize="28"
+                           FontFamily="Archive"
+                           Padding="0,20"
+                           Text="{x:Static local:Lang.db_preview}"
+                           VerticalOptions="Center"
+                           HorizontalOptions="Start"/>
+                    <Button Text="{x:Static local:Lang.refresh}"
+                            CornerRadius="0"
+                            Grid.Column="2"
+                            Margin="0,20"
+                            ImageSource="refresh.png"
+                            Clicked="Refresh_Click"
+                            HorizontalOptions="End"/>
+                    <HorizontalStackLayout Grid.Column="1"
+                                           HorizontalOptions="Center"
+                                           VerticalOptions="End">
+                        <Button Text="{x:Static local:Lang.flights}"
+                                CornerRadius="0"
+                                BackgroundColor="Transparent"
+                                Clicked="FlightClick"
+                                x:Name="FlightButton"
+                                HorizontalOptions="Center"
+                                TextColor="{AppThemeBinding Light={StaticResource Gray800}, Dark={StaticResource Gray500}}"
+                                VerticalOptions="End"/>
+                        <Button Text="{x:Static local:Lang.targets}"
+                                CornerRadius="0"
+                                BackgroundColor="Transparent"
+                                Clicked="TargetClick"
+                                x:Name="TargetButton"
+                                HorizontalOptions="Center"
+                                TextColor="{AppThemeBinding Light={StaticResource Gray800}, Dark={StaticResource Gray500}}"
+                                VerticalOptions="End"/>
+                        <Button Text="{x:Static local:Lang.slots}"
+                                CornerRadius="0"
+                                BackgroundColor="Transparent"
+                                Clicked="SlotClick"
+                                x:Name="SlotButton"
+                                HorizontalOptions="Center"
+                                TextColor="{AppThemeBinding Light={StaticResource Gray800}, Dark={StaticResource Gray500}}"
+                                VerticalOptions="End"/>
+                        <Button Text="{x:Static local:Lang.lfz}"
+                                CornerRadius="0"
+                                BackgroundColor="Transparent"
+                                Clicked="AircraftClick"
+                                x:Name="AircraftButton"
+                                TextColor="{AppThemeBinding Light={StaticResource Gray800}, Dark={StaticResource Gray500}}"
+                                HorizontalOptions="Center"
+                                VerticalOptions="End"/>
+                        <Button Text="{x:Static local:Lang.pricecats}"
+                                CornerRadius="0"
+                                BackgroundColor="Transparent"
+                                TextColor="{AppThemeBinding Light={StaticResource Gray800}, Dark={StaticResource Gray500}}"
+                                Clicked="PriceClick"
+                                x:Name="PriceButton"
+                                HorizontalOptions="Center"
+                                VerticalOptions="End"/>
+                    </HorizontalStackLayout>
+                </Grid>
+            </Border>
+            <ScrollView Grid.Row="1"
+                        Padding="20"          
                 VerticalOptions="Fill"
                 VerticalScrollBarVisibility="Always">
-            <VerticalStackLayout>
-                <HorizontalStackLayout Margin="10">
-                    <Label Text="Database Preview"
-                       FontSize="Medium"
-                       FontAttributes="Bold"/>
-                    <Picker x:Name="DBPreviewPicker"
-                        HorizontalOptions="Center">
-                        <Picker.ItemsSource>
-                            <x:Array Type="{x:Type x:String}">
-                                <x:String>Flights</x:String>
-                                <x:String>Aircraft</x:String>
-                                <x:String>Slots</x:String>
-                                <x:String>Targets</x:String>
-                                <x:String>Prices</x:String>
-                            </x:Array>
-                        </Picker.ItemsSource>
-                    </Picker>
-                    <Button Text="Refresh"
-                        ImageSource="refresh.png"
-                        Clicked="Refresh_Click"
-                        HorizontalOptions="End"/>
-                </HorizontalStackLayout>
-
-                <Grid x:Name="DBPreviewGrid"/>
-
-            </VerticalStackLayout>
-        </ScrollView>
-
+                <Grid x:Name="DBPreviewGrid"
+                      
+                      VerticalOptions="Start"/>
+            </ScrollView>
+        </Grid>
     </ContentPage>
 </Window>
