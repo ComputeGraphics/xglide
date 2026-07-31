@@ -6,4 +6,14 @@ public partial class ConfigSettings : ContentPage
 	{
 		InitializeComponent();
 	}
+
+	public void ApplyClick(object sender, EventArgs e)
+	{
+
+	}
+
+	public void CancelClick(object sender, EventArgs e)
+	{
+
+	}
 }

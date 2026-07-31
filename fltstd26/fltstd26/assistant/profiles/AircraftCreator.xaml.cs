@@ -40,6 +40,9 @@ public partial class AircraftCreator : ContentPage
             SlotStack.Add(g);
         }
 
+        PriceCatPicker.SelectedIndex = 0;
+
+
         if (prelfz != null)
         {
             NameEntry.Text = prelfz.Reg;

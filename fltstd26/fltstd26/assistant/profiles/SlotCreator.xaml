@@ -13,7 +13,7 @@
         <Grid RowDefinitions="Auto,Auto,Auto"
               Padding="20">
             <Label FontSize="28"
-                    Text="{x:Static local:Lang.price_create}"
+                    Text="{x:Static local:Lang.slotcustomizer}"
                     FontAttributes="Bold"
                     FontFamily="Archive"
                     HorizontalOptions="Center"

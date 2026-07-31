@@ -17,7 +17,7 @@ public partial class FlipChar : ContentView
     public FlipChar(short size)
     {
         Label lb = GetLetter(size,USettings.Instance.Alphabet.First());
-        lb.Padding = new Thickness(0,4,0,0);
+        lb.Padding = new Thickness(0,0,0,0);
         Letter = lb;
         Label lf = GetLetter(size,USettings.Instance.Alphabet.First());
         //lf.BackgroundColor = Colors.Pink;

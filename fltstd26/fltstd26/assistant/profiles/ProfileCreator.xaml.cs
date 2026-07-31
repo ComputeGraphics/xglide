@@ -191,6 +191,11 @@ public partial class ProfileCreator : ContentPage
                     break;
                 case 2:
                     List<Sheets.Lfz> acs = RData.GetAircraftTable();
+                    foreach(Sheets.Lfz ac in acs)
+                    {
+                        ac.AvailTimes = [];
+                        ac.PriceCat = 0;
+                    }
                     RData.Close();
                     RData.Init(DB);
                     RData.InsertRange(acs);
