@@ -69,6 +69,7 @@ namespace fltstd26.etc
         public string Creator = "Arthur Hildebrand";
         public DateTime LastChange = new(2026,6,1,14,53,0);
 
+        public string Homebase = "EDFP";
         //public List<string> Additionals = ["Test","DoubleTest"];
         public List<string> Additionals = [];
 
@@ -85,17 +86,42 @@ namespace fltstd26.etc
             new() { Name = "Status", Link = "Ctr.Status", Width = 15, MaxChars = -1 },
         ];
         
-        public string Homebase = "EDFP";
         public string BoardTitle = "Tag der offenen Tür 2026";
+        public bool SortByTime = false;
+        public bool UseTargetSquareFont = false;
+        public bool TargetOriented = false; //To Implement
+        //minutes
+        public short HideInactiveFlights = -1;
+        public short FlashInterval = 500; //in ms
 
-        public int[] Status_RedBlink = [3,11];
+        public short LogoSize_L = 144;
+        public short LogoSize_R = 144;
+        public short TitleSize = 54;
+        public short ClockSize = 48;
+        public short DateSize = 24;
+        public short FlashSize = 38;
+        public short CaptionSize = 26;
+        public short ElementSize = 20;
+        public short TargetBorderThickness = 2;
+        public short MSGCenterTitleSize = 32;
+        public short MSGCenterTextSize = 50;
+        public short MSGCenterIconSize = 90;
+
+        public int[] Status_RedBlink = [3, 11];
         public int[] Status_GreenBlink = [2];
-        public int[] Status_Green = [0,6];
-        public int[] Status_Red = [9,10,12];
-        public int[] Status_Switch = [4,5];
+        public int[] Status_Green = [0, 6];
+        public int[] Status_Red = [9, 10, 12];
+        public int[] Status_Switch = [4, 5];
         public int[] StatusBG_Green = [2];
-        public int[] StatusBG_Red = [3,9,10,12];
+        public int[] StatusBG_Red = [3, 9, 10, 12];
 
+        //FLIPBOARD
+        //Last if not found
+        public string Alphabet = "1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ,;.:-_!?&€()/<> ";
+        public short LetterWidth = 42;
+        public short FlipCycleSpeed = 25; //in ms
+
+        //MSGCENTER
         public string MSGCenterDefaultTitle = "Informationen vom AEC Bad Nauheim";
         //Icon (info when null), Title (default when null), Text
         public List<(string?, string?, string)> MSGCenterTips =
@@ -124,28 +150,21 @@ namespace fltstd26.etc
 
             ];
 
-        //Last if not found
-        public string Alphabet = "1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ,;.:-_!?&€()/<> ";
-
-        public short LetterWidth = 42;
-        public short FlipCycleSpeed = 25; //in ms
-        public short FlashInterval = 500; //in ms
-
-        //minutes
-        public short HideInactiveFlights = -1;
 
         public bool AllowNEXUS = false;
         public bool AutoASAP = false; //Keine Fragen. Einfach machen
         public bool AutoTimeCheck = false;
         public bool EnableSlots = true; // To Implement
         public bool AntiCol = false; // To Implement
-        public bool TargetOriented = false; //To Implement
-        public bool SortByTime = false;
-        public bool UseTargetSquareFont = false;
+       
+        public bool HidePastSlots = false;
+
+
+
         public bool LogFile = true;
         public bool IgnoreTransactionWeight = false;
         public bool IgnoreTransactionLength = false;
-        public bool HidePastSlots = false;
+        
         public bool AskForNodeMove = true;
         public bool AskForNodePriceChange = true;
 
@@ -165,18 +184,7 @@ namespace fltstd26.etc
         public int MaxDelay = 30;
         public int SlotTolerance = 1;
 
-        public short LogoSize_L = 144;
-        public short LogoSize_R = 144;
-        public short TitleSize = 54;
-        public short ClockSize = 48;
-        public short DateSize = 24;
-        public short FlashSize = 38;
-        public short CaptionSize = 26;
-        public short ElementSize = 20;
-        public short TargetBorderThickness = 2;
-        public short MSGCenterTitleSize = 32;
-        public short MSGCenterTextSize = 50;
-        public short MSGCenterIconSize = 90;
+
         internal void FinalizeConfig()
         {
             Columns.TrimExcess();

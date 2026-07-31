@@ -50,7 +50,7 @@ namespace fltstd26.XFly
             return CompatibleSlots;
         }
 
-        public static List<int> FindAvailableAircraft(int SlotID,bool Auto,int? PriceFilter)
+        public static List<int> FindAvailableAircraft(int SlotID,bool Auto,int? PriceFilter, bool Price)
         {
             List<int> AvailableAircraft = [];
             foreach (Sheets.Lfz lfz in RData.GetAircraftTable())

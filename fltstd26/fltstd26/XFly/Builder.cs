@@ -209,7 +209,7 @@ namespace fltstd26.XFly
                         List<int> SelLfzs = [];
                         //System.Diagnostics.Debug.WriteLine("STOP 2");
                         HashSet<int> SlotFlights = [.. (RData.GetWhere<Sheets.Flt>($"slot={SelSlots[ProcResult.Item1.Id - 1]}") ?? []).Select(flt => flt?.Lfz ?? -1)];
-                        IEnumerable<int> FitAircraft = Manager.FindAvailableAircraft(SelSlots[ProcResult.Item1.Id - 1],!LfzOverride.HasValue,PriceFilter < 0 ? -PriceFilter : null).Where(x => Manager.AircraftFitsWeight(x,Weight)).Except(SlotFlights);
+                        IEnumerable<int> FitAircraft = Manager.FindAvailableAircraft(SelSlots[ProcResult.Item1.Id - 1],!LfzOverride.HasValue,PriceFilter < 0 ? -PriceFilter : null,LfzOverride.HasValue).Where(x => Manager.AircraftFitsWeight(x,Weight)).Except(SlotFlights);
                         if (LfzOverride.HasValue) FitAircraft = [.. FitAircraft.Where(x => x == LfzOverride)];
                         foreach (int ac in FitAircraft)
                         {
