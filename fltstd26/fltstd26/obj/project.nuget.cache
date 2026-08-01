@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "I7Wlh3xwiFM=",
+  "dgSpecHash": "bTMDgBQ1HJI=",
   "success": true,
   "projectFilePath": "C:\\Users\\Arthur\\Documents\\GitHub\\xglide\\fltstd26\\fltstd26\\fltstd26.csproj",
   "expectedPackageFiles": [
@@ -27,7 +27,7 @@
     "C:\\Users\\Arthur\\.nuget\\packages\\microsoft.maui.graphics\\9.0.120\\microsoft.maui.graphics.9.0.120.nupkg.sha512",
     "C:\\Users\\Arthur\\.nuget\\packages\\microsoft.maui.graphics.win2d.winui.desktop\\9.0.120\\microsoft.maui.graphics.win2d.winui.desktop.9.0.120.nupkg.sha512",
     "C:\\Users\\Arthur\\.nuget\\packages\\microsoft.maui.resizetizer\\9.0.120\\microsoft.maui.resizetizer.9.0.120.nupkg.sha512",
-    "C:\\Users\\Arthur\\.nuget\\packages\\microsoft.net.illink.tasks\\9.0.15\\microsoft.net.illink.tasks.9.0.15.nupkg.sha512",
+    "C:\\Users\\Arthur\\.nuget\\packages\\microsoft.net.illink.tasks\\9.0.11\\microsoft.net.illink.tasks.9.0.11.nupkg.sha512",
     "C:\\Users\\Arthur\\.nuget\\packages\\microsoft.web.webview2\\1.0.3179.45\\microsoft.web.webview2.1.0.3179.45.nupkg.sha512",
     "C:\\Users\\Arthur\\.nuget\\packages\\microsoft.windows.sdk.buildtools\\10.0.22621.756\\microsoft.windows.sdk.buildtools.10.0.22621.756.nupkg.sha512",
     "C:\\Users\\Arthur\\.nuget\\packages\\microsoft.windowsappsdk\\1.7.250909003\\microsoft.windowsappsdk.1.7.250909003.nupkg.sha512",
@@ -38,9 +38,15 @@
     "C:\\Users\\Arthur\\.nuget\\packages\\sqlitepclraw.provider.e_sqlite3\\2.1.2\\sqlitepclraw.provider.e_sqlite3.2.1.2.nupkg.sha512",
     "C:\\Users\\Arthur\\.nuget\\packages\\system.memory\\4.5.3\\system.memory.4.5.3.nupkg.sha512",
     "C:\\Users\\Arthur\\.nuget\\packages\\system.speech\\9.0.5\\system.speech.9.0.5.nupkg.sha512",
-    "C:\\Users\\Arthur\\.nuget\\packages\\microsoft.maccatalyst.runtime.maccatalyst-x64.net9.0_26.2\\26.2.9008\\microsoft.maccatalyst.runtime.maccatalyst-x64.net9.0_26.2.26.2.9008.nupkg.sha512",
-    "C:\\Users\\Arthur\\.nuget\\packages\\microsoft.maccatalyst.ref.net9.0_26.2\\26.2.9008\\microsoft.maccatalyst.ref.net9.0_26.2.26.2.9008.nupkg.sha512",
-    "C:\\Users\\Arthur\\.nuget\\packages\\microsoft.windows.sdk.net.ref\\10.0.19041.57\\microsoft.windows.sdk.net.ref.10.0.19041.57.nupkg.sha512"
+    "C:\\Users\\Arthur\\.nuget\\packages\\microsoft.maccatalyst.runtime.maccatalyst-x64.net9.0_26.5\\26.5.9002\\microsoft.maccatalyst.runtime.maccatalyst-x64.net9.0_26.5.26.5.9002.nupkg.sha512",
+    "C:\\Users\\Arthur\\.nuget\\packages\\microsoft.windowsdesktop.app.ref\\9.0.11\\microsoft.windowsdesktop.app.ref.9.0.11.nupkg.sha512",
+    "C:\\Users\\Arthur\\.nuget\\packages\\microsoft.aspnetcore.app.ref\\9.0.11\\microsoft.aspnetcore.app.ref.9.0.11.nupkg.sha512",
+    "C:\\Users\\Arthur\\.nuget\\packages\\microsoft.maccatalyst.ref.net9.0_26.5\\26.5.9002\\microsoft.maccatalyst.ref.net9.0_26.5.26.5.9002.nupkg.sha512",
+    "C:\\Users\\Arthur\\.nuget\\packages\\microsoft.windows.sdk.net.ref\\10.0.19041.57\\microsoft.windows.sdk.net.ref.10.0.19041.57.nupkg.sha512",
+    "C:\\Users\\Arthur\\.nuget\\packages\\microsoft.windowsdesktop.app.ref\\9.0.11\\microsoft.windowsdesktop.app.ref.9.0.11.nupkg.sha512",
+    "C:\\Users\\Arthur\\.nuget\\packages\\microsoft.netcore.app.ref\\9.0.11\\microsoft.netcore.app.ref.9.0.11.nupkg.sha512",
+    "C:\\Users\\Arthur\\.nuget\\packages\\microsoft.aspnetcore.app.ref\\9.0.11\\microsoft.aspnetcore.app.ref.9.0.11.nupkg.sha512",
+    "C:\\Users\\Arthur\\.nuget\\packages\\microsoft.netcore.app.host.win-x64\\9.0.11\\microsoft.netcore.app.host.win-x64.9.0.11.nupkg.sha512"
   ],
   "logs": []
 }

@@ -723,4 +723,7 @@ Falls ihr Profil nicht sofort erscheint, drücken Sie einfach den "Aktualisieren
   <data name="apply" xml:space="preserve">
     <value>Anwenden</value>
   </data>
+  <data name="call_target" xml:space="preserve">
+    <value>Bitte begeben Sie sich jetzt zum Rundflugschalter:</value>
+  </data>
 </root>

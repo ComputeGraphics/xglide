@@ -1,7 +1,7 @@
-﻿using fltstd26.core;
+﻿using fltstd26.board;
+using fltstd26.core;
 using fltstd26.etc;
-using static SQLite.SQLite3;
-using static System.Net.WebRequestMethods;
+using fltstd26.Resources.Texts;
 namespace fltstd26.XFly
 {
     internal class Drawer
@@ -27,5 +27,12 @@ namespace fltstd26.XFly
             return pcat;
         }
 
+        internal static void CallTargets(IEnumerable<Sheets.Target> tgts)
+        {
+            Color bg = GSettings.DarkMode ? GSettings.GetColour("SecondaryDark") : GSettings.GetColour("SecondaryBg");
+            Color fg = GSettings.DarkMode ? GSettings.GetColour("White") : GSettings.GetColour("Black");
+            string tgt = string.Join(", ",tgts.Select(x => x.Name ?? x.Id.ToString()));
+            BoardController.PushNotification(TimeSpan.FromSeconds(30),"notification.png",Lang.call_target,tgt,bg,fg,true);
+        }
     }
 }

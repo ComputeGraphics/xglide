@@ -17,7 +17,6 @@ public partial class FlipChar : ContentView
     public FlipChar(short size)
     {
         Label lb = GetLetter(size,USettings.Instance.Alphabet.First());
-        lb.Padding = new Thickness(0,0,0,0);
         Letter = lb;
         Label lf = GetLetter(size,USettings.Instance.Alphabet.First());
         //lf.BackgroundColor = Colors.Pink;
@@ -86,11 +85,17 @@ public partial class FlipChar : ContentView
         if (Case.Width <= 0 || Case.Height <= 0)
             return;
         OverwriteLetter.Clip = new RectangleGeometry(
-            new Rect(0,0,USettings.Instance.LetterWidth,split));
+            new Rect(0,0,USettings.Instance.LetterWidth,split-1));
         Letter.Clip = new RectangleGeometry(
-            new Rect(0,split,USettings.Instance.LetterWidth,Case.Height - split));
+            new Rect(0,split,USettings.Instance.LetterWidth,Case.Height - split-1));
         Outer.HeightRequest = Case.Height + 8;
         Outer.WidthRequest = USettings.Instance.LetterWidth + 2;
+        Case.WidthRequest = USettings.Instance.LetterWidth + 2;
+        OverwriteLetter.HeightRequest = OverwriteLetter.Height;
+        Letter.HeightRequest = Letter.Height;
+
+        //OverwriteLetter.WidthRequest = OverwriteLetter.Width;
+        //Letter.WidthRequest = OverwriteLetter.Width;
     }
 
     private static Label GetLetter(short FontSize,char Letter)

@@ -171,6 +171,15 @@ namespace fltstd26.Resources.Texts {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Bitte begeben Sie sich jetzt zum Rundflugschalter: ähnelt.
+        /// </summary>
+        internal static string call_target {
+            get {
+                return ResourceManager.GetString("call_target", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Abbrechen ähnelt.
         /// </summary>
         internal static string cancel {

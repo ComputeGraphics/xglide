@@ -50,12 +50,12 @@ namespace fltstd26.XFly
             return CompatibleSlots;
         }
 
-        public static List<int> FindAvailableAircraft(int SlotID,bool Auto,int? PriceFilter, bool Price)
+        public static List<int> FindAvailableAircraft(int SlotID,bool Auto,int? PriceFilter, bool Force)
         {
             List<int> AvailableAircraft = [];
             foreach (Sheets.Lfz lfz in RData.GetAircraftTable())
             {
-                if ((!Auto || lfz.AutoAssign == true) && lfz.AvailTimes is not null && lfz.AvailTimes.Where(x => x == SlotID).Any() && (PriceFilter == null || lfz.PriceCat == PriceFilter))
+                if (Force || (!Auto || lfz.AutoAssign == true) && lfz.AvailTimes is not null && lfz.AvailTimes.Where(x => x == SlotID).Any() && (PriceFilter == null || lfz.PriceCat == PriceFilter))
                 {
                     AvailableAircraft.Add(lfz.Id);
                 }

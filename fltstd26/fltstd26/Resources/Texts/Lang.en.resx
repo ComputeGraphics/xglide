@@ -695,4 +695,7 @@ If it does not appear in the list, try refreshing it with the "Refresh" button.<
   <data name="apply" xml:space="preserve">
     <value>Apply</value>
   </data>
+  <data name="call_target" xml:space="preserve">
+    <value>Please come to the boarding point now:</value>
+  </data>
 </root>

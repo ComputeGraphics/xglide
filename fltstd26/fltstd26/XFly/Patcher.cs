@@ -23,9 +23,9 @@ namespace fltstd26.XFly
             return true;
         }
 
-        internal static List<Sheets.Flt> CleanupFlights()
+        internal static List<Sheets.Flt> CleanupFlights(List<int>? ExcludeTickets = null)
         {
-            IEnumerable<int> UnusedFlight = RData.GetFlightTable().Select(x => x.Id).Except(RData.GetTargetTable().Select(x => x.LId).Distinct());
+            IEnumerable<int> UnusedFlight = RData.GetFlightTable().Select(x => x.Id).Except(RData.GetTargetTable().Where(x => !ExcludeTickets?.Contains(x.Id) ?? true).Select(x => x.LId).Distinct());
             List<Sheets.Flt> flts = [];
             foreach (int flight in UnusedFlight)
             {

@@ -152,7 +152,7 @@ namespace fltstd26.XFly
                         for (int i = 0; i < FitSlots.Count; i++)
                         {
                             HashSet<int> SlotFlights = [.. (RData.GetWhere<Sheets.Flt>($"slot={FitSlots[i]}") ?? []).Select(flt => flt?.Lfz ?? -1)];
-                            IEnumerable<int> FitAircraft = Manager.FindAvailableAircraft(FitSlots[i],!LfzOverride.HasValue,PriceFilter < 0 ? -PriceFilter : null).Where(x => Manager.AircraftFitsWeight(x,Weight)).Except(SlotFlights);
+                            IEnumerable<int> FitAircraft = Manager.FindAvailableAircraft(FitSlots[i],!LfzOverride.HasValue,PriceFilter < 0 ? -PriceFilter : null,LfzOverride.HasValue).Where(x => Manager.AircraftFitsWeight(x,Weight)).Except(SlotFlights);
                             if (LfzOverride.HasValue) FitAircraft = [.. FitAircraft.Where(x => x == LfzOverride)];
                             //Kontingent geprüft
                             foreach (int Aircraft in FitAircraft)
@@ -175,7 +175,7 @@ namespace fltstd26.XFly
                         {
                             List<int> SlotFlightsT = [.. (RData.GetWhere<Sheets.Flt>($"slot={FitSlots[i]}") ?? []).Select(flt => flt?.Lfz ?? -1)];
                             //SlotFlightsT.ForEach(x => System.Diagnostics.Debug.WriteLine("Slot FLT: " + x));
-                            IEnumerable<int> FitAircraftT = Manager.FindAvailableAircraft(FitSlots[i],!LfzOverride.HasValue,PriceFilter < 0 ? -PriceFilter : null).Where(x => Manager.AircraftFitsWeight(x,Weight)).Except(SlotFlightsT);
+                            IEnumerable<int> FitAircraftT = Manager.FindAvailableAircraft(FitSlots[i],!LfzOverride.HasValue,PriceFilter < 0 ? -PriceFilter : null,LfzOverride.HasValue).Where(x => Manager.AircraftFitsWeight(x,Weight)).Except(SlotFlightsT);
                             //FitAircraftT.ForEach(x => System.Diagnostics.Debug.WriteLine("Fit AC: " + x));
                             if (FitAircraftT.Any())
                             {
@@ -246,11 +246,6 @@ namespace fltstd26.XFly
                 ConProc.Log("[XFLY-BUILDER] Flight could not be created: " + e.Message,1);
                 return (new() { Id = -1 }, -1);
             }
-        }
-
-        public static bool SupportsTransfer()
-        {
-            return true;
         }
     }
 }

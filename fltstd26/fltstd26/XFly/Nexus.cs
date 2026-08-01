@@ -37,7 +37,7 @@ namespace fltstd26.XFly
         private static readonly PriorityQueue<List<DatabaseAction>,byte> _localnexus = new();
         private static readonly PriorityQueue<List<DatabaseAction>,byte> _offlinenexus = new();
 
-        public static void PassNEXUS(List<DatabaseAction> a)
+        public static void Pass(List<DatabaseAction> a)
         {
             if(Level > 0)
             {
@@ -49,6 +49,7 @@ namespace fltstd26.XFly
             else
             {
                 //Do and pass DB Action to clients
+                AutoAct.Act(a,false);
             }
         }
 

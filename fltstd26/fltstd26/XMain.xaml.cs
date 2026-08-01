@@ -465,6 +465,7 @@ namespace fltstd26
             //Neutral: OffBlack (#1f1f1f)  -  idk
             //Active: SecondaryDarkBg (#004152)  -  SecondaryBg (#a0f0f8)
             //Passed: Gray900 (#212121)  -  Gray300 (#ACACAC)
+            
             try
             {
                 List<Sheets.Slot> slottable = RData.GetSlotsTable();
@@ -476,14 +477,15 @@ namespace fltstd26
                 if (now <= slot.FTime && now >= slot.STime.Subtract(TimeSpan.FromMinutes(USettings.Instance.SlotTolerance)))
                 {
                     //Slot hat bereits begonnen
-
+                    
                     List<Sheets.Flt?>? flts = RData.GetWhere<Sheets.Flt>($"slot={id}");
                     //Redetermine Status
                     if (flts == null) return;
                     Manager.DetermineStatus(slot,flts,USettings.Instance.OGNStatus);
                     //Status aktualisieren
-                    IEnumerable<int> tgts = RData.GetTargetTable().Where(t => flts.Where(x => x != null).Select(x => x!.Id).Contains(t.Id)).Select(x => x.Id);
-                    List<XBlock> affectedNodes = [.. NodeLibrary.Select(x => x.Value).Where(x => tgts.Contains(x.TargetID))];
+                    IEnumerable<Sheets.Target> tgts = RData.GetTargetTable().Where(t => flts.Where(x => x != null).Select(x => x!.Id).Contains(t.Id));
+                    List<XBlock> affectedNodes = [.. NodeLibrary.Select(x => x.Value).Where(x => tgts.Select(x => x.Id).Contains(x.TargetID))];
+                    Drawer.CallTargets(tgts);
                     string messages = "";
                     foreach (XBlock node in affectedNodes)
                     {
@@ -989,15 +991,16 @@ namespace fltstd26
                     await tc.ShowAndSelect().ContinueWith(r =>
                     {
                         if (r.Result.Item1 is null || r.Result.Item2 is null) return;
-                        RData.Update(r.Result.Item1,typeof(Sheets.Target));
-                        RData.Update(r.Result.Item2,typeof(Sheets.Flt));
+                        //RData.Update(r.Result.Item1,typeof(Sheets.Target));
+                        //RData.Update(r.Result.Item2,typeof(Sheets.Flt));
                         //CURRENT VALUE UND PREVIOUS VALUE SIND IDENTISCH -> REFERENCE PROBLEM -> SHALLOW COPY NICHT VERWENDEN
                         List<DatabaseAction> a =
                         [
                             new() { ActionID = 3,CurrentValue = r.Result.Item1,PreviousValue = t,DataType = typeof(Sheets.Target),ObjectID = target.TargetID },
-                        new() { ActionID = 3,CurrentValue = r.Result.Item2,PreviousValue = f,DataType = typeof(Sheets.Flt),ObjectID = t.LId },
-                    ];
+                            new() { ActionID = 3,CurrentValue = r.Result.Item2,PreviousValue = f,DataType = typeof(Sheets.Flt),ObjectID = t.LId },
+                        ];
                         System.Diagnostics.Debug.WriteLine("Prev: " + t.Name + " After:" + r.Result.Item1.Name);
+                        Nexus.Pass(a);
                         AutoAct.PushAction(null,a);
                         //else ConProc.Log("[AUTOACT] Action couldn't be stacked onto the ActionStack",2);
                     });
@@ -1066,10 +1069,11 @@ namespace fltstd26
                             DatabaseAction da = new() { ActionID = 2,CurrentValue = null,PreviousValue = dbtarget,DataType = typeof(Sheets.Target),ObjectID = target.TargetID };
                             //PRE FLIGHT CLEANUP
 
-                            RData.Delete(target.TargetID,typeof(Sheets.Target));
+                            //RData.Delete(target.TargetID,typeof(Sheets.Target));
                             a.Add(da);
-                            List<Sheets.Flt> rmv = Patcher.CleanupFlights();
+                            List<Sheets.Flt> rmv = Patcher.CleanupFlights([target.TargetID]);
                             rmv.ForEach(x => a.Add(new() { ActionID = 2,CurrentValue = null,PreviousValue = x,DataType = typeof(Sheets.Flt),ObjectID = x.Id,ForeignKeyName = dbtarget?.LId == x.Id ? "LId" : null,LinkAction = dbtarget?.LId == x.Id ? da.ID : 0 }));
+                            Nexus.Pass(a);
                             AutoAct.PushAction(null,a);
                         }
                     });

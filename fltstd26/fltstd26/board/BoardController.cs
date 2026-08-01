@@ -14,6 +14,7 @@ namespace fltstd26.board
         //internal static VerticalStackLayout? XBoard = null;
         internal static int ClockID = -1;
         internal static int TickID = -1;
+        internal static bool FreeCycle = true;
         //BoardController.ClockID = TimeServ.ScheduleRO(TimeSpan.FromMinutes(1),UpdateTime,true);
 
         //20 für Padding + 80 für FlashingLight Column + 5 Safe und Scrollbar
@@ -21,10 +22,32 @@ namespace fltstd26.board
 
         public static void Tick()
         {
+            if (FreeCycle)
+            {
+                foreach (BoardPage page in Boards)
+                {
+                    page.BoardCylce();
+                }
+            }
+        }
+
+        public static void PushNotification(TimeSpan duration, string icon,string title,string subtitle,Color background,Color foreground,bool tint)
+        {
             foreach (BoardPage page in Boards)
             {
-                page.BoardCylce();
+                page.PushNotification(icon,title, subtitle, background, foreground, tint);
             }
+            FreeCycle = false;
+            TimeServ.Schedule(DateTime.Now.Add(duration),ReleaseNotification);
+        }
+
+        public static void ReleaseNotification()
+        {
+            foreach (BoardPage page in Boards)
+            {
+                page.FreeMessageCenter();
+            }
+            FreeCycle = true;
         }
 
         internal static void Init()

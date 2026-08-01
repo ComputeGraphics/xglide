@@ -1,3 +1,4 @@
+using CommunityToolkit.Maui.Behaviors;
 using fltstd26.core;
 using fltstd26.etc;
 using fltstd26.system;
@@ -86,6 +87,33 @@ public partial class BoardPage : ContentPage
     {
         AutoScroll();
         UpdateMessageCenter();
+    }
+
+    internal void PushNotification(string icon, string title, string subtitle, Color background, Color foreground, bool tint)
+    {
+        msgcenter_bg.BackgroundColor = background;
+        msgcenter_icon.Source = icon;
+        msgcenter_title.Text = title;
+        msgcenter_text.Text = subtitle;
+        msgcenter_text.TextColor = foreground;
+        msgcenter_title.TextColor = foreground;
+        if (tint)
+        {
+            msgcenter_icon.Behaviors.Clear();
+            IconTintColorBehavior t = new()
+            {
+                TintColor = foreground,
+            };
+            msgcenter_icon.Behaviors.Add(t);
+        }
+    }
+
+    internal void FreeMessageCenter()
+    {
+        msgcenter_bg.BackgroundColor = GSettings.DarkMode ? GSettings.GetColour("Gray050") : GSettings.GetColour("Gray800");
+        msgcenter_title.TextColor = GSettings.DarkMode ? GSettings.GetColour("Black") : GSettings.GetColour("White");
+        msgcenter_text.TextColor = GSettings.DarkMode ? GSettings.GetColour("Black") : GSettings.GetColour("White");
+        msgcenter_icon.Behaviors.Clear();
     }
 
     internal void UpdateContent()

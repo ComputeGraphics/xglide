@@ -47,6 +47,7 @@
             </ScrollView>
         </Grid>
         <Border BackgroundColor="{AppThemeBinding Dark={StaticResource Gray050}, Light={StaticResource Gray800}}"
+                x:Name="msgcenter_bg"
                 Padding="20,15"
                 Margin="15,13"
                 Grid.Row="2">
