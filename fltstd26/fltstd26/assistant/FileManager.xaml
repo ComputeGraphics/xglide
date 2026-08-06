@@ -20,7 +20,7 @@
         </Border>
         <Border Grid.Row="1"
                     VerticalOptions="Fill"
-                    StrokeThickness="2">
+                    StrokeThickness="0">
             <Grid    RowSpacing="12"
                      RowDefinitions="Auto,*"
                                         VerticalOptions="Fill"

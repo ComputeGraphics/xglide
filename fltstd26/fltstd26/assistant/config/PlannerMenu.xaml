@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:fltstd26.Resources.Texts"
+             x:Class="fltstd26.assistant.config.PlannerMenu">
+    <VerticalStackLayout Padding="20"
+                         HorizontalOptions="Start"
+                         MinimumWidthRequest="400"
+                         MaximumWidthRequest="800">
+        <Label Text="{x:Static local:Lang.settings_planner_title}"
+               VerticalOptions="Center"
+               FontSize="Medium"
+               FontFamily="Archive"
+               HorizontalOptions="Start" />
+        <ScrollView>
+            <Grid ColumnDefinitions="*,Auto"
+                  RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto">
+                <Label Text="{x:Static local:Lang.autoasap}"
+                       HorizontalOptions="Start"
+                       VerticalOptions="Center"/>
+                <Switch x:Name="AutoASAPControl"
+                        Grid.Column="1"
+                        Toggled="SyncSwitch"/>
+                <Label Text="{x:Static local:Lang.enableslots}"
+                       HorizontalOptions="Start"
+                       VerticalOptions="Center"
+                       Grid.Row="1"/>
+                <Switch x:Name="EnableSlotsControl"
+                        Grid.Column="1"
+                        Grid.Row="1"
+                        Toggled="SyncSwitch"/>
+                <Label Text="{x:Static local:Lang.anticol}"
+                       HorizontalOptions="Start"
+                       VerticalOptions="Center"
+                       Grid.Row="2"/>
+                <Switch x:Name="AntiColControl"
+                        Grid.Column="1"
+                        Grid.Row="2"
+                        Toggled="SyncSwitch"/>
+                <Label Text="{x:Static local:Lang.autotimecheck}"
+                       HorizontalOptions="Start"
+                       VerticalOptions="Center"
+                       Grid.Row="3"/>
+                <Switch x:Name="AutoTimeCheckControl"
+                        Grid.Column="1"
+                        Grid.Row="3"
+                        Toggled="SyncSwitch"/>
+                <Label Text="{x:Static local:Lang.ignoretransactionweight}"
+                       HorizontalOptions="Start"
+                       VerticalOptions="Center"
+                       Grid.Row="4"/>
+                <Switch x:Name="IgnoreTransactionWeightControl"
+                        Grid.Column="1"
+                        Grid.Row="4"
+                        Toggled="SyncSwitch"/>
+                <Label Text="{x:Static local:Lang.ignoretransactionlength}"
+                       HorizontalOptions="Start"
+                       Grid.Row="5"
+                       VerticalOptions="Center"/>
+                <Switch x:Name="IgnoreTransactionLengthControl"
+                        Grid.Row="5"
+                        Grid.Column="1"
+                        Toggled="SyncSwitch"/>
+            </Grid>
+        </ScrollView>
+    </VerticalStackLayout>
+</ContentView>

@@ -99,11 +99,29 @@ namespace fltstd26.Resources.Texts {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Zusätzliche Fluginformationen ähnelt.
+        /// </summary>
+        internal static string additionals {
+            get {
+                return ResourceManager.GetString("additionals", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Lfz. Erstellen ähnelt.
         /// </summary>
         internal static string aircraft_create {
             get {
                 return ResourceManager.GetString("aircraft_create", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Kollisionsvermeidungssystem (WIP) ähnelt.
+        /// </summary>
+        internal static string anticol {
+            get {
+                return ResourceManager.GetString("anticol", resourceCulture);
             }
         }
         
@@ -117,6 +135,24 @@ namespace fltstd26.Resources.Texts {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Vor Transaktion fragen ähnelt.
+        /// </summary>
+        internal static string askfornodemove {
+            get {
+                return ResourceManager.GetString("askfornodemove", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Nach Preisänderungen fragen ähnelt.
+        /// </summary>
+        internal static string askforpricechange {
+            get {
+                return ResourceManager.GetString("askforpricechange", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Fortfahren ähnelt.
         /// </summary>
         internal static string assistant_continue {
@@ -126,11 +162,38 @@ namespace fltstd26.Resources.Texts {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Ersteller: ähnelt.
+        /// </summary>
+        internal static string author_doubledot {
+            get {
+                return ResourceManager.GetString("author_doubledot", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die So schnell wie möglich planen ähnelt.
+        /// </summary>
+        internal static string autoasap {
+            get {
+                return ResourceManager.GetString("autoasap", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Automatische Ticket Zuweisung ähnelt.
         /// </summary>
         internal static string autoassign {
             get {
                 return ResourceManager.GetString("autoassign", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Systemzeit berücksichtigen ähnelt.
+        /// </summary>
+        internal static string autotimecheck {
+            get {
+                return ResourceManager.GetString("autotimecheck", resourceCulture);
             }
         }
         
@@ -189,6 +252,15 @@ namespace fltstd26.Resources.Texts {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Letzte Änderung: ähnelt.
+        /// </summary>
+        internal static string change_doubledot {
+            get {
+                return ResourceManager.GetString("change_doubledot", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Datenbank prüfen ähnelt.
         /// </summary>
         internal static string check_db {
@@ -243,6 +315,15 @@ namespace fltstd26.Resources.Texts {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Konfiguration ähnelt.
+        /// </summary>
+        internal static string config {
+            get {
+                return ResourceManager.GetString("config", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Konfigurationseditor öffnen... ähnelt.
         /// </summary>
         internal static string config_editor {
@@ -257,6 +338,15 @@ namespace fltstd26.Resources.Texts {
         internal static string config_manager {
             get {
                 return ResourceManager.GetString("config_manager", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Konfigurationsname: ähnelt.
+        /// </summary>
+        internal static string config_name_doubledot {
+            get {
+                return ResourceManager.GetString("config_name_doubledot", resourceCulture);
             }
         }
         
@@ -324,6 +414,15 @@ namespace fltstd26.Resources.Texts {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Erstellt am: ähnelt.
+        /// </summary>
+        internal static string creation_doubledot {
+            get {
+                return ResourceManager.GetString("creation_doubledot", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Benutzerdefiniert ähnelt.
         /// </summary>
         internal static string custom {
@@ -361,6 +460,24 @@ namespace fltstd26.Resources.Texts {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Standard-Fluglänge ähnelt.
+        /// </summary>
+        internal static string defaultfltlength {
+            get {
+                return ResourceManager.GetString("defaultfltlength", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Standardgewicht eines Ziels ähnelt.
+        /// </summary>
+        internal static string defaulttgtweight {
+            get {
+                return ResourceManager.GetString("defaulttgtweight", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Verspätung ähnelt.
         /// </summary>
         internal static string delay {
@@ -384,6 +501,15 @@ namespace fltstd26.Resources.Texts {
         internal static string delay_error {
             get {
                 return ResourceManager.GetString("delay_error", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Verspätungstoleranz (min) ähnelt.
+        /// </summary>
+        internal static string delaytolerance {
+            get {
+                return ResourceManager.GetString("delaytolerance", resourceCulture);
             }
         }
         
@@ -424,6 +550,15 @@ namespace fltstd26.Resources.Texts {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Slots verwenden (WIP) ähnelt.
+        /// </summary>
+        internal static string enableslots {
+            get {
+                return ResourceManager.GetString("enableslots", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Ende ähnelt.
         /// </summary>
         internal static string end {
@@ -456,6 +591,15 @@ namespace fltstd26.Resources.Texts {
         internal static string explorer_continue {
             get {
                 return ResourceManager.GetString("explorer_continue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Ausweich-Preiskategorie ähnelt.
+        /// </summary>
+        internal static string fallbackpricecat {
+            get {
+                return ResourceManager.GetString("fallbackpricecat", resourceCulture);
             }
         }
         
@@ -541,6 +685,15 @@ namespace fltstd26.Resources.Texts {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Vergangene Slots ausblenden ähnelt.
+        /// </summary>
+        internal static string hidepastslots {
+            get {
+                return ResourceManager.GetString("hidepastslots", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Abflugtafel einrichten ähnelt.
         /// </summary>
         internal static string iaboard {
@@ -591,6 +744,24 @@ namespace fltstd26.Resources.Texts {
         internal static string iaboard_width {
             get {
                 return ResourceManager.GetString("iaboard_width", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Länge bei Transaktionen ignorieren ähnelt.
+        /// </summary>
+        internal static string ignoretransactionlength {
+            get {
+                return ResourceManager.GetString("ignoretransactionlength", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Gewicht bei Transaktionen ignorieren ähnelt.
+        /// </summary>
+        internal static string ignoretransactionweight {
+            get {
+                return ResourceManager.GetString("ignoretransactionweight", resourceCulture);
             }
         }
         
@@ -681,6 +852,15 @@ namespace fltstd26.Resources.Texts {
         internal static string manual_refresh {
             get {
                 return ResourceManager.GetString("manual_refresh", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Maximale Verzögerung (min) ähnelt.
+        /// </summary>
+        internal static string maxdelay {
+            get {
+                return ResourceManager.GetString("maxdelay", resourceCulture);
             }
         }
         
@@ -1118,6 +1298,15 @@ namespace fltstd26.Resources.Texts {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Quick-Ticket Toleranz ähnelt.
+        /// </summary>
+        internal static string quicktolerance {
+            get {
+                return ResourceManager.GetString("quicktolerance", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Wiederholen ähnelt.
         /// </summary>
         internal static string redo {
@@ -1217,6 +1406,150 @@ namespace fltstd26.Resources.Texts {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die FIDS Einstellungen → ähnelt.
+        /// </summary>
+        internal static string settings_board {
+            get {
+                return ResourceManager.GetString("settings_board", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Spalten ähnelt.
+        /// </summary>
+        internal static string settings_board_columns {
+            get {
+                return ResourceManager.GetString("settings_board_columns", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Fallblattanzeige ähnelt.
+        /// </summary>
+        internal static string settings_board_flip {
+            get {
+                return ResourceManager.GetString("settings_board_flip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Nachrichten Centre ähnelt.
+        /// </summary>
+        internal static string settings_board_msg {
+            get {
+                return ResourceManager.GetString("settings_board_msg", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Oberfläche ähnelt.
+        /// </summary>
+        internal static string settings_board_ui {
+            get {
+                return ResourceManager.GetString("settings_board_ui", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Daten ähnelt.
+        /// </summary>
+        internal static string settings_data {
+            get {
+                return ResourceManager.GetString("settings_data", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Datenverwaltungs Einstellungen ähnelt.
+        /// </summary>
+        internal static string settings_data_title {
+            get {
+                return ResourceManager.GetString("settings_data_title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Debug ähnelt.
+        /// </summary>
+        internal static string settings_debug {
+            get {
+                return ResourceManager.GetString("settings_debug", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Standardwerte ähnelt.
+        /// </summary>
+        internal static string settings_defaults {
+            get {
+                return ResourceManager.GetString("settings_defaults", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Standardeinstellungen und Ausweichwerte ähnelt.
+        /// </summary>
+        internal static string settings_defaults_title {
+            get {
+                return ResourceManager.GetString("settings_defaults_title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Allgemein ähnelt.
+        /// </summary>
+        internal static string settings_general {
+            get {
+                return ResourceManager.GetString("settings_general", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Allgemeine Einstellungen ähnelt.
+        /// </summary>
+        internal static string settings_general_title {
+            get {
+                return ResourceManager.GetString("settings_general_title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die On-Line ähnelt.
+        /// </summary>
+        internal static string settings_online {
+            get {
+                return ResourceManager.GetString("settings_online", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Flugplaner ähnelt.
+        /// </summary>
+        internal static string settings_planner {
+            get {
+                return ResourceManager.GetString("settings_planner", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Flugplaner Einstellungen ähnelt.
+        /// </summary>
+        internal static string settings_planner_title {
+            get {
+                return ResourceManager.GetString("settings_planner_title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Bedienung ähnelt.
+        /// </summary>
+        internal static string settings_ux {
+            get {
+                return ResourceManager.GetString("settings_ux", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Ansehen ähnelt.
         /// </summary>
         internal static string show {
@@ -1240,6 +1573,15 @@ namespace fltstd26.Resources.Texts {
         internal static string slots {
             get {
                 return ResourceManager.GetString("slots", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Slotauslöser Toleranz (min) ähnelt.
+        /// </summary>
+        internal static string slottolerance {
+            get {
+                return ResourceManager.GetString("slottolerance", resourceCulture);
             }
         }
         

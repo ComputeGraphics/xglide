@@ -49,6 +49,42 @@ build_metadata.AdditionalFiles.ManifestResourceName = fltstd26.assistant.config.
 build_metadata.AdditionalFiles.TargetPath = assistant\config\ConfigSettings.xaml
 build_metadata.AdditionalFiles.RelativePath = assistant\config\ConfigSettings.xaml
 
+[C:/Users/Arthur/Documents/GitHub/xglide/fltstd26/fltstd26/assistant/config/DataMenu.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = fltstd26.assistant.config.DataMenu.xaml
+build_metadata.AdditionalFiles.TargetPath = assistant\config\DataMenu.xaml
+build_metadata.AdditionalFiles.RelativePath = assistant\config\DataMenu.xaml
+
+[C:/Users/Arthur/Documents/GitHub/xglide/fltstd26/fltstd26/assistant/config/DefaultsMenu.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = fltstd26.assistant.config.DefaultsMenu.xaml
+build_metadata.AdditionalFiles.TargetPath = assistant\config\DefaultsMenu.xaml
+build_metadata.AdditionalFiles.RelativePath = assistant\config\DefaultsMenu.xaml
+
+[C:/Users/Arthur/Documents/GitHub/xglide/fltstd26/fltstd26/assistant/config/GeneralMenu.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = fltstd26.assistant.config.GeneralMenu.xaml
+build_metadata.AdditionalFiles.TargetPath = assistant\config\GeneralMenu.xaml
+build_metadata.AdditionalFiles.RelativePath = assistant\config\GeneralMenu.xaml
+
+[C:/Users/Arthur/Documents/GitHub/xglide/fltstd26/fltstd26/assistant/config/PlannerMenu.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = fltstd26.assistant.config.PlannerMenu.xaml
+build_metadata.AdditionalFiles.TargetPath = assistant\config\PlannerMenu.xaml
+build_metadata.AdditionalFiles.RelativePath = assistant\config\PlannerMenu.xaml
+
+[C:/Users/Arthur/Documents/GitHub/xglide/fltstd26/fltstd26/assistant/config/SidebarItem.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = fltstd26.assistant.config.SidebarItem.xaml
+build_metadata.AdditionalFiles.TargetPath = assistant\config\SidebarItem.xaml
+build_metadata.AdditionalFiles.RelativePath = assistant\config\SidebarItem.xaml
+
+[C:/Users/Arthur/Documents/GitHub/xglide/fltstd26/fltstd26/assistant/config/UxMenu.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = fltstd26.assistant.config.UxMenu.xaml
+build_metadata.AdditionalFiles.TargetPath = assistant\config\UxMenu.xaml
+build_metadata.AdditionalFiles.RelativePath = assistant\config\UxMenu.xaml
+
 [C:/Users/Arthur/Documents/GitHub/xglide/fltstd26/fltstd26/assistant/EntityView.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
 build_metadata.AdditionalFiles.ManifestResourceName = fltstd26.assistant.EntityView.xaml

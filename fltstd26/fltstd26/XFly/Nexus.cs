@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Maui.Converters;
+using fltstd26.core;
 using fltstd26.system;
 using System;
 using System.Collections.Generic;
@@ -39,7 +40,7 @@ namespace fltstd26.XFly
 
         public static void Pass(List<DatabaseAction> a)
         {
-            if(Level > 0)
+            if (Level > 0)
             {
                 //Pass to server
                 //If Server acks
@@ -50,6 +51,40 @@ namespace fltstd26.XFly
             {
                 //Do and pass DB Action to clients
                 AutoAct.Act(a,false);
+            }
+        }
+
+        public static int PushSingle(DatabaseAction a)
+        {
+            List<int> dbas = [];
+            if (Level > 0)
+            {
+                //Pass to server
+                //If Server acks
+                //Return db action to apply
+                //Do
+            }
+            else
+            {
+                //Do and pass DB Action to clients
+                dbas = AutoAct.Act([a],false);
+            }
+            return dbas.FirstOrDefault();
+        }
+
+        public static void PassProperty<X>(object pk,X? val,string prop,Type type,bool cannull = false)
+        {
+            if (Level > 0)
+            {
+                //Pass to server
+                //If Server acks
+                //Return db action to apply
+                //Do
+            }
+            else
+            {
+                //Do and pass DB Action to clients
+                RData.UpdateProperty(pk,val,prop,type,cannull);
             }
         }
 

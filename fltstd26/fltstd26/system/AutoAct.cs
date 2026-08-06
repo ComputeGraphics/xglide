@@ -116,7 +116,7 @@ namespace fltstd26.system
                 if (RedoStack.TryPeek(out List<DatabaseAction>? SingleStack) && SingleStack != null)
                 {
                     List<DatabaseAction> Modified = [];
-                    List<int>? ids = Act(SingleStack,false) ?? throw new Exception("Act already failed");
+                    List<int> ids = Act(SingleStack,false) ?? throw new Exception("Act already failed");
                     //if (ForeignKeyBuffer.Count != 0) ids = Act([.. SingleStack.Where(x => ForeignKeyBuffer.ContainsKey(x.ID))],false);
                     for (int i = 0; i < SingleStack.Count; i++) Modified.Add(SingleStack[i] with { ObjectID = ids[i] });
                     ActionStack.Push(Modified);
@@ -135,7 +135,7 @@ namespace fltstd26.system
             //ConProc.ReportActionStack("RedoStack",RedoStack,RedoLock);
         }
 
-        internal static List<int>? Act(List<DatabaseAction> actions,bool undo)
+        internal static List<int> Act(List<DatabaseAction> actions,bool undo)
         {
             try
             {
@@ -196,7 +196,7 @@ namespace fltstd26.system
             catch (Exception e)
             {
                 ConProc.Log("[AUTOACT] Action failed: " + e.Message);
-                return null;
+                return [];
             }
         }
     }

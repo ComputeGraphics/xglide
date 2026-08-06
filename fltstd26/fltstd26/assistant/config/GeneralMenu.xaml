@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:fltstd26.Resources.Texts"
+             x:Class="fltstd26.assistant.config.GeneralMenu">
+    <VerticalStackLayout Padding="20"
+                         HorizontalOptions="Start"
+                         MinimumWidthRequest="600"
+                         MaximumWidthRequest="1200">
+        <Label 
+            Text="{x:Static local:Lang.settings_general_title}"
+            VerticalOptions="Center"
+            FontSize="Medium"
+            FontFamily="Archive"
+            HorizontalOptions="Start" />
+        <Grid RowDefinitions="Auto,Auto"
+              ColumnSpacing="20"
+              HorizontalOptions="Fill"
+              Padding="0,20"
+              ColumnDefinitions="Auto,*">
+            <Label Text="{x:Static local:Lang.config_name_doubledot}"
+                   HorizontalOptions="Start"
+                   FontAttributes="Bold"
+                   VerticalOptions="Center"/>
+            <Label Text="{x:Static local:Lang.author_doubledot}"
+                   Grid.Row="1"
+                   FontAttributes="Bold"
+                   VerticalOptions="Center"
+                   HorizontalOptions="Start"/>
+            <Entry x:Name="ConfigNameEntry"
+                   Grid.Column="1"
+                   HorizontalOptions="Fill"
+                   TextChanged="TextChanged"/>
+            <Entry x:Name="ConfigAuthorEntry"
+                   Grid.Row="1"
+                   Grid.Column="1"
+                   HorizontalOptions="Fill"
+                   TextChanged="TextChanged"/>
+        </Grid>
+        <Label x:Name="ConfigMetadataLabel"
+               Text="Test"/>
+    </VerticalStackLayout>
+</ContentView>

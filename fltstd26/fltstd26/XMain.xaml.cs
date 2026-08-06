@@ -49,6 +49,7 @@ namespace fltstd26
                 }
             };
             GSettings.nav = Navigation;
+            DskMan.SaveConfig(USettings.Instance.Name);
             DskMan.Init();
             System.Diagnostics.Debug.WriteLine(Application.Current!.RequestedTheme.ToString());
             //System.Diagnostics.Debug.WriteLine(RData.Insert<Sheets.Target>(new() { Name = "Test" }));
@@ -1167,7 +1168,12 @@ namespace fltstd26
             }
         }
         private void ConfigViewClick(object sender,EventArgs e) => System.Diagnostics.Debug.WriteLine("Not implemented");
-        private void ConfigEditorClick(object sender,EventArgs e) => System.Diagnostics.Debug.WriteLine("Not implemented");
+        private async void ConfigEditorClick(object sender,EventArgs e)
+        {
+            assistant.FileManager fm = new(true,true);
+            //fm.Disappearing += (s,e) => AfterInit();
+            await Navigation.PushAsync(fm);
+        }
         private void ConfigInfoClick(object sender,EventArgs e) => System.Diagnostics.Debug.WriteLine("Not implemented");
 
         //Filesystem

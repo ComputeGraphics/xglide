@@ -6,22 +6,10 @@ namespace fltstd26.etc
 
     public static class USettings
     {
+        internal static string ConfigName = "Standard";
         internal static ConfigSettings Instance = new();
-        internal static ObservableSettings Oberservables = new()
-        {
-            logoSize_L = Instance.LogoSize_L,
-            logoSize_R = Instance.LogoSize_R,
-            titleSize = Instance.TitleSize,
-            clockSize = Instance.ClockSize,
-            dateSize = Instance.DateSize,
-            flashSize = Instance.FlashSize,
-            captionSize = Instance.CaptionSize,
-            elementSize = Instance.ElementSize,
-            targetBorderThickness = Instance.TargetBorderThickness,
-            msgCenterTitleSize = Instance.MSGCenterTitleSize,
-            msgCenterTextSize = Instance.MSGCenterTextSize,
-            msgCenterIconSize = Instance.MSGCenterIconSize,
-        };
+        internal static ObservableSettings Oberservables = GetObservables(Instance);
+
 
         //returned den vorherigen wert
         internal static object? UpdateSetting(string? key, object? value, Type type)
@@ -34,6 +22,25 @@ namespace fltstd26.etc
                 return prev;
             }
             return null;
+        }
+
+        internal static ObservableSettings GetObservables(ConfigSettings instance)
+        {
+            return new()
+            {
+                logoSize_L = instance.LogoSize_L,
+                logoSize_R = instance.LogoSize_R,
+                titleSize = instance.TitleSize,
+                clockSize = instance.ClockSize,
+                dateSize = instance.DateSize,
+                flashSize = instance.FlashSize,
+                captionSize = instance.CaptionSize,
+                elementSize = instance.ElementSize,
+                targetBorderThickness = instance.TargetBorderThickness,
+                msgCenterTitleSize = instance.MSGCenterTitleSize,
+                msgCenterTextSize = instance.MSGCenterTextSize,
+                msgCenterIconSize = instance.MSGCenterIconSize,
+            };
         }
 
 
@@ -68,6 +75,7 @@ namespace fltstd26.etc
         public string Name = "Standard";
         public string Creator = "Arthur Hildebrand";
         public DateTime LastChange = new(2026,6,1,14,53,0);
+        public DateTime Creation = new(2026,6,1,14,53,0);
 
         public string Homebase = "EDFP";
         //public List<string> Additionals = ["Test","DoubleTest"];
@@ -176,7 +184,7 @@ namespace fltstd26.etc
         public bool OGNStatus = false;
 
         //Angesetzte Minutenanzahl durch SyncLevel
-        public int OGNSyncLevel = 1;
+        public int OGNSyncLevel = 1; //todo
         public int OGNTolerance = 7;
         public int TakeoffDuration = 2; // in min
         public int LogCapacity = 1024;

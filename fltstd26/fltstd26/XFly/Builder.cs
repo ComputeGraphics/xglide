@@ -2,6 +2,7 @@
 using fltstd26.etc;
 using fltstd26.Resources.Texts;
 using fltstd26.system;
+using Microsoft.Maui.Controls.PlatformConfiguration;
 using System.Runtime.CompilerServices;
 using System.Xml.Linq;
 using static SQLite.SQLite3;
@@ -60,16 +61,28 @@ namespace fltstd26.XFly
                         if (Relink != null)
                         {
                             System.Diagnostics.Debug.WriteLine("Relinking directly");
+                            DatabaseAction dba = new() { ActionID = 3,CurrentValue = new Sheets.Target() { Id = Relink.Id,LId = FitFlightWeight[TResult - 1].Id,Name = Relink.Name,Persistent = Relink.Persistent,Price = Relink.Price,QuickTicket = Relink.QuickTicket,Weight = Relink.Weight },PreviousValue = Relink,DataType = typeof(Sheets.Target),ObjectID = Relink.Id };
                             RData.UpdateProperty<int>(Relink.Id,FitFlightWeight[TResult - 1].Id,"LId", typeof(Sheets.Target));
-                            AutoAct.PushAction(new() { ActionID = 3,CurrentValue = new Sheets.Target() { Id = Relink.Id,LId = FitFlightWeight[TResult - 1].Id,Name = Relink.Name,Persistent = Relink.Persistent,Price = Relink.Price,QuickTicket = Relink.QuickTicket,Weight = Relink.Weight },PreviousValue = Relink,DataType = typeof(Sheets.Target),ObjectID = Relink.Id });
+                            //Nexus.Pass([dba]);
+                            AutoAct.PushAction(dba);
                         }
                         else
                         {
                             Sheets.Target newtgt = Manager.CreateLinkedTarget(FitFlightWeight[TResult - 1].Id,Definition,TgtWeight,Price,Quick,Persistency);
-                            AutoAct.PushAction(new() { ActionID = 1,CurrentValue = null,PreviousValue = newtgt,DataType = typeof(Sheets.Target),ObjectID = newtgt.Id });
+                            /*Sheets.Target newtgt = new()
+                            {
+                                LId = FitFlightWeight[TResult - 1].Id,
+                                Name = Definition,
+                                Weight = TgtWeight,
+                                Price = Price,
+                                QuickTicket = Quick,
+                                Persistent = Persistency
+                            };*/
+                            
+                            DatabaseAction dba = new() { ActionID = 1,CurrentValue = null,PreviousValue = newtgt,DataType = typeof(Sheets.Target),ObjectID = newtgt.Id };
+                            //int dbas = Nexus.PushSingle(dba);
+                            AutoAct.PushAction(dba);
                         }
-
-                        //TRIGGER XPLAN REFRESH
                     }
                     else if (TResult == -1)
                     {
@@ -103,16 +116,52 @@ namespace fltstd26.XFly
                                 if (Relink != null)
                                 {
                                     System.Diagnostics.Debug.WriteLine("Relinking after new flight");
-                                    RData.UpdateProperty(Relink.Id,x.Result.Item1.Id,"LId",typeof(Sheets.Target));
-                                    da = new() { ActionID = 3,CurrentValue = new Sheets.Target() { Id = Relink.Id,LId = x.Result.Item1.Id,Name = Relink.Name,Persistent = Relink.Persistent,Price = Relink.Price,QuickTicket = Relink.QuickTicket,Weight = Relink.Weight },PreviousValue = Relink,DataType = typeof(Sheets.Target),ObjectID = Relink.Id };
+                                    //RData.UpdateProperty(Relink.Id,x.Result.Item1.Id,"LId",typeof(Sheets.Target));
+                                    da = new()
+                                    { 
+                                        ActionID = 3,
+                                        CurrentValue = new Sheets.Target() 
+                                        { 
+                                            Id = Relink.Id,
+                                            LId = x.Result.Item1.Id,
+                                            Name = Relink.Name,
+                                            Persistent = Relink.Persistent,
+                                            Price = Relink.Price,
+                                            QuickTicket = Relink.QuickTicket,
+                                            Weight = Relink.Weight 
+                                        },
+                                        PreviousValue = Relink,
+                                        DataType = typeof(Sheets.Target),
+                                        ObjectID = Relink.Id
+                                    };
                                 }
                                 else
                                 {
                                     Sheets.Target newtgt = Manager.CreateLinkedTarget(x.Result.Item1.Id,Definition,TgtWeight,Price,Quick,Persistency);
-                                    da = new() { ActionID = 1,CurrentValue = null,PreviousValue = newtgt,DataType = typeof(Sheets.Target),ObjectID = newtgt.Id };
+                                    /*Sheets.Target newtgt = new()
+                                    {
+                                        LId = x.Result.Item1.Id,
+                                        Name = Definition,
+                                        Weight = TgtWeight,
+                                        Price = Price,
+                                        QuickTicket = Quick,
+                                        Persistent = Persistency
+                                    };
+                                    id = Nexus.PushSingle(da);
+                                           */
+                                    da = new()
+                                    { 
+                                        ActionID = 1,
+                                        CurrentValue = null,
+                                        PreviousValue = newtgt,
+                                        DataType = typeof(Sheets.Target),
+                                        ObjectID = newtgt.Id,
+                                    };
+                                    
                                 }
                                 a.Add(da);
                                 a.Add(new() { ActionID = 1,CurrentValue = null,PreviousValue = x.Result.Item1,DataType = typeof(Sheets.Flt),ObjectID = x.Result.Item1.Id,LinkAction=da.ID, ForeignKeyName="LId" });
+                                //Nexus.Pass(a);
                                 AutoAct.PushAction(null,a);
                             }
                             //else throw new Exception("Flug konnte nicht erstellt werden");

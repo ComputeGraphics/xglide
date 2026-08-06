@@ -5,6 +5,8 @@
              Title=""
              Shell.NavBarIsVisible="false"
              x:DataType="Color"
+             xmlns:views="clr-namespace:fltstd26.assistant.config"
+             BackgroundColor="{x:AppThemeBinding Dark={StaticResource Gray960}, Light={StaticResource White}}"
              xmlns:local="clr-namespace:fltstd26.Resources.Texts">
     <Grid RowDefinitions="Auto,*,Auto"
               VerticalOptions="Fill">
@@ -12,32 +14,72 @@
                         Padding="20"
                         StrokeThickness="0">
             <Label FontSize="28"
-                       FontFamily="Archive"
-                       VerticalOptions="Center"
-                   x:Name="WindowTitle"
-                       HorizontalOptions="Start"/>
+                   FontFamily="Archive"
+                   VerticalOptions="Center"
+                   Text="{x:Static local:Lang.config}"
+                   HorizontalOptions="Start"/>
         </Border>
         <Border Grid.Row="1"
                     VerticalOptions="Fill"
-                    StrokeThickness="2">
-            <Grid    RowSpacing="12"
-                     RowDefinitions="Auto,*"
-                                        VerticalOptions="Fill"
-                                        Padding="20">
-                <Label FontSize="22"
-                       VerticalOptions="Center"
-                       x:Name="WindowSubtitle"
-                       HorizontalOptions="Start"/>
-                <Border StrokeThickness="2"
-                        Padding="10"
-                        Grid.Row="1"
-                        VerticalOptions="Fill"
-                        BackgroundColor="{x:AppThemeBinding Dark={StaticResource Gray950}, Light={StaticResource Gray300}}">
-                    <ScrollView>
-                        <VerticalStackLayout x:Name="FileView"
-                                             Spacing="10"/>
-                    </ScrollView>
+                    StrokeThickness="0">
+            <Grid ColumnDefinitions="Auto,*"
+                  VerticalOptions="Fill">
+                <Border StrokeThickness="0"
+                        BackgroundColor="{AppThemeBinding Light={StaticResource SecondaryDark}, Dark={StaticResource Gray900}}">
+                    <VerticalStackLayout Padding="0,16,144,16"
+                                         x:Name="Sidebar"
+                                         Spacing="8"
+                                         VerticalOptions="Fill">
+                        <views:SidebarItem Icon="control.png"
+                                           Title="{x:Static local:Lang.settings_general}"
+                                           Subtitle="$"
+                                           ItemId="0"
+                                           Clicked="SelectedIndexChanged"/>
+                        <views:SidebarItem Icon="calendar.png"
+                                           Title="{x:Static local:Lang.settings_planner}"
+                                           Subtitle="$"
+                                           ItemId="1"
+                                           Clicked="SelectedIndexChanged"/>
+                        <views:SidebarItem Icon="chart.png"
+                                           Title="{x:Static local:Lang.settings_data}"
+                                           Subtitle="$"
+                                           ItemId="2"
+                                           Clicked="SelectedIndexChanged"/>
+                        <views:SidebarItem Icon="floppy.png"
+                                           Title="{x:Static local:Lang.settings_defaults}"
+                                           Subtitle="$"
+                                           ItemId="3"
+                                           Clicked="SelectedIndexChanged"/>
+                        <views:SidebarItem Icon="screen.png"
+                                           Title="{x:Static local:Lang.settings_ux}"
+                                           Subtitle="$"
+                                           ItemId="4"
+                                           Clicked="SelectedIndexChanged"/>
+                        <views:SidebarItem Icon="signal.png"
+                                           Title="{x:Static local:Lang.settings_online}"
+                                           Subtitle="$"
+                                           ItemId="5"
+                                           Clicked="SelectedIndexChanged"/>
+                        <views:SidebarItem Icon="settings.png"
+                                           Title="{x:Static local:Lang.settings_debug}"
+                                           Subtitle="$"
+                                           ItemId="6"
+                                           Clicked="SelectedIndexChanged"/>
+                        <views:SidebarItem Icon="screen.png"
+                                           VerticalOptions="End"
+                                           Title="{x:Static local:Lang.settings_board}"
+                                           Subtitle="$"
+                                           ItemId="7"
+                                           Clicked="SelectedIndexChanged"/>
+                    </VerticalStackLayout>
                 </Border>
+                <Border BackgroundColor="Transparent"
+                        StrokeThickness="0"
+                        
+                        Grid.Column="1"
+                        HorizontalOptions="Fill"
+                        VerticalOptions="Fill"
+                        x:Name="MenuContainer"/>
             </Grid>
         </Border>
 
@@ -47,8 +89,10 @@
                     Grid.Row="2"
                     Padding="10"
                     StrokeThickness="0">
-            <Grid ColumnDefinitions="*,Auto,Auto">
+            <Grid ColumnDefinitions="*,Auto,Auto"
+                  ColumnSpacing="20">
                 <Button Text="{x:Static local:Lang.cancel}"
+                        ImageSource="x.png"
                                     Clicked="CancelClick"
                                     TextColor="Black"
                                     Grid.Column="1"

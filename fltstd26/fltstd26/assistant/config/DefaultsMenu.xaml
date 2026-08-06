@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:fltstd26.Resources.Texts"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             x:Class="fltstd26.assistant.config.DefaultsMenu">
+    <VerticalStackLayout Padding="20"
+                         HorizontalOptions="Start"
+                         MinimumWidthRequest="400"
+                         MaximumWidthRequest="800">
+        <Label 
+            Text="{x:Static local:Lang.settings_defaults_title}"
+            VerticalOptions="Center"
+            FontSize="Medium"
+            FontFamily="Archive"
+            HorizontalOptions="Start" />
+        <ScrollView Padding="0,10">
+            <Grid ColumnDefinitions="*,Auto,Auto"
+                  RowSpacing="10"
+                  RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto">
+                <Label Text="{x:Static local:Lang.fallbackpricecat}"
+                       HorizontalOptions="Start"
+                       VerticalOptions="Center"/>
+                <Picker x:Name="FallbackPriceCatControl"
+                        SelectedIndexChanged="SyncSettings"
+                        WidthRequest="200"
+                        Grid.Column="1"
+                        Grid.ColumnSpan="2"/>
+
+
+                <Label Text="{x:Static local:Lang.delaytolerance}"
+                       HorizontalOptions="Start"
+                       VerticalOptions="Center"
+                       Grid.Row="1"/>
+                <Label HorizontalOptions="Center"
+                       Text="{Binding x:DataType='Stepper', Source={x:Reference DelayToleranceControl}, Path=Value}"
+                       VerticalOptions="Center"
+                       FontAttributes="Bold"
+                       Grid.Row="1"
+                       Grid.Column="1"/>
+                <Stepper x:Name="DelayToleranceControl"
+                         ValueChanged="SyncSettings"
+                         Maximum="120"
+                         Minimum="0"
+                         Increment="1"
+                         HorizontalOptions="End"
+                         Grid.Row="1"
+                         Grid.Column="2"/>
+
+                <Label Text="{x:Static local:Lang.maxdelay}"
+                       HorizontalOptions="Start"
+                       VerticalOptions="Center"
+                       Grid.Row="2"/>
+                <Label HorizontalOptions="Center"
+                       Text="{Binding x:DataType='Stepper', Source={x:Reference MaxDelayControl}, Path=Value}"
+                       VerticalOptions="Center"
+                       FontAttributes="Bold"
+                       Grid.Row="2"
+                       Grid.Column="1"/>
+                <Stepper x:Name="MaxDelayControl"
+                         Maximum="1440"
+                         ValueChanged="SyncSettings"
+                         Minimum="5"
+                         Increment="5"
+                         HorizontalOptions="End"
+                         Grid.Row="2"
+                         Grid.Column="2"/>
+
+                <Label Text="{x:Static local:Lang.defaulttgtweight}"
+                       HorizontalOptions="Start"
+                       Grid.Row="3"
+                       VerticalOptions="Center"/>
+                <Grid Grid.Row="3"
+                      Grid.Column="1"
+                      Grid.ColumnSpan="2"
+                      WidthRequest="200"
+                      ColumnDefinitions="*,Auto"
+                      HorizontalOptions="End">
+                    <Entry x:Name="DefaultTgtWeightControl"
+                           HorizontalOptions="Fill"
+                           Keyboard="Numeric"
+                           HorizontalTextAlignment="End"
+                           TextChanged="TgtWeightControlChanged"/>
+                    <ImageButton BackgroundColor="Transparent"
+                                 Grid.Column="1"
+                                 x:Name="DefaultTgtWeightCheck"
+                                 IsVisible="False"
+                                 Clicked="TgtWeightControlSync"
+                                 Source="check.png">
+                        <ImageButton.Behaviors>
+                            <toolkit:IconTintColorBehavior TintColor="{AppThemeBinding Dark={x:StaticResource White}}"/>
+                        </ImageButton.Behaviors>
+                    </ImageButton>
+                </Grid>
+
+                <Label Text="{x:Static local:Lang.defaultfltlength}"
+                       HorizontalOptions="Start"
+                       Grid.Row="4"
+                       VerticalOptions="Center"/>
+                <Grid Grid.Row="4"
+                      Grid.Column="1"
+                      Grid.ColumnSpan="2"
+                      WidthRequest="200"
+                      ColumnDefinitions="*,Auto"
+                      HorizontalOptions="End">
+                    <Entry x:Name="DefaultFltLengthControl"
+                           HorizontalOptions="Fill"
+                           Keyboard="Numeric"
+                           HorizontalTextAlignment="End"
+                           TextChanged="FltLengthControlChanged"/>
+                    <ImageButton BackgroundColor="Transparent"
+                                 Grid.Column="1"
+                                 x:Name="DefaultFltLengthCheck"
+                                 IsVisible="False"
+                                 Clicked="FltLengthControlSync"
+                                 Source="check.png">
+                        <ImageButton.Behaviors>
+                            <toolkit:IconTintColorBehavior TintColor="{AppThemeBinding Dark={x:StaticResource White}}"/>
+                        </ImageButton.Behaviors>
+                    </ImageButton>
+                </Grid>
+
+                <Label Text="{x:Static local:Lang.quicktolerance}"
+                       HorizontalOptions="Start"
+                       VerticalOptions="Center"
+                       Grid.Row="5"/>
+                <Label HorizontalOptions="Center"
+                       Text="{Binding x:DataType='Stepper', Source={x:Reference QuickToleranceControl}, Path=Value}"
+                       VerticalOptions="Center"
+                       FontAttributes="Bold"
+                       Grid.Row="5"
+                       Grid.Column="1"/>
+                <Stepper x:Name="QuickToleranceControl"
+                         ValueChanged="SyncSettings"
+                         Maximum="90"
+                         Minimum="0"
+                         Increment="1"
+                         HorizontalOptions="End"
+                         Grid.Row="5"
+                         Grid.Column="2"/>
+
+            </Grid>
+        </ScrollView>
+    </VerticalStackLayout>
+</ContentView>

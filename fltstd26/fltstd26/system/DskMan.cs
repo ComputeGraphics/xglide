@@ -41,6 +41,7 @@ namespace fltstd26.system
                         Directory.CreateDirectory(path);
                     }
                 }
+                LoadConfig(USettings.ConfigName,false);
                 ConProc.Log($"[DSKMAN] Initialized succesfully");
                 return true;
             }
@@ -109,7 +110,7 @@ namespace fltstd26.system
             List<IFile> files = [];
             try
             {
-                if (RData.Active()) throw new Exception("RDATA is blocking the Database");
+                if (!config && RData.Active()) throw new Exception("RDATA is blocking the Database");
                 string path = Path.Combine(IAppData,IAppDataFolders[config ? 1 : 0]);
                 if (Directory.Exists(path))
                 { 
@@ -137,62 +138,43 @@ namespace fltstd26.system
             return files;
         }
 
-        public static bool SaveConfig(string name)
+        public static string? SaveConfig(string name,bool backup = false,bool absolute = false)
         {
             try
             {
-                StreamWriter stream = new(Path.Combine(GSettings.Paths["Config"],name.Trim() + ".xml"));
+                string path = absolute ? name : Path.Combine(backup ? GSettings.Paths["Backup"] : GSettings.Paths["Config"],name.Trim());
+                if (!path.EndsWith(".xml")) path += ".xml";
+                StreamWriter stream = new(path);
                 XmlSerializer xml = new(typeof(ConfigSettings));
                 xml.Serialize(stream,USettings.Instance);
                 stream.Close();
                 ConProc.Log($"[DSKMAN] A configuration was saved: {name}");
-                return true;
+                return path;
             }
             catch (Exception ex)
             {
                 ConProc.Log($"[DSKMAN] Error saving configuration: {ex.Message}",2);
-                return false;
+                return null;
             }
         }
 
-        internal static void LoadConfig(string name)
+        internal static void LoadConfig(string name, bool isAbsolute)
         {
             try
             {
-                string path = Path.Combine(GSettings.Paths["Config"],name.Trim() + ".xml");
-                if (File.Exists(path))
+                string path = isAbsolute ? name : Path.Combine(GSettings.Paths["Config"],name.Trim() + ".xml");
+
+                if (File.Exists(name))
                 {
-                    XElement uconfig = XElement.Load(path);
-
-                    //Meta
-                    USettings.Instance.Name = uconfig.Element("Name")?.Value ?? "N/A";
-                    USettings.Instance.Creator = uconfig.Element("Creator")?.Value ?? "N/A";
-                    USettings.Instance.LastChange = DateTime.ParseExact(uconfig.Element("LastChange")?.Value ?? "1970-01-01T17:00:01.0000000", "O", CultureInfo.InvariantCulture);
-
-                    //General
-                    USettings.Instance.AskForNodeMove = GSettings.GetBoolean(uconfig.Element("AskForNodeMove")?.Value, true);
-                    USettings.Instance.AskForNodePriceChange = GSettings.GetBoolean(uconfig.Element("AskForNodePriceChange")?.Value, true);
-
-                    //Properties
-                    USettings.Instance.Additionals = uconfig.Element("Additionals")?.Value.Split(';').ToList() ?? [];
-
-                    //XBOARD
-                    //USettings.Instance.Columns = uconfig.Element("Columns")?.Value.Split(';').ToList() ?? [];
-
-                    //XFLY
-                    //Manager
-                    USettings.Instance.AutoASAP = GSettings.GetBoolean(uconfig.Element("AutoASAP")?.Value,false);
-                    USettings.Instance.AutoTimeCheck = GSettings.GetBoolean(uconfig.Element("AutoTimeCheck")?.Value,true);
-                    USettings.Instance.EnableSlots = GSettings.GetBoolean(uconfig.Element("EnableSlots")?.Value,true);
-                    USettings.Instance.AntiCol = GSettings.GetBoolean(uconfig.Element("AntiCol")?.Value,false);
-                    //Defaults
-                    USettings.Instance.DefaultCeil = Int32.TryParse(uconfig.Element("DefaultCeil")?.Value,out int p) ? p : 15;
-                    USettings.Instance.QuickTolerance = Int32.TryParse(uconfig.Element("QuickTolerance")?.Value,out p) ? p : 5;
-                    USettings.Instance.DefaultFltLength = Int32.TryParse(uconfig.Element("DefaultFltLength")?.Value,out p) ? p : 15;
-                    USettings.Instance.FallbackPriceCat = Int32.TryParse(uconfig.Element("FallbackPriceCat")?.Value,out p) ? p : 1;
-                    USettings.Instance.DefaultTgtWeight = Int32.TryParse(uconfig.Element("DefaultTgtWeight")?.Value,out p) ? p : 1;
-
-                    ConProc.Log($"[DSKMAN] A configuration was applied: {name}",1);
+                    StreamReader stream = new(name);
+                    XmlSerializer xml = new(typeof(ConfigSettings));
+                    object? deserialized = xml.Deserialize(stream);
+                    if (deserialized != null && deserialized is ConfigSettings config)
+                    {
+                        USettings.Instance = config;
+                        USettings.Oberservables = USettings.GetObservables(config);
+                        ConProc.Log($"[DSKMAN] A configuration was applied: {name}",1);
+                    }
                 }
             }
             catch (Exception ex)

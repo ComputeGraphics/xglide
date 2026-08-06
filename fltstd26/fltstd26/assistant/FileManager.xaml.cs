@@ -41,7 +41,16 @@ public partial class FileManager : ContentPage
         {
             Action view = Config ? () => { } : () => { if (!RData.Locked) Application.Current?.OpenWindow(new debug.DBPreview(file.Location)); };
 
-            Action modify = Config ? () => { }
+            Action modify = Config ?
+                () => 
+                {
+                    if (editor == null && !RData.Locked)
+                    {
+                        editor = new(new config.ConfigSettings(file.Location,file.Name));
+                        Application.Current?.OpenWindow(editor);
+                        LockWindow();
+                    }
+                }
             : () =>
             {
                 if (editor == null && !RData.Locked)
@@ -64,7 +73,7 @@ public partial class FileManager : ContentPage
                 if (!RData.Locked) DskMan.Delete(file.Name,Config);
                 Refresh();
             }
-            ListTile lt = new(true,"db.png",file.Name.Replace(".sqlite",string.Empty),file.Context,[null,view,modify,share,delete]);
+            ListTile lt = new(true,Config ? "file.png" : "db.png",Config ? file.Name.Replace(".xml",string.Empty) : file.Name.Replace(".sqlite",string.Empty),file.Context,[null,view,modify,share,delete]);
             lt.Checked.CheckedChanged += CheckedChanged;
             FileView.Add(lt);
         }

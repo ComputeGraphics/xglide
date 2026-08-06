@@ -145,6 +145,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Compile Update="assistant\config\DataMenu.xaml.cs">
+	    <DependentUpon>DataMenu.xaml</DependentUpon>
+	  </Compile>
 	  <Compile Update="assistant\FileManager.xaml.cs">
 	    <DependentUpon>FileManager.xaml</DependentUpon>
 	  </Compile>
@@ -188,6 +191,24 @@
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="assistant\config\ConfigSettings.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="assistant\config\DataMenu.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="assistant\config\DefaultsMenu.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="assistant\config\GeneralMenu.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="assistant\config\PlannerMenu.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="assistant\config\SidebarItem.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="assistant\config\UxMenu.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="assistant\IABoard.xaml">

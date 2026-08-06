@@ -698,4 +698,118 @@ If it does not appear in the list, try refreshing it with the "Refresh" button.<
   <data name="call_target" xml:space="preserve">
     <value>Please come to the boarding point now:</value>
   </data>
+  <data name="config" xml:space="preserve">
+    <value>Configuration</value>
+  </data>
+  <data name="settings_general" xml:space="preserve">
+    <value>General</value>
+  </data>
+  <data name="settings_planner" xml:space="preserve">
+    <value>Flight Planner</value>
+  </data>
+  <data name="settings_data" xml:space="preserve">
+    <value>Data</value>
+  </data>
+  <data name="settings_defaults" xml:space="preserve">
+    <value>Defaults</value>
+  </data>
+  <data name="settings_ux" xml:space="preserve">
+    <value>Interface</value>
+  </data>
+  <data name="settings_online" xml:space="preserve">
+    <value>On-Line</value>
+  </data>
+  <data name="settings_debug" xml:space="preserve">
+    <value>Debug</value>
+  </data>
+  <data name="settings_board" xml:space="preserve">
+    <value>FIDS Settings →</value>
+  </data>
+  <data name="settings_board_columns" xml:space="preserve">
+    <value>Columns</value>
+  </data>
+  <data name="settings_board_flip" xml:space="preserve">
+    <value>Flip Screen Display</value>
+  </data>
+  <data name="settings_board_ui" xml:space="preserve">
+    <value>Interface</value>
+  </data>
+  <data name="settings_board_msg" xml:space="preserve">
+    <value>Message Centre</value>
+  </data>
+  <data name="settings_general_title" xml:space="preserve">
+    <value>General Settings</value>
+  </data>
+  <data name="config_name_doubledot" xml:space="preserve">
+    <value>Configuration Name:</value>
+  </data>
+  <data name="author_doubledot" xml:space="preserve">
+    <value>Author:</value>
+  </data>
+  <data name="creation_doubledot" xml:space="preserve">
+    <value>Created at:</value>
+  </data>
+  <data name="change_doubledot" xml:space="preserve">
+    <value>Last Change:</value>
+  </data>
+  <data name="autoasap" xml:space="preserve">
+    <value>Plan as soon as possible</value>
+  </data>
+  <data name="enableslots" xml:space="preserve">
+    <value>Use Slots (WIP)</value>
+  </data>
+  <data name="anticol" xml:space="preserve">
+    <value>Anti Collision System (WIP)</value>
+  </data>
+  <data name="ignoretransactionweight" xml:space="preserve">
+    <value>Ignore weight when transacting</value>
+  </data>
+  <data name="ignoretransactionlength" xml:space="preserve">
+    <value>Ignore length when transacting</value>
+  </data>
+  <data name="autotimecheck" xml:space="preserve">
+    <value>Consider system time</value>
+  </data>
+  <data name="settings_planner_title" xml:space="preserve">
+    <value>Flight Planner Settings</value>
+  </data>
+  <data name="settings_data_title" xml:space="preserve">
+    <value>Data Management Settings</value>
+  </data>
+  <data name="additionals" xml:space="preserve">
+    <value>Additional Flight Informations</value>
+  </data>
+  <data name="settings_defaults_title" xml:space="preserve">
+    <value>Default Settings and Fallback Values</value>
+  </data>
+  <data name="fallbackpricecat" xml:space="preserve">
+    <value>Fallback Price Category</value>
+  </data>
+  <data name="delaytolerance" xml:space="preserve">
+    <value>Delay Tolerance (min)</value>
+  </data>
+  <data name="maxdelay" xml:space="preserve">
+    <value>Maximum Delay (min)</value>
+  </data>
+  <data name="defaulttgtweight" xml:space="preserve">
+    <value>Default Weight of Target</value>
+  </data>
+  <data name="defaultfltlength" xml:space="preserve">
+    <value>Default flight length</value>
+  </data>
+  <data name="quicktolerance" xml:space="preserve">
+    <value>Quick-Ticket Tolerance</value>
+  </data>
+  <data name="askfornodemove" xml:space="preserve">
+    <value>Ask before transaction</value>
+  </data>
+  <data name="askforpricechange" xml:space="preserve">
+    <value>Ask for price changes</value>
+  </data>
+  <data name="hidepastslots" xml:space="preserve">
+    <value>Hide past slots</value>
+  </data>
+  <data name="slottolerance" xml:space="preserve">
+    <value>Slot Invoke Tolerance</value>
+  </data>
 </root>

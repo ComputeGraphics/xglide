@@ -726,4 +726,118 @@ Falls ihr Profil nicht sofort erscheint, drücken Sie einfach den "Aktualisieren
   <data name="call_target" xml:space="preserve">
     <value>Bitte begeben Sie sich jetzt zum Rundflugschalter:</value>
   </data>
+  <data name="config" xml:space="preserve">
+    <value>Konfiguration</value>
+  </data>
+  <data name="settings_general" xml:space="preserve">
+    <value>Allgemein</value>
+  </data>
+  <data name="settings_planner" xml:space="preserve">
+    <value>Flugplaner</value>
+  </data>
+  <data name="settings_data" xml:space="preserve">
+    <value>Daten</value>
+  </data>
+  <data name="settings_defaults" xml:space="preserve">
+    <value>Standardwerte</value>
+  </data>
+  <data name="settings_ux" xml:space="preserve">
+    <value>Bedienung</value>
+  </data>
+  <data name="settings_online" xml:space="preserve">
+    <value>On-Line</value>
+  </data>
+  <data name="settings_debug" xml:space="preserve">
+    <value>Debug</value>
+  </data>
+  <data name="settings_board" xml:space="preserve">
+    <value>FIDS Einstellungen →</value>
+  </data>
+  <data name="settings_board_columns" xml:space="preserve">
+    <value>Spalten</value>
+  </data>
+  <data name="settings_board_flip" xml:space="preserve">
+    <value>Fallblattanzeige</value>
+  </data>
+  <data name="settings_board_ui" xml:space="preserve">
+    <value>Oberfläche</value>
+  </data>
+  <data name="settings_board_msg" xml:space="preserve">
+    <value>Nachrichten Centre</value>
+  </data>
+  <data name="settings_general_title" xml:space="preserve">
+    <value>Allgemeine Einstellungen</value>
+  </data>
+  <data name="config_name_doubledot" xml:space="preserve">
+    <value>Konfigurationsname:</value>
+  </data>
+  <data name="author_doubledot" xml:space="preserve">
+    <value>Ersteller:</value>
+  </data>
+  <data name="creation_doubledot" xml:space="preserve">
+    <value>Erstellt am:</value>
+  </data>
+  <data name="change_doubledot" xml:space="preserve">
+    <value>Letzte Änderung:</value>
+  </data>
+  <data name="autoasap" xml:space="preserve">
+    <value>So schnell wie möglich planen</value>
+  </data>
+  <data name="enableslots" xml:space="preserve">
+    <value>Slots verwenden (WIP)</value>
+  </data>
+  <data name="anticol" xml:space="preserve">
+    <value>Kollisionsvermeidungssystem (WIP)</value>
+  </data>
+  <data name="ignoretransactionweight" xml:space="preserve">
+    <value>Gewicht bei Transaktionen ignorieren</value>
+  </data>
+  <data name="ignoretransactionlength" xml:space="preserve">
+    <value>Länge bei Transaktionen ignorieren</value>
+  </data>
+  <data name="autotimecheck" xml:space="preserve">
+    <value>Systemzeit berücksichtigen</value>
+  </data>
+  <data name="settings_planner_title" xml:space="preserve">
+    <value>Flugplaner Einstellungen</value>
+  </data>
+  <data name="settings_data_title" xml:space="preserve">
+    <value>Datenverwaltungs Einstellungen</value>
+  </data>
+  <data name="additionals" xml:space="preserve">
+    <value>Zusätzliche Fluginformationen</value>
+  </data>
+  <data name="settings_defaults_title" xml:space="preserve">
+    <value>Standardeinstellungen und Ausweichwerte</value>
+  </data>
+  <data name="fallbackpricecat" xml:space="preserve">
+    <value>Ausweich-Preiskategorie</value>
+  </data>
+  <data name="delaytolerance" xml:space="preserve">
+    <value>Verspätungstoleranz (min)</value>
+  </data>
+  <data name="maxdelay" xml:space="preserve">
+    <value>Maximale Verzögerung (min)</value>
+  </data>
+  <data name="defaulttgtweight" xml:space="preserve">
+    <value>Standardgewicht eines Ziels</value>
+  </data>
+  <data name="defaultfltlength" xml:space="preserve">
+    <value>Standard-Fluglänge</value>
+  </data>
+  <data name="quicktolerance" xml:space="preserve">
+    <value>Quick-Ticket Toleranz</value>
+  </data>
+  <data name="askfornodemove" xml:space="preserve">
+    <value>Vor Transaktion fragen</value>
+  </data>
+  <data name="askforpricechange" xml:space="preserve">
+    <value>Nach Preisänderungen fragen</value>
+  </data>
+  <data name="hidepastslots" xml:space="preserve">
+    <value>Vergangene Slots ausblenden</value>
+  </data>
+  <data name="slottolerance" xml:space="preserve">
+    <value>Slotauslöser Toleranz (min)</value>
+  </data>
 </root>
