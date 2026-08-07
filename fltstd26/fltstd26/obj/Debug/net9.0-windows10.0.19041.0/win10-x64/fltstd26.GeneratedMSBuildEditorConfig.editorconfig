@@ -71,6 +71,12 @@ build_metadata.AdditionalFiles.ManifestResourceName = fltstd26.assistant.config.
 build_metadata.AdditionalFiles.TargetPath = assistant\config\GeneralMenu.xaml
 build_metadata.AdditionalFiles.RelativePath = assistant\config\GeneralMenu.xaml
 
+[C:/Users/Arthur/Documents/GitHub/xglide/fltstd26/fltstd26/assistant/config/OnLineMenu.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = fltstd26.assistant.config.OnLineMenu.xaml
+build_metadata.AdditionalFiles.TargetPath = assistant\config\OnLineMenu.xaml
+build_metadata.AdditionalFiles.RelativePath = assistant\config\OnLineMenu.xaml
+
 [C:/Users/Arthur/Documents/GitHub/xglide/fltstd26/fltstd26/assistant/config/PlannerMenu.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
 build_metadata.AdditionalFiles.ManifestResourceName = fltstd26.assistant.config.PlannerMenu.xaml

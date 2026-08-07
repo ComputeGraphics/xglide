@@ -4,18 +4,26 @@ namespace fltstd26.assistant.config;
 
 public partial class DefaultsMenu : ContentView
 {
-    private etc.ConfigSettings _instance;
-    private List<Sheets.PriceCat> _pcs;
+    private readonly etc.ConfigSettings _instance;
+    private List<Sheets.PriceCat> _pcs = [];
     private bool _afterinit = false;
     public DefaultsMenu(etc.ConfigSettings cfg)
     {
 
-        _pcs = RData.GetPriceTable();
+        
         _instance = cfg;
         InitializeComponent();
         System.Diagnostics.Debug.WriteLine("Initializing Defaults Menu");
-        FallbackPriceCatControl.ItemsSource = _pcs.Select(c => c.Name).ToList();
+
+        Unloaded += (s,e) => _afterinit = false;
+        Loaded += (s,e) => SyncViews();
+    }
+
+    private void SyncViews()
+    {
+        _pcs = RData.GetPriceTable();
         int i = _pcs.FindIndex(x => x.Id == _instance.FallbackPriceCat);
+        FallbackPriceCatControl.ItemsSource = _pcs.Select(c => c.Name).ToList();
         if (i != -1) FallbackPriceCatControl.SelectedIndex = i;
         DelayToleranceControl.Value = _instance.DelayTolerance;
         MaxDelayControl.Value = _instance.MaxDelay;
@@ -27,7 +35,7 @@ public partial class DefaultsMenu : ContentView
 
     private void SyncSettings(object sender,EventArgs e)
     {
-        if (QuickToleranceControl != null)
+        if (_afterinit)
         {
             _instance.DelayTolerance = (int)DelayToleranceControl.Value;
             _instance.MaxDelay = (int)MaxDelayControl.Value;
@@ -47,12 +55,15 @@ public partial class DefaultsMenu : ContentView
 
     private void TgtWeightControlSync(object sender,EventArgs e)
     {
-        if (Int32.TryParse(DefaultTgtWeightControl.Text,out int length))
+        if (_afterinit)
         {
-            _instance.DefaultTgtWeight = length;
-            DefaultTgtWeightCheck.IsVisible = false;
+            if (Int32.TryParse(DefaultTgtWeightControl.Text,out int length))
+            {
+                _instance.DefaultTgtWeight = length;
+                DefaultTgtWeightCheck.IsVisible = false;
+            }
+            else DefaultTgtWeightControl.Text = _instance.DefaultTgtWeight.ToString();
         }
-        else DefaultTgtWeightControl.Text = _instance.DefaultTgtWeight.ToString();
     }
 
     private void FltLengthControlChanged(object sender,EventArgs e)
@@ -62,12 +73,15 @@ public partial class DefaultsMenu : ContentView
 
     private void FltLengthControlSync(object sender,EventArgs e)
     {
-        if (Int32.TryParse(DefaultFltLengthControl.Text,out int length))
+        if(_afterinit)
         {
-            _instance.DefaultTgtWeight = length;
-            DefaultFltLengthCheck.IsVisible = false;
+            if (Int32.TryParse(DefaultFltLengthControl.Text,out int length))
+            {
+                _instance.DefaultTgtWeight = length;
+                DefaultFltLengthCheck.IsVisible = false;
+            }
+            else DefaultFltLengthControl.Text = _instance.DefaultTgtWeight.ToString();
         }
-        else DefaultFltLengthControl.Text = _instance.DefaultTgtWeight.ToString();
     }
 
 }

@@ -389,7 +389,7 @@ X-Fly Manager Studio 2026!</value>
     <value>There was no slot matching the given attributes found.</value>
   </data>
   <data name="too_late" xml:space="preserve">
-    <value> does not lie within dawn/dusk boundaries at your location. Flights outside these boundaries might not be legal</value>
+    <value> do not lie within dawn/dusk boundaries at your location. Flights outside these boundaries might not be legal</value>
   </data>
   <data name="overlap_warning" xml:space="preserve">
     <value>overlap. If this is not intentional you should either move the slot to a different time or remove it entirely.</value>
@@ -811,5 +811,23 @@ If it does not appear in the list, try refreshing it with the "Refresh" button.<
   </data>
   <data name="slottolerance" xml:space="preserve">
     <value>Slot Invoke Tolerance</value>
+  </data>
+  <data name="settings_online_title" xml:space="preserve">
+    <value>Network Settings</value>
+  </data>
+  <data name="ognstatus" xml:space="preserve">
+    <value>Use OGN Connection</value>
+  </data>
+  <data name="ognsynclevel" xml:space="preserve">
+    <value>OGN Synchronization Level</value>
+  </data>
+  <data name="ogntolerance" xml:space="preserve">
+    <value>OGN Time Tolerance (min)</value>
+  </data>
+  <data name="takeoffduration" xml:space="preserve">
+    <value>Takeoff Duration (min)</value>
+  </data>
+  <data name="homebase" xml:space="preserve">
+    <value>Homebase (ICAO)</value>
   </data>
 </root>

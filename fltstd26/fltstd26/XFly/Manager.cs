@@ -50,12 +50,12 @@ namespace fltstd26.XFly
             return CompatibleSlots;
         }
 
-        public static List<int> FindAvailableAircraft(int SlotID,bool Auto,int? PriceFilter, bool Force)
+        public static List<int> FindAvailableAircraft(int SlotID,bool Auto,int? PriceFilter)
         {
             List<int> AvailableAircraft = [];
             foreach (Sheets.Lfz lfz in RData.GetAircraftTable())
             {
-                if (Force || (!Auto || lfz.AutoAssign == true) && lfz.AvailTimes is not null && lfz.AvailTimes.Where(x => x == SlotID).Any() && (PriceFilter == null || lfz.PriceCat == PriceFilter))
+                if ((!Auto || lfz.AutoAssign == true) && lfz.AvailTimes is not null && lfz.AvailTimes.Where(x => x == SlotID).Any() && (PriceFilter == null || lfz.PriceCat == PriceFilter))
                 {
                     AvailableAircraft.Add(lfz.Id);
                 }
@@ -350,6 +350,7 @@ namespace fltstd26.XFly
             if (prev == 13 && status != 13) GSettings.StatusLink.Remove(FltID);
             else if (status == 13 && !GSettings.StatusLink.TryAdd(FltID,prev)) GSettings.StatusLink[FltID] = status;
             if (dbupdate) RData.UpdateProperty(FltID,(byte)status,"Status",typeof(Sheets.Flt));
+            System.Diagnostics.Debug.WriteLine($"Status of {FltID} changed from {prev} to {status}");
             StatusRefresh();
             //Invoke Plan Update
             //Invoke Board Update

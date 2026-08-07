@@ -152,6 +152,7 @@ namespace fltstd26.board
         }
         internal static void SynchronizeWithStatus(List<Sheets.Flt> flts)
         {
+            System.Diagnostics.Debug.WriteLine("Synchronizing Boards with Status change");
             foreach (var board in Boards)
             {
                 board.UpdateStatus(flts);

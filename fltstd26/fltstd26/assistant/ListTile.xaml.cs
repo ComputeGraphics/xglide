@@ -16,6 +16,7 @@ public partial class ListTile : ContentView
         Play.IsEnabled = btn[0] != null;
         Play.IsVisible = btn[0] != null;
         View.IsEnabled = btn[1] != null;
+        View.IsVisible = btn[1] != null;
         Modify.IsEnabled = btn[2] != null;
         Share.IsEnabled = btn[3] != null;
         Delete.IsEnabled = btn[4] != null;

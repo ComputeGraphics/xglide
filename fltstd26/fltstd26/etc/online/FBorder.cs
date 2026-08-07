@@ -101,7 +101,7 @@ public partial class FBorder : ContentView
 
     private void SelectedIndexChanged(object? sender,EventArgs e)
     {
-        dbstatus = status.SelectedIndex;
         Manager.StatusChange(FlightID,dbstatus,status.SelectedIndex);
+        dbstatus = status.SelectedIndex;
     }
 }

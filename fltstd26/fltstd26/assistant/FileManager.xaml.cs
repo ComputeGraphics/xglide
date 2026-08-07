@@ -22,6 +22,7 @@ public partial class FileManager : ContentPage
     {
         PopOnCont = poponcont;
         Config = c;
+        if(c && !RData.Active()) RData.Init();
         InitializeComponent();
         WindowTitle.Text = c ? Lang.config_manager : Lang.profile_manager;
         WindowSubtitle.Text = c ? Lang.config_select : Lang.profile_select;
@@ -39,7 +40,8 @@ public partial class FileManager : ContentPage
         files = DskMan.GetFolder(Config);
         foreach (IFile file in files)
         {
-            Action view = Config ? () => { } : () => { if (!RData.Locked) Application.Current?.OpenWindow(new debug.DBPreview(file.Location)); };
+
+            void view() { if (!RData.Locked) Application.Current?.OpenWindow(new debug.DBPreview(file.Location)); }
 
             Action modify = Config ?
                 () => 
@@ -73,7 +75,7 @@ public partial class FileManager : ContentPage
                 if (!RData.Locked) DskMan.Delete(file.Name,Config);
                 Refresh();
             }
-            ListTile lt = new(true,Config ? "file.png" : "db.png",Config ? file.Name.Replace(".xml",string.Empty) : file.Name.Replace(".sqlite",string.Empty),file.Context,[null,view,modify,share,delete]);
+            ListTile lt = new(true,Config ? "file.png" : "db.png",Config ? file.Name.Replace(".xml",string.Empty) : file.Name.Replace(".sqlite",string.Empty),file.Context,[null,Config ? null : view,modify,share,delete]);
             lt.Checked.CheckedChanged += CheckedChanged;
             FileView.Add(lt);
         }
@@ -125,21 +127,27 @@ public partial class FileManager : ContentPage
         }
     }
 
-    private void ContinueClick(object sener, EventArgs e)
+    private void ContinueClick(object sender, EventArgs e)
     {
-        System.Diagnostics.Debug.WriteLine("Selected File: " + SelectedFile.ToString());
-        if(Config)
+        if(SelectedFile != -1 && SelectedFile < files.Count)
         {
-
-        }
-        else
-        {
-            RData.Close();
-            RData.DatabaseFilename = files[SelectedFile].Name;
-            if(PopOnCont)
+            System.Diagnostics.Debug.WriteLine("Selected File: " + SelectedFile.ToString());
+            if (Config)
             {
-                EditorClosed(null,null);
-                Navigation.PopAsync();
+                USettings.ConfigName = files[SelectedFile].Location;
+                DskMan.LoadConfig(files[SelectedFile].Location,true);
+                Navigation.PopToRootAsync(true);
+            }
+            else
+            {
+                RData.Close();
+                RData.DatabaseFilename = files[SelectedFile].Name;
+                if (PopOnCont)
+                {
+                    EditorClosed(null,null);
+                    Navigation.PopAsync(true);
+                }
+                Navigation.PushAsync(new FileManager(true,false));
             }
         }
     }

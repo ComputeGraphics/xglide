@@ -111,7 +111,7 @@ public partial class BoardView : ContentView
 	{
 		if (StatusField != null)
 		{
-			//System.Diagnostics.Debug.WriteLine("Updating Status Field");
+			System.Diagnostics.Debug.WriteLine("Updating Status Field of " + FlightID.ToString());
             byte BGCode = 0;
             if (USettings.Instance.StatusBG_Green.Contains(status)) BGCode = 1;
             else if (USettings.Instance.StatusBG_Red.Contains(status)) BGCode = 2;

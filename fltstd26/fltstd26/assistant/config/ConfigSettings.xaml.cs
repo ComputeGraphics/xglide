@@ -14,7 +14,8 @@ public partial class ConfigSettings : ContentPage
 
     private ContentView[]? pages;
 
-    internal etc.ConfigSettings? _current;
+    private etc.ConfigSettings? _current;
+    private string? _filename;
 
     private int _selected = 0;
     public ConfigSettings(string? config,string? name)
@@ -26,10 +27,12 @@ public partial class ConfigSettings : ContentPage
             {
                 USettings.ConfigName = sv;
                 DskMan.LoadConfig(config,true);
+                _filename = config;
             }
         }
 
         etc.ConfigSettings? c = Sheets.Clone(USettings.Instance);
+        System.Diagnostics.Debug.WriteLine("Previous Tolerance: " + USettings.Instance.QuickTolerance);
         if (c != null)
         {
             _current = c;
@@ -43,6 +46,7 @@ public partial class ConfigSettings : ContentPage
                 new DataMenu(_current),
                 new DefaultsMenu(_current),
                 new UxMenu(_current),
+                new OnLineMenu(_current),
                 ];
         }
 
@@ -74,11 +78,16 @@ public partial class ConfigSettings : ContentPage
 
     public void ApplyClick(object sender,EventArgs e)
     {
-
+        if (_current != null && _filename != null)
+        {
+            USettings.Instance = _current;
+            DskMan.SaveConfig(_filename);
+        }
     }
 
     public void CancelClick(object sender,EventArgs e)
     {
+        Application.Current?.CloseWindow(Window);
     }
 
 }

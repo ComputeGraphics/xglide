@@ -694,6 +694,15 @@ namespace fltstd26.Resources.Texts {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Heimatflugplatz (ICAO) ähnelt.
+        /// </summary>
+        internal static string homebase {
+            get {
+                return ResourceManager.GetString("homebase", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Abflugtafel einrichten ähnelt.
         /// </summary>
         internal static string iaboard {
@@ -1144,6 +1153,33 @@ namespace fltstd26.Resources.Texts {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die OGN Verbindung nutzen ähnelt.
+        /// </summary>
+        internal static string ognstatus {
+            get {
+                return ResourceManager.GetString("ognstatus", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die OGN Synchronisierungsmultiplikator ähnelt.
+        /// </summary>
+        internal static string ognsynclevel {
+            get {
+                return ResourceManager.GetString("ognsynclevel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die OGN Zeittoleranz (min) ähnelt.
+        /// </summary>
+        internal static string ogntolerance {
+            get {
+                return ResourceManager.GetString("ogntolerance", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Öffnen ähnelt.
         /// </summary>
         internal static string open {
@@ -1523,6 +1559,15 @@ namespace fltstd26.Resources.Texts {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Netzwerkeinstellungen ähnelt.
+        /// </summary>
+        internal static string settings_online_title {
+            get {
+                return ResourceManager.GetString("settings_online_title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Flugplaner ähnelt.
         /// </summary>
         internal static string settings_planner {
@@ -1667,6 +1712,15 @@ namespace fltstd26.Resources.Texts {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Startdauer (min) ähnelt.
+        /// </summary>
+        internal static string takeoffduration {
+            get {
+                return ResourceManager.GetString("takeoffduration", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Ticket/Ziel Optionen ähnelt.
         /// </summary>
         internal static string target_option {
@@ -1730,7 +1784,7 @@ namespace fltstd26.Resources.Texts {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die  befindet sich außerhalb des Dämmerungsbereichs. Dieser Flug darf möglicherweise nicht legal stattfinden ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die  befinden sich außerhalb des Dämmerungsbereichs. Diese Flüge dürfen möglicherweise nicht legal stattfinden ähnelt.
         /// </summary>
         internal static string too_late {
             get {

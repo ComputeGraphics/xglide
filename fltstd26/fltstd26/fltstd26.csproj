@@ -202,6 +202,9 @@
 	  <MauiXaml Update="assistant\config\GeneralMenu.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="assistant\config\OnLineMenu.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="assistant\config\PlannerMenu.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>

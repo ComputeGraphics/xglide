@@ -102,11 +102,13 @@ namespace fltstd26.XFly
             System.Diagnostics.Debug.WriteLine("Current OGN Dawn: " + bgl_dawn ?? "N/A");
             System.Diagnostics.Debug.WriteLine("Current OGN Dusk: " + bgl_dusk ?? "N/A");
             if (bgl_dusk == null || bgl_dawn == null) return;
-            foreach(Sheets.Slot slot in RData.GetSlotsTable())
+            string overlaps = "Slots\r\n";
+            foreach (Sheets.Slot slot in RData.GetSlotsTable())
             {
-                if (slot.STime.TimeOfDay > bgl_dusk || slot.FTime.TimeOfDay < bgl_dawn) system.modals.ModalPush.Message(Lang.warning,$"Slot {slot.Id} " + Lang.too_late);
+                if (slot.STime.TimeOfDay > bgl_dusk || slot.FTime.TimeOfDay < bgl_dawn) overlaps += $"{slot.Id} ({slot.STime:G}-{slot.FTime:G})\r\n";
                 //if(slot.STime > )
             }
+            if(overlaps != "Slots\r\n") system.modals.ModalPush.Message(Lang.warning,$"{overlaps}" + Lang.too_late);
         }
         internal static void TestOverlap()
         {
@@ -116,8 +118,7 @@ namespace fltstd26.XFly
             {
                 if (i+1 < slots.Count && slots[i].FTime > slots[i+1].STime) overlaps += $"Slot {slots[i].Id} ({slots[i].STime.ToShortTimeString()}-{slots[i].FTime.ToShortTimeString()}) -!- {slots[i+1].Id} ({slots[i].STime.ToShortTimeString()}-{slots[i].FTime.ToShortTimeString()}) \r\n";
             }
-
-            system.modals.ModalPush.Message(Lang.warning,overlaps + Lang.overlap_warning);
+            if(overlaps != "") system.modals.ModalPush.Message(Lang.warning,overlaps + Lang.overlap_warning);
         }
     }
 }

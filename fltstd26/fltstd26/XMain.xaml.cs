@@ -31,7 +31,7 @@ namespace fltstd26
         private Guid focusedID = new(new byte[16]);
         internal bool XPlanOpen = false;
         internal bool OneStart = false;
-
+        internal bool SecStart = false;
         public XMain()
         {
             InitializeComponent();
@@ -41,22 +41,36 @@ namespace fltstd26
                 {
                     Window.Title = "XFly Management Studio 2026";
                     AutoAct.ActionButtons = new(XPlan_UndoButton,XPlan_RedoButton);
-                    if(!OneStart)
+                    if (SecStart)
+                    {
+                        AfterInit();
+                        SecStart = false;
+                    }
+                    if (!OneStart)
                     {
                         Window.Destroying += CloseProcedure;
+                        if (USettings.AutoLoad)
+                        {
+                            RData.Init();
+                            AfterInit();
+                        }
+                        else
+                        {
+                            Navigation.PushAsync(new Assistant());
+                            SecStart = true;
+                        }
                         OneStart = true;
                     }
                 }
             };
             GSettings.nav = Navigation;
-            DskMan.SaveConfig(USettings.Instance.Name);
+            //DskMan.SaveConfig(USettings.Instance.Name);
             DskMan.Init();
             System.Diagnostics.Debug.WriteLine(Application.Current!.RequestedTheme.ToString());
             //System.Diagnostics.Debug.WriteLine(RData.Insert<Sheets.Target>(new() { Name = "Test" }));
             //System.Diagnostics.Debug.WriteLine(RData.GetWhere<Sheets.Slot>($"id=2").First().Length);
             //Application.Current!.UserAppTheme = AppTheme.Light;
             if (USettings.Instance.LogFile) ConProc.InitLogFile();
-            AfterInit();
         }
 
         private void CloseProcedure(object? sender,EventArgs e)
@@ -72,7 +86,6 @@ namespace fltstd26
         private void AfterInit()
         {
             TimeServ.Init();
-            RData.Init();
             OGN.Sync();
             if(BoardController.Boards.Count > 0)
             {
@@ -486,7 +499,11 @@ namespace fltstd26
                     //Status aktualisieren
                     IEnumerable<Sheets.Target> tgts = RData.GetTargetTable().Where(t => flts.Where(x => x != null).Select(x => x!.Id).Contains(t.Id));
                     List<XBlock> affectedNodes = [.. NodeLibrary.Select(x => x.Value).Where(x => tgts.Select(x => x.Id).Contains(x.TargetID))];
-                    Drawer.CallTargets(tgts);
+                    if(now < slot.FTime)
+                    {
+                        Drawer.CallTargets(tgts);
+                    }
+                    
                     string messages = "";
                     foreach (XBlock node in affectedNodes)
                     {
@@ -1271,8 +1288,9 @@ namespace fltstd26
         //Update Status
         private void Status_FinishOld_Click(object sender,EventArgs e)
         {
+            DateTime now = DateTime.Now;
             List<Sheets.Flt> flts = RData.GetFlightTable();
-            IEnumerable<Sheets.Slot> slots = RData.GetSlotsTable().Where(x => x.FTime < DateTime.Now);
+            IEnumerable<Sheets.Slot> slots = RData.GetSlotsTable().Where(x => x.FTime < now);
             foreach (Sheets.Slot slot in slots)
             {
                 Manager.DetermineStatus(slot,[.. flts.Where(x => x.Slot == slot.Id)],false);
@@ -1281,8 +1299,9 @@ namespace fltstd26
 
         private void Status_RefreshCurrent_Click(object sender,EventArgs eventArgs)
         {
+            DateTime now = DateTime.Now;
             List<Sheets.Flt> flts = RData.GetFlightTable();
-            IEnumerable<Sheets.Slot> activeSlots = RData.GetSlotsTable().Where(x => x.STime < DateTime.Now).Where(x => x.FTime > DateTime.Now);
+            IEnumerable<Sheets.Slot> activeSlots = RData.GetSlotsTable().Where(x => x.STime < now).Where(x => x.FTime > now);
             foreach (Sheets.Slot slot in activeSlots)
             {
                 Manager.DetermineStatus(slot,[.. flts.Where(x => x.Slot == slot.Id)],false);
@@ -1291,9 +1310,11 @@ namespace fltstd26
 
         private void Status_RefreshNext_Click(object sender,EventArgs eventArgs)
         {
+            DateTime now = DateTime.Now;
             List<Sheets.Flt> flts = RData.GetFlightTable();
-            IEnumerable<Sheets.Slot> activeSlots = RData.GetSlotsTable().Where(x => x.FTime > DateTime.Now).OrderBy(x => x.STime);
-            activeSlots = activeSlots.Where(x => !(x.STime > activeSlots.First().STime));
+            IEnumerable<Sheets.Slot> activeSlotsUnorder = RData.GetSlotsTable().Where(x => x.FTime > now);
+            IList<Sheets.Slot> activeSlots = [.. activeSlotsUnorder.OrderBy(x => x.STime)];
+            activeSlots = [..activeSlots.Where(x => !(x.STime > activeSlots.First().STime))];
             foreach (Sheets.Slot slot in activeSlots)
             {
                 Manager.DetermineStatus(slot,[.. flts.Where(x => x.Slot == slot.Id)],false);
@@ -1321,7 +1342,7 @@ namespace fltstd26
 
         private async void CheckDB_Unlink_Click(object sender,EventArgs e)
         {
-            await Patcher.GeneralInspection();
+            await Patcher.RelinkTargets();
             XPlanRefresh();
         }
 

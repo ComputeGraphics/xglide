@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:fltstd26.Resources.Texts"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             x:Class="fltstd26.assistant.config.OnLineMenu">
+    <VerticalStackLayout Padding="20"
+                         HorizontalOptions="Start"
+                         MinimumWidthRequest="400"
+                         MaximumWidthRequest="800">
+        <Label 
+            Text="{x:Static local:Lang.settings_online_title}"
+            VerticalOptions="Center"
+            FontSize="Medium"
+            FontFamily="Archive"
+            HorizontalOptions="Start" />
+        <ScrollView Padding="0,10">
+            <Grid ColumnDefinitions="*,Auto,Auto"
+                  RowSpacing="10"
+                  RowDefinitions="Auto,Auto,Auto,Auto,Auto">
+                <Label Text="{x:Static local:Lang.ognstatus}"
+                       HorizontalOptions="Start"
+                       VerticalOptions="Center"/>
+                <Switch x:Name="OGNStatusControl"
+                        Grid.Column="1"
+                        Grid.ColumnSpan="2"
+                        Toggled="SyncSwitch"/>
+
+
+                <Label Text="{x:Static local:Lang.ognsynclevel}"
+                       HorizontalOptions="Start"
+                       VerticalOptions="Center"
+                       Grid.Row="1"/>
+                <Label HorizontalOptions="Center"
+                       Text="{Binding x:DataType='Stepper', Source={x:Reference OGNSyncLevelControl}, Path=Value}"
+                       VerticalOptions="Center"
+                       FontAttributes="Bold"
+                       Grid.Row="1"
+                       Grid.Column="1"/>
+                <Stepper x:Name="OGNSyncLevelControl"
+                         ValueChanged="SyncSettings"
+                         Maximum="12"
+                         Minimum="1"
+                         Increment="1"
+                         HorizontalOptions="End"
+                         Grid.Row="1"
+                         Grid.Column="2"/>
+
+                <Label Text="{x:Static local:Lang.ogntolerance}"
+                       HorizontalOptions="Start"
+                       VerticalOptions="Center"
+                       Grid.Row="2"/>
+                <Label HorizontalOptions="Center"
+                       Text="{Binding x:DataType='Stepper', Source={x:Reference OGNToleranceControl}, Path=Value}"
+                       VerticalOptions="Center"
+                       FontAttributes="Bold"
+                       Grid.Row="2"
+                       Grid.Column="1"/>
+                <Stepper x:Name="OGNToleranceControl"
+                         Maximum="60"
+                         ValueChanged="SyncSettings"
+                         Minimum="0"
+                         Increment="1"
+                         HorizontalOptions="End"
+                         Grid.Row="2"
+                         Grid.Column="2"/>
+
+                <Label Text="{x:Static local:Lang.takeoffduration}"
+                       HorizontalOptions="Start"
+                       VerticalOptions="Center"
+                       Grid.Row="3"/>
+                <Label HorizontalOptions="Center"
+                       Text="{Binding x:DataType='Stepper', Source={x:Reference TakeoffDurationControl}, Path=Value}"
+                       VerticalOptions="Center"
+                       FontAttributes="Bold"
+                       Grid.Row="3"
+                       Grid.Column="1"/>
+                <Stepper x:Name="TakeoffDurationControl"
+                         ValueChanged="SyncSettings"
+                         Maximum="60"
+                         Minimum="0"
+                         Increment="1"
+                         HorizontalOptions="End"
+                         Grid.Row="3"
+                         Grid.Column="2"/>
+
+
+                <Label Text="{x:Static local:Lang.homebase}"
+                       HorizontalOptions="Start"
+                       Grid.Row="4"
+                       VerticalOptions="Center"/>
+                <Grid Grid.Row="4"
+                      Grid.Column="1"
+                      Grid.ColumnSpan="2"
+                      WidthRequest="200"
+                      ColumnDefinitions="*,Auto"
+                      HorizontalOptions="End">
+                    <Entry x:Name="HomebaseControl"
+                           HorizontalOptions="Fill"
+                           Keyboard="Numeric"
+                           HorizontalTextAlignment="End"
+                           TextChanged="HomebaseControlChanged"/>
+                    <ImageButton BackgroundColor="Transparent"
+                                 Grid.Column="1"
+                                 x:Name="HomebaseCheck"
+                                 IsVisible="False"
+                                 Clicked="HomebaseControlSync"
+                                 Source="check.png">
+                        <ImageButton.Behaviors>
+                            <toolkit:IconTintColorBehavior TintColor="{AppThemeBinding Dark={x:StaticResource White}}"/>
+                        </ImageButton.Behaviors>
+                    </ImageButton>
+                </Grid>
+
+            </Grid>
+        </ScrollView>
+    </VerticalStackLayout>
+</ContentView>

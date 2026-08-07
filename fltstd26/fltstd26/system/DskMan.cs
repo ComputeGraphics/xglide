@@ -41,7 +41,6 @@ namespace fltstd26.system
                         Directory.CreateDirectory(path);
                     }
                 }
-                LoadConfig(USettings.ConfigName,false);
                 ConProc.Log($"[DSKMAN] Initialized succesfully");
                 return true;
             }
@@ -174,6 +173,7 @@ namespace fltstd26.system
                         USettings.Instance = config;
                         USettings.Oberservables = USettings.GetObservables(config);
                         ConProc.Log($"[DSKMAN] A configuration was applied: {name}",1);
+                        System.Diagnostics.Debug.WriteLine("Config Creator is: " + USettings.Instance.Creator);
                     }
                 }
             }

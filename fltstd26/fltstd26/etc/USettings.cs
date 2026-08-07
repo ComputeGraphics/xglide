@@ -9,7 +9,7 @@ namespace fltstd26.etc
         internal static string ConfigName = "Standard";
         internal static ConfigSettings Instance = new();
         internal static ObservableSettings Oberservables = GetObservables(Instance);
-
+        internal static bool AutoLoad = false;
 
         //returned den vorherigen wert
         internal static object? UpdateSetting(string? key, object? value, Type type)

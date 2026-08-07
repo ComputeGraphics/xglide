@@ -132,10 +132,6 @@
         </MenuBarItem>
 
         <MenuBarItem Text="{x:Static local:Lang.menubar_manage}">
-            <MenuFlyoutSubItem Text="{x:Static local:Lang.delete}">
-                <MenuFlyoutItem Text="Platzhalter"
-                            Command="{Binding RefreshCommand}" />
-            </MenuFlyoutSubItem>
             <MenuFlyoutItem Text="{x:Static local:Lang.delay}"
                             Clicked="CustomDelayClick" />
 

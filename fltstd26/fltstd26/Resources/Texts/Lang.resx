@@ -417,7 +417,7 @@ XFly Manager Studio 2026!</value>
     <value>Es kann kein für die Flugeigenschaften passender Zeitabschnitt gefunden werden.</value>
   </data>
   <data name="too_late" xml:space="preserve">
-    <value> befindet sich außerhalb des Dämmerungsbereichs. Dieser Flug darf möglicherweise nicht legal stattfinden</value>
+    <value> befinden sich außerhalb des Dämmerungsbereichs. Diese Flüge dürfen möglicherweise nicht legal stattfinden</value>
   </data>
   <data name="overlap_warning" xml:space="preserve">
     <value>überlappen. Falls dies nicht gewollt ist, sollten die betroffenen Slots verschoben oder gelöscht werden.</value>
@@ -839,5 +839,23 @@ Falls ihr Profil nicht sofort erscheint, drücken Sie einfach den "Aktualisieren
   </data>
   <data name="slottolerance" xml:space="preserve">
     <value>Slotauslöser Toleranz (min)</value>
+  </data>
+  <data name="settings_online_title" xml:space="preserve">
+    <value>Netzwerkeinstellungen</value>
+  </data>
+  <data name="ognstatus" xml:space="preserve">
+    <value>OGN Verbindung nutzen</value>
+  </data>
+  <data name="ognsynclevel" xml:space="preserve">
+    <value>OGN Synchronisierungsmultiplikator</value>
+  </data>
+  <data name="ogntolerance" xml:space="preserve">
+    <value>OGN Zeittoleranz (min)</value>
+  </data>
+  <data name="takeoffduration" xml:space="preserve">
+    <value>Startdauer (min)</value>
+  </data>
+  <data name="homebase" xml:space="preserve">
+    <value>Heimatflugplatz (ICAO)</value>
   </data>
 </root>
