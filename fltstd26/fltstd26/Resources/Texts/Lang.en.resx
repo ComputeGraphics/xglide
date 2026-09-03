@@ -830,4 +830,10 @@ If it does not appear in the list, try refreshing it with the "Refresh" button.<
   <data name="homebase" xml:space="preserve">
     <value>Homebase (ICAO)</value>
   </data>
+  <data name="error" xml:space="preserve">
+    <value>Error</value>
+  </data>
+  <data name="db_locked" xml:space="preserve">
+    <value>The database is locked. Any action could cause data loss.</value>
+  </data>
 </root>

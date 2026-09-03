@@ -18,11 +18,11 @@ public partial class FileManager : ContentPage
 
     private readonly bool Config;
     private readonly bool PopOnCont;
-    public FileManager(bool c, bool poponcont)
+    public FileManager(bool c,bool poponcont)
     {
         PopOnCont = poponcont;
         Config = c;
-        if(c && !RData.Active()) RData.Init();
+        if (c && !RData.Active()) RData.Init();
         InitializeComponent();
         WindowTitle.Text = c ? Lang.config_manager : Lang.profile_manager;
         WindowSubtitle.Text = c ? Lang.config_select : Lang.profile_select;
@@ -44,7 +44,7 @@ public partial class FileManager : ContentPage
             void view() { if (!RData.Locked) Application.Current?.OpenWindow(new debug.DBPreview(file.Location)); }
 
             Action modify = Config ?
-                () => 
+                () =>
                 {
                     if (editor == null && !RData.Locked)
                     {
@@ -82,16 +82,16 @@ public partial class FileManager : ContentPage
 
     }
 
-    private void CheckedChanged(object? sender, EventArgs e)
+    private void CheckedChanged(object? sender,EventArgs e)
     {
-        if(sender != null && sender is CheckBox cb)
+        if (sender != null && sender is CheckBox cb)
         {
-            List<ListTile> children = [..FileView.Children.OfType<ListTile>()];
+            List<ListTile> children = [.. FileView.Children.OfType<ListTile>()];
             int newindex = children.FindIndex(x => x.Checked.Id == cb.Id);
-            if(newindex != -1)
+            if (newindex != -1)
             {
                 if (SelectedFile != -1 && SelectedFile < children.Count)
-                {  
+                {
                     if (!cb.IsChecked)
                     {
                         SelectedFile = -1;
@@ -110,26 +110,38 @@ public partial class FileManager : ContentPage
     private void RefreshClick(object sender,EventArgs e) => Refresh();
     private async void PlusClick(object sender,EventArgs e)
     {
-        if(Config)
-        {
 
-        }
-        else
+        string? res = "";
+        await ModalPush.Entry(Config ? Lang.new_config : Lang.new_db,Config ? Lang.new_config_name : Lang.new_db_name,Lang.xplan_name,null).ContinueWith(x => res = x.Result);
+        if (res != null && editor == null)
         {
-            string? res = "";
-            await ModalPush.Entry(Lang.new_db,Lang.new_db_name,Lang.xplan_name,null).ContinueWith(x => res = x.Result);
-            if (res != null && editor == null && !RData.Locked)
+            if(Config)
             {
-                editor = new(new profiles.ProfileCreator(Path.Combine(GSettings.Paths["Database"],res + ".sqlite")));
-                Application.Current?.OpenWindow(editor);
-                LockWindow();
+                string? pth = DskMan.SaveConfig(new ConfigSettings(),res);
+                if(pth != null)
+                {
+                    editor = new(new config.ConfigSettings(pth,res));
+                    Application.Current?.OpenWindow(editor);
+                    LockWindow();
+                }
+                
+            }
+            else
+            {
+                if (!RData.Locked)
+                {
+                    editor = new(new profiles.ProfileCreator(Path.Combine(GSettings.Paths["Database"],res + ".sqlite")));
+                    Application.Current?.OpenWindow(editor);
+                    LockWindow();
+                }
+                else ModalPush.Message(Lang.error,Lang.db_locked);
             }
         }
     }
 
-    private void ContinueClick(object sender, EventArgs e)
+    private void ContinueClick(object sender,EventArgs e)
     {
-        if(SelectedFile != -1 && SelectedFile < files.Count)
+        if (SelectedFile != -1 && SelectedFile < files.Count)
         {
             System.Diagnostics.Debug.WriteLine("Selected File: " + SelectedFile.ToString());
             if (Config)
@@ -155,13 +167,13 @@ public partial class FileManager : ContentPage
     private void LockWindow()
     {
         wl = new(null,null);
-        if(editor != null) editor.Destroying += EditorClosed;
+        if (editor != null) editor.Destroying += EditorClosed;
         GSettings.nav?.PushModalAsync(wl);
     }
 
     private void EditorClosed(object? sender,EventArgs? e)
     {
-        if(!Config) RData.Close();
+        if (!Config) RData.Close();
         editor = null;
         wl?.ReleaseLock();
     }

@@ -99,7 +99,7 @@ namespace fltstd26.etc
         public bool UseTargetSquareFont = false;
         public bool TargetOriented = false; //To Implement
         //minutes
-        public short HideInactiveFlights = -1;
+        public short HideInactiveFlights = 30;
         public short FlashInterval = 500; //in ms
 
         public short LogoSize_L = 144;

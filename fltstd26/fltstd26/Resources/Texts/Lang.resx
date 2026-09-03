@@ -858,4 +858,10 @@ Falls ihr Profil nicht sofort erscheint, drücken Sie einfach den "Aktualisieren
   <data name="homebase" xml:space="preserve">
     <value>Heimatflugplatz (ICAO)</value>
   </data>
+  <data name="error" xml:space="preserve">
+    <value>Fehler</value>
+  </data>
+  <data name="db_locked" xml:space="preserve">
+    <value>Die Datenbank wird momentan verwendet. Der Vorgang wurde blockiert</value>
+  </data>
 </root>

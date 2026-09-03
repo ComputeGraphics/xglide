@@ -14,15 +14,15 @@ public partial class ConfigSettings : ContentPage
 
     private ContentView[]? pages;
 
-    private etc.ConfigSettings? _current;
-    private string? _filename;
+    private readonly etc.ConfigSettings? _current;
+    private readonly string? _filename;
 
     private int _selected = 0;
     public ConfigSettings(string? config,string? name)
     {
         if (config != null && name != null)
         {
-            string? sv = DskMan.SaveConfig(name,true);
+            string? sv = DskMan.SaveConfig(USettings.Instance,name,true);
             if (sv != null)
             {
                 USettings.ConfigName = sv;
@@ -36,9 +36,6 @@ public partial class ConfigSettings : ContentPage
         if (c != null)
         {
             _current = c;
-            //generalpage = new GeneralMenu(_current);
-            //plannerpage = new PlannerMenu(_current);
-            //datapage = new DataMenu(_current);
             pages =
                 [
                 new GeneralMenu(_current),
@@ -81,7 +78,7 @@ public partial class ConfigSettings : ContentPage
         if (_current != null && _filename != null)
         {
             USettings.Instance = _current;
-            DskMan.SaveConfig(_filename);
+            DskMan.SaveConfig(USettings.Instance,_filename,false,true);
         }
     }
 

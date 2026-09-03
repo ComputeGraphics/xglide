@@ -1169,7 +1169,7 @@ namespace fltstd26
         private void ConfigOpenClick(object sender,EventArgs e) => System.Diagnostics.Debug.WriteLine("Not implemented");
         private void ConfigSaveClick(object sender,EventArgs e)
         {
-            DskMan.SaveConfig(USettings.Instance.Name);
+            DskMan.SaveConfig(USettings.Instance,USettings.Instance.Name);
         }
         private static async void ConfigSaveAsClick(object sender,EventArgs e)
         {
@@ -1177,7 +1177,7 @@ namespace fltstd26
             await ModalPush.Entry(Lang.new_config,Lang.new_config_name,"MyConfig",null).ContinueWith(t => resp = t.Result);
             if (resp != null)
             {
-                DskMan.SaveConfig(resp);
+                DskMan.SaveConfig(USettings.Instance,resp);
                 await ModalPush.Question(Lang.config_switch,Lang.config_switch_warn).ContinueWith(x =>
                 {
                     if (x.Result) USettings.Instance.Name = resp;

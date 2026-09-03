@@ -156,7 +156,7 @@ namespace fltstd26.core
                 row[9] = GSettings.UnformatPrice(prices.Find(x => x.Id == ac.PriceCat)?.Price ?? 0);
                 row[10] = GSettings.UnformatPrice(actgts.Sum(tgt => tgt.Price < 0 ? prices.Find(x => x.Id == -tgt.Price)?.Price ?? 0 : tgt.Price));
 
-                row[11] = $"{acslots.Min(x => x.STime)} - {acslots.Max(x => x.FTime)}";
+                //row[11] = $"{acslots.Min(x => x.STime)} - {acslots.Max(x => x.FTime)}";
                 row[12] = acslots.Sum(x => x.Length);
 
                 table.Rows.Add(row);

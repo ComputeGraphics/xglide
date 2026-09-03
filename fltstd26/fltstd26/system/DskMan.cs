@@ -137,7 +137,7 @@ namespace fltstd26.system
             return files;
         }
 
-        public static string? SaveConfig(string name,bool backup = false,bool absolute = false)
+        public static string? SaveConfig(ConfigSettings instance, string name,bool backup = false,bool absolute = false)
         {
             try
             {
@@ -145,7 +145,7 @@ namespace fltstd26.system
                 if (!path.EndsWith(".xml")) path += ".xml";
                 StreamWriter stream = new(path);
                 XmlSerializer xml = new(typeof(ConfigSettings));
-                xml.Serialize(stream,USettings.Instance);
+                xml.Serialize(stream,instance);
                 stream.Close();
                 ConProc.Log($"[DSKMAN] A configuration was saved: {name}");
                 return path;
